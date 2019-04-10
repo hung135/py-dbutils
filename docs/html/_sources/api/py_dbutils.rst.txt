@@ -1,0 +1,38 @@
+py\_dbutils package
+===================
+
+Submodules
+----------
+
+py\_dbutils.dbconn module
+-------------------------
+
+.. automodule:: py_dbutils.dbconn
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+py\_dbutils.skeleton module
+---------------------------
+
+.. automodule:: py_dbutils.skeleton
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+py\_dbutils.utils module
+------------------------
+
+.. automodule:: py_dbutils.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: py_dbutils
+    :members:
+    :undoc-members:
+    :show-inheritance:

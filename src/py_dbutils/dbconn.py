@@ -4,6 +4,7 @@ import os
 #import commands
 import sys
 import datetime
+import sqlalchemy
 
 #import migrate_utils
 lg.basicConfig()
@@ -70,7 +71,7 @@ class Connection:
 
     # @migrate_utils.static_func.timer
     def connect_sqlalchemy(self, schema=None, db_type=None):
-        import sqlalchemy
+
         # import pymssql
         '''Returns a connection and a metadata object'''
         # We connect with the help of the PostgreSQL URL
@@ -152,7 +153,7 @@ class Connection:
 
     def dump_tables_csv(self, table_list, folder):
         import csv
-        import sqlalchemy
+
 
         con, meta = self.connect_sqlalchemy(self.dbschema, self._dbtype)
         # print dir(meta.tables)
@@ -222,7 +223,7 @@ order by
     i.relname;""".format(v_schema)))
 
     def get_create_table_sqlalchemy(self, table_name, trg_db):
-        import sqlalchemy
+
         stmt = None
         con, meta = self.connect_sqlalchemy()
         t = table_name.split('.')[-1]
@@ -238,7 +239,7 @@ order by
         return stmt
 
     def print_tables(self, table_list):
-        import sqlalchemy
+
 
         print(self.dbschema, self._dbtype)
         con, meta = self.connect_sqlalchemy(self.dbschema, self._dbtype)
@@ -397,7 +398,7 @@ group by relname;""".format(table_name)
 
     def print_create_table(self, folder=None):
         import migrate_utils as mig
-        import sqlalchemy
+
 
         con, meta = self.connect_sqlalchemy(self.dbschema, self._dbtype)
         # print dir(meta.tables)
@@ -418,7 +419,7 @@ group by relname;""".format(table_name)
 
     def get_table_column_types(self, table_name, trg_schema=None):
 
-        import sqlalchemy
+
         if trg_schema is None:
             schema = self.dbschema
         else:
@@ -430,7 +431,7 @@ group by relname;""".format(table_name)
 
     def get_table_columns(self, table_name, trg_schema=None):
 
-        import sqlalchemy
+
         if trg_schema is None:
             schema = self.dbschema
         else:
@@ -779,7 +780,7 @@ group by relname;""".format(table_name)
         :rtype: object
         """
         # type: (str, str) -> list
-        import sqlalchemy
+
         try:
             print("Getting Column List from DB: {}.{}".format(table_schema, table_name))
             con, meta = self.connect_sqlalchemy(table_schema, self._dbtype)
@@ -793,7 +794,7 @@ group by relname;""".format(table_name)
     # returns a list of table dict
     # @migrate_utils.static_func.timer
     def get_tables(self, schema=None):
-        import sqlalchemy
+
         dbschema = self.dbschema
         if schema is not None:
             dbschema = schema

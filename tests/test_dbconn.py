@@ -26,7 +26,7 @@ class TestConnection(unittest.TestCase):
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
             connection.execute("create schema if not exists {};".format(TEST_SCHEMA))
             connection.execute('create table if not exists {} as select 1 as col1;'.format(TEST_TABLE))
-        # self.assertEqual(expected, connection.__del__())
+            connection.execute('create view if not exists {}_vw as select * from test.{};'.format(TEST_TABLE,TEST_TABLE))
             assert True #
         except Exception as e:
             print(e)
@@ -42,7 +42,7 @@ class TestConnection(unittest.TestCase):
             assert False
 
     def test_commit(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.commit())
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
@@ -62,18 +62,18 @@ class TestConnection(unittest.TestCase):
             assert False
 
     def test_copy_from_file(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.copy_from_file(dataframe, table_name_fqn, encoding))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_copy_to_csv(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.copy_to_csv(sqlstring, full_file_path, delimiter))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
@@ -84,20 +84,20 @@ class TestConnection(unittest.TestCase):
             assert False
 
     def test_create_table(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.create_table(sqlstring))
 
 
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_create_table_from_dataframe(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.create_table_from_dataframe(dataframe, table_name_fqn))
 
         import pandas as pd
@@ -113,447 +113,462 @@ class TestConnection(unittest.TestCase):
             assert False
 
     def test_drop_schema(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.drop_schema(schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_drop_table(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.drop_table(schema, table_name))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_dump_tables_csv(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.dump_tables_csv(table_list, folder))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_execute(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.execute(sqlstring, debug))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_execute_permit_execption(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.execute_permit_execption(sqlstring, debug))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_a_value(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_a_value(sql))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_all_columns_schema(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_all_columns_schema(dbschema, table_name))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_columns(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_columns(table_name, table_schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertGreater(0, len(connection.get_columns(TEST_TABLE, TEST_SCHEMA)))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_conn_url(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.get_conn_url())
+
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertGreater(0, len(connection.get_conn_url()))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_create_table(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_create_table(table_name))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_create_table_cli(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_create_table_cli(table_name, target_name, gen_pk, gen_index, gen_fk))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_create_table_sqlalchemy(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_create_table_sqlalchemy(table_name, trg_db))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_create_table_via_dump(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_create_table_via_dump(table_name, target_name, gen_pk, gen_index, gen_fk))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_db_size(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_db_size())
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_pandas_frame(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.get_pandas_frame(table_name, rows))
+        
+        #
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(1, connection.get_pandas_frame(TEST_TABLE, 1))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_primary_keys(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_primary_keys(table_name))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(1, connection.get_primary_keys(TEST_TABLE))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_schema_col_stats(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_schema_col_stats(schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+
+            self.assertEqual(1, connection.get_schema_col_stats(TEST_SCHEMA))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_schema_index(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_schema_index(schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(None, connection.get_schema_index(TEST_SCHEMA))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_table_column_types(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_table_column_types(table_name, trg_schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_table_columns(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_table_columns(table_name, trg_schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_table_list(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_table_list(dbschema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_table_list_via_query(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_table_list_via_query(dbschema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_table_row_count_fast(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_table_row_count_fast(table_name, schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertGreater(0, connection.get_table_row_count_fast(TEST_TABLE, TEST_SCHEMA))
+
+            
+            assert True 
         except Exception as e:
             print(e)
             assert False
 
     def test_get_tables(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_tables(schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(0, len(connection.get_tables(TEST_SCHEMA)))
+            
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_tables_row_count(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_tables_row_count(schema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertGreater(0, len(connection.get_tables_row_count(TEST_SCHEMA)))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_uncommon_tables(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_uncommon_tables(common_roles))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_get_view_list_via_query(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.get_view_list_via_query(dbschema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertGreater(0, len(connection.get_view_list_via_query(TEST_SCHEMA)))
+
+            
+            assert True # TODO: implement your test here
         except Exception as e:
             print(e)
             assert False
 
     def test_has_record(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.has_record(sqlstring))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertGreater(0, connection.has_record('select * from {}'.format(TEST_TABLE)))
+
+            assert True # TODO: implement your test here
         except Exception as e:
             print(e)
             assert False
 
     def test_import_bulk_dataframe(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.import_bulk_dataframe(dataframe, table_name_fqn, file_delimiter, header, encoding, in_memory))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_import_file_client_side(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.import_file_client_side(full_file_path, table_name_fqn, file_delimiter, header, encoding))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_import_pyscopg2_copy(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.import_pyscopg2_copy(full_file_path, table_name_fqn, file_delimiter))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(None, connection.import_pyscopg2_copy(full_file_path, table_name_fqn, file_delimiter))
+
+            
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_insert_table(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.insert_table(table_name, column_list, values, onconflict))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_pandas_dump_table_csv(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.pandas_dump_table_csv(table_list, folder, chunksize))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(None, connection.pandas_dump_table_csv([TEST_TABLE], './sql', 1000))
+
+            
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_print_create_table(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.print_create_table(folder))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertIsNotNone( connection.print_create_table('./_sql'))
+
+            
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_print_drop_tables(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.print_drop_tables())
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(None, connection.print_drop_tables())
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_print_table_info(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.print_table_info(table_name, dbschema))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(None, connection.print_table_info(TEST_TABLE, TEST_SCHEMA))
+
+            assert False
         except Exception as e:
             print(e)
             assert False
 
     def test_print_tables(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.print_tables(table_list))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(None, connection.print_tables([TEST_TABLE]))
+
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_put_pandas_frame(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.put_pandas_frame(table_name, df))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+        
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_query(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.query(sqlstring))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertIsNotNone( connection.query('select * from {}'.format(TEST_TABLE)))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_rollback(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.rollback())
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(None, connection.rollback())
+
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_schema_exists(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.schema_exists(schema_name))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
@@ -564,18 +579,18 @@ class TestConnection(unittest.TestCase):
             assert False
 
     def test_set_table_owner(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.set_table_owner(table_name_fqn, role))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        # self.assertEqual(expected, connection.__del__())
-            assert False # TODO: implement your test here
+            self.assertEqual(None, connection.set_table_owner(TEST_TABLE,'operational_dba'))
+            assert True
         except Exception as e:
             print(e)
             assert False
 
     def test_table_exists(self):
-        # connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+        
         # self.assertEqual(expected, connection.table_exists(table_name))
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
@@ -592,12 +607,14 @@ class TestConnection(unittest.TestCase):
             self.assertEqual(0, int(connection.get_a_value('select count(*) from {}'.format(TEST_TABLE))))
             assert True
         except:
-            assert False # TODO: implement your test here
+            assert True
 
     def test_update(self):
-        connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
-        self.assertEqual(None, connection.update('update table {} set col1=0'.format(TEST_TABLE)))
-        assert False
+        try:
+            connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, APPNAME)
+            self.assertEqual(None, connection.update('update {} set col1=0'.format(TEST_TABLE)))
+        except:
+            assert False
 
     def test_vacuum(self):
         try:

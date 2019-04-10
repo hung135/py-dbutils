@@ -252,7 +252,7 @@ order by
                 print(str(stmt) + ";")
             except:
                 # print("Cannot Find Table: {}".format(t))
-                logging.Error("Cannot Find Table: {}".format(t))
+                logging.error("Cannot Find Table: {}".format(t))
 
     def get_create_table(self, table_name):
         sql = """SELECT                                          
@@ -869,8 +869,8 @@ group by relname;""".format(table_name)
         Base = automap_base()
         # from sqlalchemy.orm import Session
 
-        Base.prepare(self.engine, reflect=True, schema=dbschema)
-        l = eval('Base.classes.{}'.format(table_name))
+        Base.prepare(self.connect_sqlalchemy(), reflect=True, schema=dbschema)
+        l = eval('Base.classes.{}'.format(table_name.split('.'[-1])))
         for m in l.__table__.columns:
             print(m, m.type)
 

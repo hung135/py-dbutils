@@ -69,7 +69,7 @@
                  <span class="n">dbtype</span><span class="o">=</span><span class="s1">&#39;POSTGRES&#39;</span><span class="p">,</span> <span class="n">appname</span><span class="o">=</span><span class="s1">&#39;py_dbutils&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Default to commit after every transaction</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_commit</span> <span class="o">=</span> <span class="n">commit</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbschema</span> <span class="o">=</span> <span class="n">dbschema</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">appname</span> <span class="o">=</span> <span class="n">appname</span>
@@ -95,7 +95,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect_mysql</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dbtype</span> <span class="o">==</span> <span class="s1">&#39;ORACLE&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect_oracle</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># db url</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DB Connected To: </span><span class="si">{0}</span><span class="s2">:</span><span class="si">{1}</span><span class="s2">:</span><span class="si">{2}</span><span class="s2">:</span><span class="si">{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_name</span><span class="p">,</span> <span class="n">dbtype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_userid</span><span class="p">))</span>
 
@@ -157,7 +157,7 @@
 <div class="viewcode-block" id="Connection.pandas_dump_table_csv"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.pandas_dump_table_csv">[docs]</a>    <span class="k">def</span> <span class="nf">pandas_dump_table_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_list</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="mi">100000</span><span class="p">):</span>
         <span class="c1"># def get_pandas_frame(self, table_name,rows=None):</span>
         <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-        <span class="kn">import</span> <span class="nn">migrate_utils</span> <span class="k">as</span> <span class="nn">migu</span>
+
         <span class="n">conn</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_sqlalchemy</span><span class="p">()</span>
 
         <span class="c1"># z=db.get_pandas_frame(&#39;errorlog&#39;)</span>
@@ -175,9 +175,7 @@
 
                     <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                         <span class="c1"># print(list(df.columns))</span>
-                        <span class="n">column_list_snake</span> <span class="o">=</span> <span class="n">migu</span><span class="o">.</span><span class="n">convert_list_to_snake_case</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">))</span>
-                        <span class="c1"># print(column_list_snake)</span>
-                        <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">column_list_snake</span>
+
                         <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">full_file_path</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Records Dumped: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)))</span>
                     <span class="k">else</span><span class="p">:</span>
@@ -206,15 +204,15 @@
         <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select  schemaname,tablename,attname as columnname,n_distinct , reltuples::bigint</span>
 <span class="s2">            ,( (select   distinct(True)  from pg_index ix,pg_attribute ab where  ab.attnum = ANY(ix.indkey)</span>
 <span class="s2">            and ab.attrelid = a.oid</span>
-<span class="s2">            and ix.indrelid=a.oid </span>
+<span class="s2">            and ix.indrelid=a.oid</span>
 <span class="s2">            and ab.attname=p.attname    )   )as is_index</span>
 <span class="s2">            from pg_stats p,</span>
 <span class="s2">            pg_class a</span>
-<span class="s2">            where </span>
-<span class="s2">            a.oid=concat(schemaname,&#39;.&#39;,tablename)::regclass and </span>
-<span class="s2">            a.relkind=&#39;r&#39; and </span>
+<span class="s2">            where</span>
+<span class="s2">            a.oid=concat(schemaname,&#39;.&#39;,tablename)::regclass and</span>
+<span class="s2">            a.relkind=&#39;r&#39; and</span>
 <span class="s2">            a.relname=tablename and</span>
-<span class="s2">            schemaname=&#39;</span><span class="si">{}</span><span class="s2">&#39; and </span>
+<span class="s2">            schemaname=&#39;</span><span class="si">{}</span><span class="s2">&#39; and</span>
 <span class="s2">            n_distinct&gt;0 order by 5,4;</span>
 <span class="s2">            &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v_schema</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span></div>
@@ -256,7 +254,15 @@
 <span class="s2">    i.relname;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v_schema</span><span class="p">)))</span></div>
 
 <div class="viewcode-block" id="Connection.get_create_table_sqlalchemy"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.get_create_table_sqlalchemy">[docs]</a>    <span class="k">def</span> <span class="nf">get_create_table_sqlalchemy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">trg_db</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">          table_name (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="n">stmt</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">con</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_sqlalchemy</span><span class="p">()</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">table_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -272,7 +278,15 @@
         <span class="k">return</span> <span class="n">stmt</span></div>
 
 <div class="viewcode-block" id="Connection.print_tables"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.print_tables">[docs]</a>    <span class="k">def</span> <span class="nf">print_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">          table_name (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbschema</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dbtype</span><span class="p">)</span>
         <span class="n">con</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_sqlalchemy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbschema</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dbtype</span><span class="p">)</span>
@@ -288,7 +302,7 @@
                 <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cannot Find Table: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">t</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Connection.get_create_table"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.get_create_table">[docs]</a>    <span class="k">def</span> <span class="nf">get_create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT                                          </span>
+        <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT</span>
 <span class="s2">  &#39;CREATE TABLE &#39; || relname || E&#39;</span><span class="se">\n</span><span class="s2">(</span><span class="se">\n</span><span class="s2">&#39; ||</span>
 <span class="s2">  array_to_string(</span>
 <span class="s2">    array_agg(</span>
@@ -298,14 +312,14 @@
 <span class="s2">  ) || E&#39;</span><span class="se">\n</span><span class="s2">);</span><span class="se">\n</span><span class="s2">&#39;</span>
 <span class="s2">from</span>
 <span class="s2">(</span>
-<span class="s2">  SELECT </span>
+<span class="s2">  SELECT</span>
 <span class="s2">    c.relname, a.attname AS column_name,</span>
 <span class="s2">    pg_catalog.format_type(a.atttypid, a.atttypmod) as type,</span>
-<span class="s2">    case </span>
+<span class="s2">    case</span>
 <span class="s2">      when a.attnotnull</span>
-<span class="s2">    then &#39;NOT NULL&#39; </span>
-<span class="s2">    else &#39;NULL&#39; </span>
-<span class="s2">    END as not_null </span>
+<span class="s2">    then &#39;NOT NULL&#39;</span>
+<span class="s2">    else &#39;NULL&#39;</span>
+<span class="s2">    END as not_null</span>
 <span class="s2">  FROM pg_class c,</span>
 <span class="s2">   pg_attribute a,</span>
 <span class="s2">   pg_type t</span>
@@ -352,6 +366,15 @@
         <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="n">v_index_sql</span></div>
 
 <div class="viewcode-block" id="Connection.get_create_table_cli"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.get_create_table_cli">[docs]</a>    <span class="k">def</span> <span class="nf">get_create_table_cli</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">target_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gen_pk</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gen_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gen_fk</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          table_name (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="n">v_source_schema</span> <span class="o">=</span> <span class="n">table_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">v_target_schema</span> <span class="o">=</span> <span class="n">target_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">target_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -430,7 +453,15 @@
         <span class="k">return</span> <span class="n">sql</span><span class="p">,</span> <span class="n">v_index_sql</span></div>
 
 <div class="viewcode-block" id="Connection.print_create_table"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.print_create_table">[docs]</a>    <span class="k">def</span> <span class="nf">print_create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="kn">import</span> <span class="nn">migrate_utils</span> <span class="k">as</span> <span class="nn">mig</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          table_name (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
 
 
         <span class="n">con</span><span class="p">,</span> <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connect_sqlalchemy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbschema</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dbtype</span><span class="p">)</span>
@@ -442,7 +473,7 @@
             <span class="n">table</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">meta</span><span class="p">,</span> <span class="n">autoload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">autoload_with</span><span class="o">=</span><span class="n">con</span><span class="p">)</span>
             <span class="n">stmt</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">CreateTable</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
             <span class="n">column_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
-            <span class="n">createsql</span> <span class="o">=</span> <span class="n">mig</span><span class="o">.</span><span class="n">convert_snake_case</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">stmt</span><span class="p">),</span> <span class="n">column_list</span><span class="p">)</span>
+            <span class="n">createsql</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">stmt</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">folder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">createsql</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -451,7 +482,15 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Total Tables:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_count</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Connection.get_table_column_types"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.get_table_column_types">[docs]</a>    <span class="k">def</span> <span class="nf">get_table_column_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">trg_schema</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">          table_name (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">trg_schema</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbschema</span>
@@ -463,7 +502,15 @@
         <span class="k">return</span> <span class="n">table</span><span class="o">.</span><span class="n">columns</span></div>
 
 <div class="viewcode-block" id="Connection.get_table_columns"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.get_table_columns">[docs]</a>    <span class="k">def</span> <span class="nf">get_table_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">trg_schema</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">          table_name (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">trg_schema</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbschema</span>
@@ -475,6 +522,15 @@
         <span class="k">return</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="Connection.schema_exists"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.schema_exists">[docs]</a>    <span class="k">def</span> <span class="nf">schema_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          table_name (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="n">v_found</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="n">v_found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_record</span><span class="p">(</span>
@@ -483,6 +539,16 @@
         <span class="k">return</span> <span class="n">v_found</span></div>
 
 <div class="viewcode-block" id="Connection.table_exists"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.table_exists">[docs]</a>    <span class="k">def</span> <span class="nf">table_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          table_name (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
+
         <span class="n">v_table_exists</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">v_schema</span> <span class="o">=</span> <span class="n">table_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">v_table_name</span> <span class="o">=</span> <span class="n">table_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
@@ -492,29 +558,45 @@
         <span class="k">return</span> <span class="n">v_table_exists</span></div>
 
 <div class="viewcode-block" id="Connection.has_record"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.has_record">[docs]</a>    <span class="k">def</span> <span class="nf">has_record</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Takes a query string and runs it to see if it returns any rows</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          sqlstring (str): String</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          boolean: True/False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="n">rs</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">record_len</span><span class="o">=</span><span class="mi">0</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">rs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;error in dbconn.has_record: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">))</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">record_len</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+        <span class="c1">#we need to close this or it will lock the connection</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">record_len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="kc">False</span></div>
 
 <div class="viewcode-block" id="Connection.query"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.query">[docs]</a>    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="sd">&quot;&quot;&quot; runs query or procedure that returns record set</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Running Query: </span><span class="si">{}</span><span class="se">\n\t</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span> <span class="n">sqlstring</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">sqlstring</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;select&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">sqlstring</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;call&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span>
             <span class="n">rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">=</span><span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Only Selects allowed&#39;</span><span class="p">)</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Query Completed: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span>
         <span class="k">return</span> <span class="n">rows</span></div>
 
 <div class="viewcode-block" id="Connection.insert_table"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.insert_table">[docs]</a>    <span class="k">def</span> <span class="nf">insert_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">column_list</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">onconflict</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="n">sqlstring</span> <span class="o">=</span> <span class="s2">&quot;Insert into &quot;</span> <span class="o">+</span> <span class="n">table_name</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="n">column_list</span> <span class="o">+</span> <span class="s2">&quot;) values &quot;</span> <span class="o">+</span> <span class="n">values</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">onconflict</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -524,17 +606,20 @@
         <span class="sd">&quot;&quot;&quot; Default to commit after every transaction</span>
 <span class="sd">                Will check instance variable to decide if a commit is needed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;COMMIT&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;COMMIT&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">=</span><span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Connection.rollback"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.rollback">[docs]</a>    <span class="k">def</span> <span class="nf">rollback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ROLLBACK&quot;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ROLLBACK&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">=</span><span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Connection.vacuum"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.vacuum">[docs]</a>    <span class="k">def</span> <span class="nf">vacuum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbschema</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Default to commit after every transaction</span>
 <span class="sd">                Will check instance variable to decide if a commit is needed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">table_name</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">table_name</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;vacuum analyze&quot;</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Vacuuming Schema&quot;</span><span class="p">)</span>
@@ -545,34 +630,31 @@
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Vacuuming Table:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;vacuum </span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dbschema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Connection.execute"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-
+<div class="viewcode-block" id="Connection.execute"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.execute">[docs]</a>    <span class="k">def</span> <span class="nf">execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">,</span><span class="n">commit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">catch_exception</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Debug DB Execute: </span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2"> </span><span class="se">\n\t</span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_userid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_name</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">))</span>
         <span class="n">rowcount</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-            <span class="n">rowcount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">rowcount</span>
+        <span class="n">sql</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">catch_exception</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1">#print(&quot;Error Execute SQL:{}&quot;.format(e))</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;SQL error Occurred But Continuing:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span>
+        <span class="n">rowcount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">rowcount</span>
+        <span class="k">if</span> <span class="n">commit</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="c1">#print(&quot;Error Execute SQL:{}&quot;.format(e))</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;SQL error Occurred But Continuing:</span><span class="se">\n</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DB Execute Completed: </span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_userid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_name</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">rowcount</span></div>
 
-<div class="viewcode-block" id="Connection.execute_permit_execption"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.execute_permit_execption">[docs]</a>    <span class="k">def</span> <span class="nf">execute_permit_execption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="c1"># cloning previous method to avoid breaking things already in place</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Debug DB Execute: </span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2">:</span><span class="si">{}</span><span class="s2"> </span><span class="se">\n\t</span><span class="si">{}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_userid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_name</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">))</span>
-        <span class="n">rowcount</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-        <span class="n">rowcount</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">rowcount</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="n">rowcount</span></div>
 
 <div class="viewcode-block" id="Connection.drop_schema"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.drop_schema">[docs]</a>    <span class="k">def</span> <span class="nf">drop_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="s2">&quot;Drop Database Schema: </span><span class="se">\n\t</span><span class="s2">Host:</span><span class="si">{0}</span><span class="se">\n\t</span><span class="s2">Database:</span><span class="si">{1}</span><span class="se">\n</span><span class="s2">Schema:</span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_name</span><span class="p">,</span>
                                                                                     <span class="n">schema</span><span class="p">))</span>
@@ -580,27 +662,33 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Connection.truncate_table"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.truncate_table">[docs]</a>    <span class="k">def</span> <span class="nf">truncate_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Connection.truncate_table"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.truncate_table">[docs]</a>    <span class="k">def</span> <span class="nf">truncate_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">commit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">vacuum</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="n">dbschema</span> <span class="o">=</span> <span class="n">table_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">str_string</span><span class="o">=</span><span class="s2">&quot;Truncating Table: </span><span class="se">\n\t</span><span class="s2">Host:</span><span class="si">{0}</span><span class="se">\n\t</span><span class="s2">Database:</span><span class="si">{1}</span><span class="se">\n\t</span><span class="s2">Tablename:</span><span class="si">{2}</span><span class="se">\n\t</span><span class="s2">Schema:</span><span class="si">{3}</span><span class="s2">&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">str_string</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_name</span><span class="p">,</span><span class="n">table_name</span><span class="p">,</span> <span class="n">dbschema</span><span class="p">))</span>
 
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-            <span class="s2">&quot;Truncating Table: </span><span class="se">\n\t</span><span class="s2">Host:</span><span class="si">{0}</span><span class="se">\n\t</span><span class="s2">Database:</span><span class="si">{1}</span><span class="se">\n\t</span><span class="s2">Tablename:</span><span class="si">{2}</span><span class="se">\n\t</span><span class="s2">Schema:</span><span class="si">{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_database_name</span><span class="p">,</span>
-                                                                                                   <span class="n">table_name</span><span class="p">,</span> <span class="n">dbschema</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;TRUNCATE table </span><span class="si">{0}</span><span class="s1"> cascade&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vacuum</span><span class="p">(</span><span class="n">dbschema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">commit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">vacuum</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vacuum</span><span class="p">(</span><span class="n">dbschema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Connection.update"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="Connection.drop_table"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.drop_table">[docs]</a>    <span class="k">def</span> <span class="nf">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Dropping Table(if Exists): </span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;Drop table if exists </span><span class="si">{0}</span><span class="s1">.</span><span class="si">{1}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">table_name</span><span class="p">))</span>
+<div class="viewcode-block" id="Connection.create_cur"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.create_cur">[docs]</a>    <span class="k">def</span> <span class="nf">create_cur</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span></div>
+<div class="viewcode-block" id="Connection.drop_table"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.drop_table">[docs]</a>    <span class="k">def</span> <span class="nf">drop_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table_name</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Dropping Table(if Exists): </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;Drop table if exists </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Connection.create_table"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.create_table">[docs]</a>    <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_cur</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">sqlstring</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;create table &#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
@@ -690,29 +778,14 @@
 
 <div class="viewcode-block" id="Connection.copy_to_csv"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.copy_to_csv">[docs]</a>    <span class="k">def</span> <span class="nf">copy_to_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sqlstring</span><span class="p">,</span> <span class="n">full_file_path</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">):</span>
         <span class="n">total_rows</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;POSTGRES&#39;</span><span class="p">,</span> <span class="s1">&#39;CITUS&#39;</span><span class="p">]:</span>
+            <span class="n">outputquery</span> <span class="o">=</span> <span class="s2">&quot;COPY (</span><span class="si">{0}</span><span class="s2">) TO STDOUT WITH CSV HEADER&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">)</span>
 
-            <span class="c1"># save the Current shell password</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_save_environment_vars</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_replace_environment_vars</span><span class="p">()</span>
-            <span class="c1"># copy_command_client_side = &quot;&quot;&quot;psql -c &quot;\copy {0} FROM &#39;{1}&#39; with (format csv, delimiter &#39;{2}&#39;)&quot; &quot;&quot;&quot;</span>
-            <span class="n">shell_command</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;psql -c &quot;\copy (</span><span class="si">{0}</span><span class="s2">) to &#39;</span><span class="si">{1}</span><span class="s2">&#39; WITH DELIMITER AS &#39;</span><span class="si">{2}</span><span class="s2">&#39; CSV QUOTE AS &#39;</span><span class="se">\\</span><span class="s2">&quot;&#39; &quot; &quot;&quot;&quot;</span>
-
-            <span class="n">command_text</span> <span class="o">=</span> <span class="p">(</span><span class="n">shell_command</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">,</span> <span class="n">full_file_path</span><span class="p">,</span> <span class="n">delimiter</span><span class="p">))</span>
-
-            <span class="n">prev_password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PGPASSWORD&#39;</span><span class="p">]</span>
-
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dumping Data to CSV STARTED:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">full_file_path</span><span class="p">))</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;SQL:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sqlstring</span><span class="p">))</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Command string: </span><span class="se">\n</span><span class="s2">t</span><span class="se">\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command_text</span><span class="p">))</span>
-            <span class="n">error_code</span><span class="p">,</span> <span class="n">txt_out</span> <span class="o">=</span> <span class="n">commands</span><span class="o">.</span><span class="n">getstatusoutput</span><span class="p">(</span><span class="n">command_text</span><span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Dumping Data to CSV COMPLETED:</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">txt_out</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_restore_environment_vars</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">error_code</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="n">txt_out</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Total Rows Dumped: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="n">total_rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">full_file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">x</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">copy_expert</span><span class="p">(</span><span class="n">outputquery</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;MSSQL&#39;</span><span class="p">]:</span>
             <span class="kn">import</span> <span class="nn">pandas</span>
 
@@ -794,7 +867,7 @@
         <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT t.table_schema,t.table_name ,u.usename as ownername,p.grantor,p.grantee</span>
 <span class="s2">            ,c.relname , c.relowner ,p.*</span>
 <span class="s2">            from information_schema.tables t</span>
-<span class="s2">            left outer join information_schema.table_privileges p on p.table_schema=t.table_schema and p.table_name=t.table_name </span>
+<span class="s2">            left outer join information_schema.table_privileges p on p.table_schema=t.table_schema and p.table_name=t.table_name</span>
 <span class="s2">            and (grantor  in (&#39;operational_dba&#39;) and grantee  in (&#39;operational_dba&#39;) )</span>
 <span class="s2">            , pg_catalog.pg_user u,</span>
 <span class="s2">            pg_catalog.pg_class c</span>
@@ -802,7 +875,7 @@
 <span class="s2">            and c.relowner=u.usesysid</span>
 <span class="s2">            and u.usename not in (&#39;svc_opdba&#39;,&#39;operational_dba&#39;)</span>
 <span class="s2">            and p.grantee is null</span>
-<span class="s2">            and t.table_schema not in (&#39;pg_catalog&#39;,&#39;sys&#39;,&#39;information_schema&#39;,&#39;cfpb_admin&#39;); </span>
+<span class="s2">            and t.table_schema not in (&#39;pg_catalog&#39;,&#39;sys&#39;,&#39;information_schema&#39;,&#39;cfpb_admin&#39;);</span>
 <span class="s2">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">sql</span><span class="p">)</span></div>
 
@@ -1016,7 +1089,7 @@
             <span class="n">table_exists</span> <span class="o">=</span> <span class="kc">False</span>
             <span class="n">sql</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;select count(*) from information_schema.tables</span>
 <span class="s2">            WHERE table_type=&#39;BASE TABLE&#39;</span>
-<span class="s2">            and table_name=&#39;</span><span class="si">{table_name}</span><span class="s2">&#39; </span>
+<span class="s2">            and table_name=&#39;</span><span class="si">{table_name}</span><span class="s2">&#39;</span>
 <span class="s2">            &quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">table_name_fqn</span><span class="p">:</span>
                 <span class="n">table_name</span> <span class="o">=</span> <span class="n">table_name_fqn</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
@@ -1039,7 +1112,12 @@
     <span class="c1"># copy using pyscopg to convert a dataframe to a file like object and pass it into pyscopg</span>
     <span class="c1"># this does not write to the file system but puts all the data into memory</span>
 <div class="viewcode-block" id="Connection.copy_from_file"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.dbconn.Connection.copy_from_file">[docs]</a>    <span class="k">def</span> <span class="nf">copy_from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">,</span> <span class="n">table_name_fqn</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">cStringIO</span> <span class="k">import</span> <span class="n">StringIO</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">StringIO</span> <span class="k">import</span> <span class="n">StringIO</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>
+
+
         <span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
 
         <span class="nd">@contextmanager</span>
@@ -1049,7 +1127,7 @@
                 <span class="c1"># make sure we are at the begining of the object/file</span>
                 <span class="n">data_stringIO</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
                 <span class="n">dataframe</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">data_stringIO</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
-                <span class="n">data_stringIO</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="n">data_stringIO</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
                 <span class="k">yield</span> <span class="n">data_stringIO</span>
             <span class="k">finally</span><span class="p">:</span>
                 <span class="n">data_stringIO</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -1059,7 +1137,7 @@
         <span class="k">with</span> <span class="n">readStringIO</span><span class="p">()</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">column_list</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
             <span class="n">cmd_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;COPY </span><span class="si">{table}</span><span class="s2"> (</span><span class="si">{columns}</span><span class="s2">) FROM STDIN WITH (FORMAT CSV)&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">table_name_fqn</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">column_list</span><span class="p">)</span>
-            <span class="c1">#print(&quot;pyscopg:&quot;, cmd_string)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pyscopg:&quot;</span><span class="p">,</span> <span class="n">cmd_string</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_cur</span><span class="o">.</span><span class="n">copy_expert</span><span class="p">(</span><span class="n">cmd_string</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
 
@@ -1080,7 +1158,7 @@
             <span class="n">data_stringIO</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
 
             <span class="n">dataframe</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">data_stringIO</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
-            <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;--dbname=</span><span class="si">{dbname}</span><span class="s2"> --host=</span><span class="si">{host}</span><span class="s2"> -c &quot;\copy </span><span class="si">{table_name}</span><span class="s2"> </span>
+            <span class="n">params</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;--dbname=</span><span class="si">{dbname}</span><span class="s2"> --host=</span><span class="si">{host}</span><span class="s2"> -c &quot;\copy </span><span class="si">{table_name}</span><span class="s2"></span>
 <span class="s2">            FROM stdin with (format csv, delimiter &#39;</span><span class="si">{delimiter}</span><span class="s2">&#39;, HEADER </span><span class="si">{header}</span><span class="s2">, ENCODING &#39;</span><span class="si">{encoding}</span><span class="s2">&#39;)&quot; &quot;&quot;&quot;</span>
             <span class="n">command_text</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name_fqn</span><span class="p">,</span>
                                          <span class="n">delimiter</span><span class="o">=</span><span class="n">file_delimiter</span><span class="p">,</span> <span class="n">dbname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_database_name</span><span class="p">,</span>

@@ -17,3 +17,8 @@ docker run --restart "unless-stopped" --name docker-postgres -p 5432:5432 -e POS
 #sleep 2 && docker run -it --rm -e "PGPASSWORD=docker" --link docker-postgres:postgres postgres psql -h postgres -U postgres
 
 
+export PGDATABASE=postgres
+export PGUSER=postgres
+export PGPASSWORD=docker
+export PGPORT=5432
+export PGHOST=localhost

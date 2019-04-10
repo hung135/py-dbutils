@@ -982,7 +982,7 @@ group by relname;""".format(table_name)
             table_exists = False
             sql = """select count(*) from information_schema.tables
             WHERE table_type='BASE TABLE'
-            and table_name='{table_name}' {schema}
+            and table_name='{table_name}' 
             """
             if '.' in table_name_fqn:
                 table_name = table_name_fqn.split('.')[1]

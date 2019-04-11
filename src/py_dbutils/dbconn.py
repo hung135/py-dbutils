@@ -135,10 +135,13 @@ class Connection:
 
         # z=db.get_pandas_frame('errorlog')
         for t in table_list:
-            z = pd.read_sql_table(t, conn, schema=self.dbschema, index_col=None, coerce_float=True, parse_dates=None,
+            print("dumping table ",t,self.dbschema)
+            table=t.split(".")[-1]
+            schema = t.split(".")[0]
+            z = pd.read_sql_table(table, conn, schema=schema, index_col=None, coerce_float=True, parse_dates=None,
                                   columns=None, chunksize=chunksize)
             # with open(folder+"/"+t+".csv","wb") as f:
-            filename = "{}_{}_{}.csv".format(self._database_name, self.dbschema, t)
+            filename = "{}_{}_{}.csv".format(self._database_name, schema, table)
             full_file_path = folder + "/" + filename
             # print(type(z),filename)
             i = 0
@@ -187,6 +190,7 @@ class Connection:
             schemaname='{}' and
             n_distinct>0 order by 5,4;
             """.format(v_schema)
+
         return self.query(sql)
 
     def get_schema_index(self, schema=None):
@@ -593,21 +597,7 @@ group by relname;""".format(table_name)
         self._cur.execute("ROLLBACK")
         self._cur.close()
         self._cur = None
-    #
-    # def vacuum(self, dbschema=None, table_name=None):
-    #     """ Default to commit after every transaction
-    #             Will check instance variable to decide if a commit is needed
-    #     """
-    #     self.create_cur()
-    #     if table_name is None or table_name == '':
-    #         self._cur.execute("vacuum analyze")
-    #         logging.debug("Vacuuming Schema")
-    #     elif '.' in table_name:
-    #         logging.debug("Vacuuming Table:{0}".format(table_name))
-    #         self._cur.execute("vacuum {0}".format(table_name))
-    #     else:
-    #         logging.debug("Vacuuming Table:{0}".format(table_name))
-    #         self._cur.execute("vacuum {0}.{1}".format(dbschema, table_name))
+
 
     def execute(self, sqlstring, commit=False, catch_exception=True, debug=False):
         self.create_cur()
@@ -641,7 +631,7 @@ group by relname;""".format(table_name)
 
         self.commit()
 
-    def truncate_table(self, table_name=None, commit=True, vacuum=True):
+    def truncate_table(self, table_name=None, commit=True):
         self.create_cur()
         dbschema = table_name.split('.')[0]
         str_string = "Truncating Table: \n\tHost:{0}\n\tDatabase:{1}\n\tTablename:{2}\n\tSchema:{3}"
@@ -650,8 +640,7 @@ group by relname;""".format(table_name)
         self._cur.execute('TRUNCATE table {0} cascade'.format(table_name))
         if commit:
             self.commit()
-        if vacuum:
-            self.vacuum(dbschema, table_name)
+
 
     def update(self, sqlstring):
         self.create_cur()
@@ -789,6 +778,9 @@ group by relname;""".format(table_name)
         return total_rows
 
     def get_conn_url(self):
+        if self._dbtype.upper() in[ "POSTGRES","CITUS"]:
+            self.url = 'postgresql://{}:{}@{}:{}/{}'
+            self.url = self.url.format(self._userid, self._password, self._host, self._port, self._database_name)
 
         return self.url
 
@@ -932,17 +924,16 @@ group by relname;""".format(table_name)
         if schema is None:
             schema = self.dbschema
         con, meta = self.connect_sqlalchemy(schema, self._dbtype)
-        # print dir(meta.tables)
+        print(dir(meta.tables))
+        print(schema, self._dbtype)
+        tables=self.get_table_list_via_query(schema)
+        table_obj=[]
+        for t in  tables:
 
-        table_obj = []
-        for n, t in meta.tables.items():
-            # print(n, t.name)
-
-            # print(type(n), n, dir(t))
-            x = self.query("select count(1) from {}".format(t.key))
+            x = self.query("select count(1) from {}.{}".format(schema,t))
             rowcount = x[0][0]
             # print(type(rowcount),dir(rowcount))
-            d = dict({"db": self._database_name, "schema": self.dbschema, "table_name": t.name, "row_counts": rowcount})
+            d = dict({"db": self._database_name, "schema": schema, "table_name": t, "row_counts": rowcount})
             table_obj.append(d)
 
         return table_obj
@@ -963,15 +954,18 @@ group by relname;""".format(table_name)
             field_list.append(field_name)
         return field_list
 
-    def print_table_info(self, table_name, dbschema):
+    def print_table_info(self, table_name, schema):
         from sqlalchemy.ext.automap import automap_base
         Base = automap_base()
         # from sqlalchemy.orm import Session
+        engine,meta=self.connect_sqlalchemy()
+        Base.prepare(engine, reflect=True, schema=schema)
+        l = eval('Base.classes.{}'.format("{}".format(table_name)))
 
-        Base.prepare(self.connect_sqlalchemy(), reflect=True, schema=dbschema)
-        l = eval('Base.classes.{}'.format(table_name.split('.'[-1])))
         for m in l.__table__.columns:
             print(m, m.type)
+
+
 
     def get_db_size(self):
         sql = """SELECT  table_schema,table_name, pg_size_pretty(total_bytes) AS total
@@ -996,11 +990,16 @@ group by relname;""".format(table_name)
 
     # this is only in this class for convience atm, should be moved out eventually
 
-    def get_pandas_frame(self, table_name, rows=None):
+    def get_pandas_frame(self, table_name_fqn, rows=None):
         import pandas as pd
         conn, meta = self.connect_sqlalchemy()
-        z = pd.read_sql_table(table_name, conn, schema=self.dbschema, index_col=None, coerce_float=True,
+
+        schema = table_name_fqn.split('.')[0]
+        table_name = table_name_fqn.split('.')[1]
+
+        z = pd.read_sql_table(table_name, conn, schema=schema, index_col=None, coerce_float=True,
                               parse_dates=None, columns=None, chunksize=rows)
+        print(z)
         return z
 
     def put_pandas_frame(self, table_name, df):
@@ -1127,7 +1126,7 @@ group by relname;""".format(table_name)
                 data_stringIO.close()
 
                 # print("copy_from_file:", table_name_fqn, len(dataframe))
-
+        self.create_cur()
         with readStringIO() as f:
             column_list = ','.join(dataframe.columns.values.tolist())
             cmd_string = """COPY {table} ({columns}) FROM STDIN WITH (FORMAT CSV)""".format(table=table_name_fqn,
@@ -1178,11 +1177,11 @@ group by relname;""".format(table_name)
     # uses pyscopg2 builtin copy commmand delivered with binary
 
     def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter):
-
+        self.create_cur()
         f = open(full_file_path)
         # cur.copy_from(f, table_name_fqn, columns=('col1', 'col2'), sep=",")
         x = self._cur.copy_from(f, table_name_fqn, sep=",")
-        self._conn.commit()
+
 
         return x
 

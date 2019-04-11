@@ -68,6 +68,11 @@ class Connection:
 
         self._sqlalchemy_con = None
         self._sqlalchemy_meta = {}
+    def __enter__(self):
+        return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.__del__()
+
 
     # @migrate_utils.static_func.timer
     def connect_sqlalchemy(self, schema=None, db_type=None):
@@ -573,9 +578,14 @@ group by relname;""".format(table_name)
         """ Default to commit after every transaction
                 Will check instance variable to decide if a commit is needed
         """
-        self._cur.execute("COMMIT")
-        self._cur.close()
-        self._cur=None
+        try:
+            self._cur.execute("COMMIT")
+            self._cur.close()
+            self._cur=None
+        except AttributeError:
+            logging.error("No Open Cursor to do Commit")
+        except Exception as e:
+            logging.error(e)
 
     def rollback(self):
         self._cur.execute("ROLLBACK")
@@ -735,9 +745,17 @@ group by relname;""".format(table_name)
         pass
 
     def __del__(self):
-        try:
+        if self.commit:
             self.commit()
+            logging.debug("Auto Commit ON: Commiting")
+        else:
+            self.rollback()
+            logging.debug("Auto Commit OFF: Rolling Back:")
+        try:
             self._cur.close()
+        except:
+            pass
+        try:
             self._conn.close()
             logging.debug("Closed DB Connection: {0}:{1}:{2}".format(self._host, self._database_name, self._dbtype))
         except:

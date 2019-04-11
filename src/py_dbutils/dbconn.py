@@ -1,16 +1,17 @@
 import logging as lg
 import os
 # import subprocess as commands
-#import commands
+# import commands
 import sys
 import datetime
 import sqlalchemy
 
-#import migrate_utils
+# import migrate_utils
 lg.basicConfig()
 logging = lg.getLogger()
 # logging.setLevel(lg.INFO)
 logging.setLevel(lg.DEBUG)
+
 
 # Decorator function to log and time how long a function took to run
 
@@ -68,11 +69,12 @@ class Connection:
 
         self._sqlalchemy_con = None
         self._sqlalchemy_meta = {}
+
     def __enter__(self):
         return self
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.__del__()
-
 
     # @migrate_utils.static_func.timer
     def connect_sqlalchemy(self, schema=None, db_type=None):
@@ -114,8 +116,7 @@ class Connection:
             # We then bind the connection to MetaData()
             # print('connecting schema:', schema)
             if self._sqlalchemy_meta.get(schema, None) is None:
-                self._sqlalchemy_meta[schema] = sqlalchemy.MetaData(bind=self._sqlalchemy_con, reflect=True,
-                                                                    schema=schema)
+                self._sqlalchemy_meta[schema] = sqlalchemy.MetaData(bind=self._sqlalchemy_con, schema=schema)
 
         return self._sqlalchemy_con, self._sqlalchemy_meta[schema]
 
@@ -156,7 +157,6 @@ class Connection:
 
     def dump_tables_csv(self, table_list, folder):
         import csv
-
 
         con, meta = self.connect_sqlalchemy(self.dbschema, self._dbtype)
         # print dir(meta.tables)
@@ -356,7 +356,7 @@ group by relname;""".format(table_name)
         self._replace_environment_vars()
 
         cli = """psql -c"\d {}" """.format(table_name)
-        #cli = """psql {6} -c "\copy {0} FROM '{1}' with (format csv,{4} FORCE_NULL ({3}),delimiter '{2}', ENCODING '{5}')" """
+        # cli = """psql {6} -c "\copy {0} FROM '{1}' with (format csv,{4} FORCE_NULL ({3}),delimiter '{2}', ENCODING '{5}')" """
 
         sql = ''
         v_index_sql = ''
@@ -396,10 +396,12 @@ group by relname;""".format(table_name)
                     if 'REFERENCES' in line and line.startswith('TABLE '):
                         v_referenced_table = line.split('"')[1]
                         v_index_sql += 'ALTER TABLE {0} ADD CONSTRAINT FOREIGN KEY ('.format(v_referenced_table)
-                        v_index_sql += str(line.split('(')[1] + ';\n').replace(v_source_schema + '.', v_target_schema + '.')
+                        v_index_sql += str(line.split('(')[1] + ';\n').replace(v_source_schema + '.',
+                                                                               v_target_schema + '.')
                     else:
                         v_index_sql += 'ALTER TABLE {0} ADD CONSTRAINT FOREIGN KEY ('.format(target_name)
-                        v_index_sql += str(line.split('(')[1] + ';\n').replace(v_source_schema + '.', v_target_schema + '.')
+                        v_index_sql += str(line.split('(')[1] + ';\n').replace(v_source_schema + '.',
+                                                                               v_target_schema + '.')
             elif v_index and len(line) > 1 and 'UNIQUE' in line:
                 if gen_index:
                     v_index_sql += 'CREATE UNIQUE INDEX  ON {0} ('.format(target_name)
@@ -434,7 +436,6 @@ group by relname;""".format(table_name)
           boolean: True/False
         """
         self.create_cur()
-
 
         con, meta = self.connect_sqlalchemy(self.dbschema, self._dbtype)
         # print dir(meta.tables)
@@ -525,7 +526,8 @@ group by relname;""".format(table_name)
         v_schema = table_name.split('.')[0]
         v_table_name = table_name.split('.')[1]
         v_table_exists = self.has_record(
-            """select 1 from information_schema.tables where table_schema='{0}' and table_name='{1}'""".format(v_schema, v_table_name))
+            """select 1 from information_schema.tables where table_schema='{0}' and table_name='{1}'""".format(v_schema,
+                                                                                                               v_table_name))
 
         return v_table_exists
 
@@ -540,14 +542,14 @@ group by relname;""".format(table_name)
         """
         self.create_cur()
         rs = None
-        record_len=0
+        record_len = 0
         try:
             rs = self.query(sqlstring)
         except Exception as e:
             logging.error("error in dbconn.has_record: {}".format(sqlstring))
-        record_len=len(rs)
-        #we need to close this or it will lock the connection
-        self._cur.close()
+        record_len = len(rs)
+        # we need to close this or it will lock the connection
+
         if record_len > 0:
             return True
         return False
@@ -561,7 +563,7 @@ group by relname;""".format(table_name)
             self._cur.execute(sqlstring)
             rows = self._cur.fetchall()
             self._cur.close()
-            self._cur=None
+            self._cur = None
         else:
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
@@ -581,7 +583,7 @@ group by relname;""".format(table_name)
         try:
             self._cur.execute("COMMIT")
             self._cur.close()
-            self._cur=None
+            self._cur = None
         except AttributeError:
             logging.error("No Open Cursor to do Commit")
         except Exception as e:
@@ -590,34 +592,35 @@ group by relname;""".format(table_name)
     def rollback(self):
         self._cur.execute("ROLLBACK")
         self._cur.close()
-        self._cur=None
+        self._cur = None
+    #
+    # def vacuum(self, dbschema=None, table_name=None):
+    #     """ Default to commit after every transaction
+    #             Will check instance variable to decide if a commit is needed
+    #     """
+    #     self.create_cur()
+    #     if table_name is None or table_name == '':
+    #         self._cur.execute("vacuum analyze")
+    #         logging.debug("Vacuuming Schema")
+    #     elif '.' in table_name:
+    #         logging.debug("Vacuuming Table:{0}".format(table_name))
+    #         self._cur.execute("vacuum {0}".format(table_name))
+    #     else:
+    #         logging.debug("Vacuuming Table:{0}".format(table_name))
+    #         self._cur.execute("vacuum {0}.{1}".format(dbschema, table_name))
 
-    def vacuum(self, dbschema=None, table_name=None):
-        """ Default to commit after every transaction
-                Will check instance variable to decide if a commit is needed
-        """
+    def execute(self, sqlstring, commit=False, catch_exception=True, debug=False):
         self.create_cur()
-        if table_name is None or table_name == '':
-            self._cur.execute("vacuum analyze")
-            logging.debug("Vacuuming Schema")
-        elif '.' in table_name:
-            logging.debug("Vacuuming Table:{0}".format(table_name))
-            self._cur.execute("vacuum {0}".format(table_name))
-        else:
-            logging.debug("Vacuuming Table:{0}".format(table_name))
-            self._cur.execute("vacuum {0}.{1}".format(dbschema, table_name))
-
-    def execute(self, sqlstring,commit=False,catch_exception=True, debug=False):
-        self.create_cur()
-        logging.debug("Debug DB Execute: {}:{}:{} \n\t{} ".format(self._userid, self._host, self._database_name, sqlstring))
+        logging.debug(
+            "Debug DB Execute: {}:{}:{} \n\t{} ".format(self._userid, self._host, self._database_name, sqlstring))
         rowcount = 0
-        sql=str(sqlstring).strip()
+        sql = str(sqlstring).strip()
 
         if catch_exception:
             try:
                 self._cur.execute(sql)
             except Exception as e:
-                #print("Error Execute SQL:{}".format(e))
+                # print("Error Execute SQL:{}".format(e))
                 logging.warning("SQL error Occurred But Continuing:\n{}".format(e))
         else:
             self._cur.execute(sql)
@@ -629,7 +632,6 @@ group by relname;""".format(table_name)
 
         return rowcount
 
-
     def drop_schema(self, schema):
         self.create_cur()
         logging.debug(
@@ -639,11 +641,11 @@ group by relname;""".format(table_name)
 
         self.commit()
 
-    def truncate_table(self, table_name=None,commit=True,vacuum=True):
+    def truncate_table(self, table_name=None, commit=True, vacuum=True):
         self.create_cur()
         dbschema = table_name.split('.')[0]
-        str_string="Truncating Table: \n\tHost:{0}\n\tDatabase:{1}\n\tTablename:{2}\n\tSchema:{3}"
-        logging.debug(str_string.format(self._host, self._database_name,table_name, dbschema))
+        str_string = "Truncating Table: \n\tHost:{0}\n\tDatabase:{1}\n\tTablename:{2}\n\tSchema:{3}"
+        logging.debug(str_string.format(self._host, self._database_name, table_name, dbschema))
 
         self._cur.execute('TRUNCATE table {0} cascade'.format(table_name))
         if commit:
@@ -655,9 +657,11 @@ group by relname;""".format(table_name)
         self.create_cur()
         self._cur.execute(sqlstring)
         self.commit()
+
     def create_cur(self):
         if self._cur is None:
-            self._cur=self._conn.cursor()
+            self._cur = self._conn.cursor()
+
     def drop_table(self, table_name):
         self.create_cur()
         logging.debug("Dropping Table(if Exists): {0}".format(table_name))
@@ -764,17 +768,18 @@ group by relname;""".format(table_name)
     def copy_to_csv(self, sqlstring, full_file_path, delimiter):
         total_rows = 0
         if self._cur is None:
-            self._cur=self._conn.cursor()
+            self._cur = self._conn.cursor()
         if self._dbtype in ['POSTGRES', 'CITUS']:
             outputquery = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(sqlstring)
 
             with open(full_file_path, 'w') as f:
-                x=self._cur.copy_expert(outputquery, f)
+                x = self._cur.copy_expert(outputquery, f)
             print(x)
         if self._dbtype in ['MSSQL']:
             import pandas
 
-            df = pandas.read_sql_query(sqlstring, self._conn, index_col=None, coerce_float=True, params=None, parse_dates=None, chunksize=100000)
+            df = pandas.read_sql_query(sqlstring, self._conn, index_col=None, coerce_float=True, params=None,
+                                       parse_dates=None, chunksize=100000)
             # df.to_csv(full_file_path,header=false,sep=delimiter)
 
             for chunk in df:
@@ -846,6 +851,7 @@ group by relname;""".format(table_name)
             # for m in k:
             l.append(t)
         return l
+
     # returns list of tables that are not assigned to common roles
 
     def get_uncommon_tables(self, common_roles='operational_dba'):
@@ -904,11 +910,13 @@ group by relname;""".format(table_name)
     # @migrate_utils.static_func.timer
     def get_table_row_count_fast(self, table_name, schema=None):
         x = 0
-        if self.dbtype in ['POSTGRES', 'CITUS']:
-            self.vacuum(table_name)
+        if self._dbtype in ['POSTGRES', 'CITUS']:
+
+
             row = self.query("""select n_live_tup
                     from pg_stat_user_tables
                     where schemaname='{}' and relname='{}'""".format(schema, table_name))
+
             x = row[0][0]
 
         return x
@@ -985,6 +993,7 @@ group by relname;""".format(table_name)
   ) a
 ) a;"""
         return self.query(sql)
+
     # this is only in this class for convience atm, should be moved out eventually
 
     def get_pandas_frame(self, table_name, rows=None):
@@ -999,6 +1008,7 @@ group by relname;""".format(table_name)
         z = df.to_sql(table_name, conn, schema=self.dbschema, index=False, if_exists='append', chunksize=None,
                       dtype=None)
         return z
+
     # certain commans requires the environment variables for the session
     # we need to save that and replace with our current and put it back after we are done
 
@@ -1102,12 +1112,11 @@ group by relname;""".format(table_name)
         except ImportError:
             from io import StringIO
 
-
         from contextlib import contextmanager
 
         @contextmanager
         def readStringIO():
-            #from cStringIO import StringIO
+            # from cStringIO import StringIO
             try:
                 # make sure we are at the begining of the object/file
                 data_stringIO = StringIO()
@@ -1117,18 +1126,20 @@ group by relname;""".format(table_name)
             finally:
                 data_stringIO.close()
 
-                #print("copy_from_file:", table_name_fqn, len(dataframe))
+                # print("copy_from_file:", table_name_fqn, len(dataframe))
 
         with readStringIO() as f:
             column_list = ','.join(dataframe.columns.values.tolist())
-            cmd_string = """COPY {table} ({columns}) FROM STDIN WITH (FORMAT CSV)""".format(table=table_name_fqn, columns=column_list)
+            cmd_string = """COPY {table} ({columns}) FROM STDIN WITH (FORMAT CSV)""".format(table=table_name_fqn,
+                                                                                            columns=column_list)
             print("pyscopg:", cmd_string)
             self._cur.copy_expert(cmd_string, f)
             self._conn.commit()
 
     # still in the works
 
-    def import_bulk_dataframe(self, dataframe, table_name_fqn, file_delimiter=',', header=False, encoding='utf8', in_memory=False):
+    def import_bulk_dataframe(self, dataframe, table_name_fqn, file_delimiter=',', header=False, encoding='utf8',
+                              in_memory=False):
         tempfile = './_tmp_bulk_import.csv'
         if not in_memory:
             dataframe.to_csv(tempfile, header=False, index=False, encoding=encoding)
@@ -1169,7 +1180,7 @@ group by relname;""".format(table_name)
     def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter):
 
         f = open(full_file_path)
-        #cur.copy_from(f, table_name_fqn, columns=('col1', 'col2'), sep=",")
+        # cur.copy_from(f, table_name_fqn, columns=('col1', 'col2'), sep=",")
         x = self._cur.copy_from(f, table_name_fqn, sep=",")
         self._conn.commit()
 
@@ -1177,7 +1188,8 @@ group by relname;""".format(table_name)
 
     # simple import using client side
     # this assumes the csv has data exactly in the same structure as the target table
-    def import_file_client_side(self, full_file_path, table_name_fqn, file_delimiter=',', header=False, encoding='utf8'):
+    def import_file_client_side(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
+                                encoding='utf8'):
 
         self._save_environment_vars()
         self._replace_environment_vars()

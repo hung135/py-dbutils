@@ -8,7 +8,7 @@ import inspect
 import os
 
 DBSCHEMA = 'postgres'
-COMMIT = False
+COMMIT = True
 PASSWORD = 'docker'
 USERID = 'postgres'
 HOST = 'localhost'
@@ -35,7 +35,8 @@ class TestConnection(unittest.TestCase):
 
         dataframe = pd.read_csv(os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv')))
         connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, inspect.stack()[0][3])
-        connection.execute("create schema if not exists {}".format(TEST_SCHEMA))
+        connection.execute("create schema {};".format(TEST_SCHEMA))
+        connection.commit()
         engine, meta = connection.connect_sqlalchemy(schema=TEST_SCHEMA, db_type='POSTGRES')
         dataframe.to_sql(name=TEST_TABLE.split('.')[-1], con=engine, index=False, if_exists='replace',
                          schema=TEST_SCHEMA)
@@ -263,7 +264,8 @@ class TestConnection(unittest.TestCase):
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
-            self.assertGreater(0, len(connection.get_columns(TEST_TABLE, TEST_SCHEMA)))
+            x=connection.get_columns('test', TEST_SCHEMA)
+            self.assertGreater(len(x), 0)
             assert True
         except Exception as e:
             print(e)
@@ -441,9 +443,12 @@ class TestConnection(unittest.TestCase):
 
         # self.assertEqual(expected, connection.get_table_row_count_fast(table_name, schema))
         try:
+            self.populate_test_table()
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
-            self.assertGreater(0, connection.get_table_row_count_fast(TEST_TABLE, TEST_SCHEMA))
+            connection.execute('vacuum test')
+            connection.commit()
+            self.assertGreaterEqual( connection.get_table_row_count_fast('test', TEST_SCHEMA),0)
 
             assert True
         except Exception as e:
@@ -469,7 +474,9 @@ class TestConnection(unittest.TestCase):
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
-            self.assertGreater(0, len(connection.get_tables_row_count(TEST_SCHEMA)))
+            x=connection.get_tables_row_count('test')
+            print(x)
+            self.assertGreater(len(x),0)
             assert True
         except Exception as e:
             print(e)
@@ -491,11 +498,14 @@ class TestConnection(unittest.TestCase):
 
         # self.assertEqual(expected, connection.get_view_list_via_query(dbschema))
         try:
+            self.populate_test_table()
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
-            self.assertGreater(0, len(connection.get_view_list_via_query(TEST_SCHEMA)))
+            connection.execute("create view test.vw_test as select * from {}".format(TEST_TABLE))
+            x=connection.get_view_list_via_query(TEST_SCHEMA)
+            self.assertGreater(len(x),0)
 
-            assert True  # TODO: implement your test here
+            assert True
         except Exception as e:
             print(e)
             assert False
@@ -507,7 +517,7 @@ class TestConnection(unittest.TestCase):
             self.populate_test_table()
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
-            self.assertGreater(0, connection.has_record('select * from {}'.format(TEST_TABLE)))
+            self.assertEqual(True, connection.has_record('select * from {}'.format(TEST_TABLE)))
 
             assert True  # TODO: implement your test here
         except Exception as e:

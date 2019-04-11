@@ -12,14 +12,6 @@ py\_dbutils.dbconn module
     :undoc-members:
     :show-inheritance:
 
-py\_dbutils.skeleton module
----------------------------
-
-.. automodule:: py_dbutils.skeleton
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 py\_dbutils.utils module
 ------------------------
 

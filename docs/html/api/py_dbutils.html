@@ -181,7 +181,7 @@ Will check instance variable to decide if a commit is needed</p>
 
 <dl class="method">
 <dt id="py_dbutils.dbconn.Connection.get_pandas_frame">
-<code class="descname">get_pandas_frame</code><span class="sig-paren">(</span><em>table_name</em>, <em>rows=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_pandas_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_pandas_frame" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_pandas_frame</code><span class="sig-paren">(</span><em>table_name_fqn</em>, <em>rows=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_pandas_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_pandas_frame" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -334,7 +334,7 @@ Will check instance variable to decide if a commit is needed</p>
 
 <dl class="method">
 <dt id="py_dbutils.dbconn.Connection.print_table_info">
-<code class="descname">print_table_info</code><span class="sig-paren">(</span><em>table_name</em>, <em>dbschema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.print_table_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.print_table_info" title="Permalink to this definition">¶</a></dt>
+<code class="descname">print_table_info</code><span class="sig-paren">(</span><em>table_name</em>, <em>schema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.print_table_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.print_table_info" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -410,7 +410,7 @@ Will check instance variable to decide if a commit is needed</p>
 
 <dl class="method">
 <dt id="py_dbutils.dbconn.Connection.truncate_table">
-<code class="descname">truncate_table</code><span class="sig-paren">(</span><em>table_name=None</em>, <em>commit=True</em>, <em>vacuum=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.truncate_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.truncate_table" title="Permalink to this definition">¶</a></dt>
+<code class="descname">truncate_table</code><span class="sig-paren">(</span><em>table_name=None</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.truncate_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.truncate_table" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -418,92 +418,6 @@ Will check instance variable to decide if a commit is needed</p>
 <code class="descname">update</code><span class="sig-paren">(</span><em>sqlstring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.update" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="py_dbutils.dbconn.Connection.vacuum">
-<code class="descname">vacuum</code><span class="sig-paren">(</span><em>dbschema=None</em>, <em>table_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.vacuum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.vacuum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Default to commit after every transaction
-Will check instance variable to decide if a commit is needed</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-py_dbutils.skeleton">
-<span id="py-dbutils-skeleton-module"></span><h2>py_dbutils.skeleton module<a class="headerlink" href="#module-py_dbutils.skeleton" title="Permalink to this headline">¶</a></h2>
-<p>This is a skeleton file that can serve as a starting point for a Python
-console script. To run this script uncomment the following lines in the
-[options.entry_points] section in setup.cfg:</p>
-<blockquote>
-<div><dl class="simple">
-<dt>console_scripts =</dt><dd><p>fibonacci = py_dbutils.skeleton:run</p>
-</dd>
-</dl>
-</div></blockquote>
-<p>Then run <cite>python setup.py install</cite> which will install the command <cite>fibonacci</cite>
-inside your current environment.
-Besides console scripts, the header (i.e. until _logger…) of this file can
-also be used as template for Python modules.</p>
-<p>Note: This skeleton file can be safely removed if not needed!</p>
-<dl class="function">
-<dt id="py_dbutils.skeleton.fib">
-<code class="descclassname">py_dbutils.skeleton.</code><code class="descname">fib</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/skeleton.html#fib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.skeleton.fib" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fibonacci example function</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>n</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – integer</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>n-th Fibonacci number</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="py_dbutils.skeleton.main">
-<code class="descclassname">py_dbutils.skeleton.</code><code class="descname">main</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/skeleton.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.skeleton.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main entry point allowing external calls</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>args</strong> (<em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>]</em>) – command line parameter list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="py_dbutils.skeleton.parse_args">
-<code class="descclassname">py_dbutils.skeleton.</code><code class="descname">parse_args</code><span class="sig-paren">(</span><em>args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/skeleton.html#parse_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.skeleton.parse_args" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse command line parameters</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>args</strong> (<em>[</em><a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>]</em>) – command line parameters as list of strings</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>command line parameters namespace</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/argparse.html#argparse.Namespace" title="(in Python v3.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">argparse.Namespace</span></code></a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="py_dbutils.skeleton.run">
-<code class="descclassname">py_dbutils.skeleton.</code><code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/skeleton.html#run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.skeleton.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Entry point for console_scripts</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="py_dbutils.skeleton.setup_logging">
-<code class="descclassname">py_dbutils.skeleton.</code><code class="descname">setup_logging</code><span class="sig-paren">(</span><em>loglevel</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/skeleton.html#setup_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.skeleton.setup_logging" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup basic logging</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>loglevel</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – minimum loglevel for emitting messages</p>
-</dd>
-</dl>
 </dd></dl>
 
 </div>

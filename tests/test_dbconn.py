@@ -37,12 +37,19 @@ class TestConnection(unittest.TestCase):
 
         dataframe = pd.read_csv(TEST_CSV_FILE)
         connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE, inspect.stack()[0][3])
-        connection.execute("create schema {};".format(TEST_SCHEMA))
+        connection.execute(sqlstring="create schema {};".format(TEST_SCHEMA))
         connection.commit()
+        print("---")
+        connection.drop_table("{schema}.{table_name}".format(
+            schema=TEST_SCHEMA, table_name=TEST_TABLE_NAME), cascade=True)
+        connection.commit()
+        print("---")
         engine, meta = connection.connect_sqlalchemy(schema=TEST_SCHEMA, db_type='POSTGRES')
+        print("---")
         dataframe.to_sql(name=TEST_TABLE.split('.')[-1], con=engine, index=False, if_exists='replace',
                          schema=TEST_SCHEMA)
 
+        connection.commit()
         connection.execute("""CREATE INDEX test_idx
                                             ON test.test USING btree
                                             (col1 ASC NULLS LAST)
@@ -50,6 +57,7 @@ class TestConnection(unittest.TestCase):
                                             ALTER TABLE test.test ADD PRIMARY KEY (col1); """)
         connection.commit()
         connection.execute("vacuum analyse {}".format(TEST_TABLE))
+        connection.commit()
         print("Loaded Test Data")
         print(connection.query("select * from {}".format(TEST_TABLE)))
 
@@ -63,14 +71,19 @@ class TestConnection(unittest.TestCase):
                                     USERID, HOST, PORT, DATABASE,
                                     DBTYPE, inspect.stack()[0][3])
 
-            connection.execute("create schema if not exists {};".format(TEST_SCHEMA))
-            connection.execute('drop table if  exists {};'.format(TEST_TABLE))
-            connection.execute('create table if not exists {} as select 1 as col1;'.format(TEST_TABLE))
-            connection.execute(
-                'create view if not exists {}_vw as select * from test.{};'.format(TEST_TABLE, TEST_TABLE))
-            assert True  #
-        except Exception as e:
+            connection.execute(sqlstring="create schema if not exists {};".format(TEST_SCHEMA))
 
+            connection.drop_table(table_name=TEST_TABLE, cascade=True)
+
+            connection.execute(sqlstring='create table if not exists {} as select 1 as col1;'.format(TEST_TABLE),
+                               commit=True)
+
+            connection.execute(
+                sqlstring='CREATE OR REPLACE view {}_vw as select * from {};'.format(TEST_TABLE, TEST_TABLE)
+                , catch_exception=False, commit=True)
+            assert True
+        except Exception as e:
+            print(e)
             assert False
 
     def test_check_table_exists(self):
@@ -81,21 +94,27 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_connect_sqlalchemy(self):
         try:
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
-            self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy())))
-            self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy('POSTGRES'))))
-            self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy('MSSQL'))))
-            self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy('MYSQL'))))
-            self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy('ORACLE'))))
+            import sqlalchemy
+            x, y = connection.connect_sqlalchemy()
+            z = isinstance(x, sqlalchemy.engine.base.Engine)
+
+            self.assertEqual(True, z)
+            # self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy('POSTGRES'))))
+            # self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy('MSSQL'))))
+            # self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy('MYSQL'))))
+            # self.assertEqual("<class 'tuple'>", str(type(connection.connect_sqlalchemy('ORACLE'))))
 
             assert True
         except Exception as e:
-
+            print(e)
+            print(e)
             assert False
 
     def test_copy_from_file(self):
@@ -120,7 +139,8 @@ class TestConnection(unittest.TestCase):
             self.assertLess(0, connection.get_a_value("select count(*) from {}".format(TEST_TABLE)))
             assert True
         except Exception as e:
-
+            print(e)
+            print(e)
             assert False
 
     def test_copy_to_csv(self):
@@ -135,6 +155,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_create_table(self):
@@ -146,14 +167,15 @@ class TestConnection(unittest.TestCase):
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
             connection.drop_table("{schema}.{table_name}_x".format(
-            schema=TEST_SCHEMA, table_name=TEST_TABLE_NAME))
+                schema=TEST_SCHEMA, table_name=TEST_TABLE_NAME), cascade=True)
             connection.create_table(sqlstring)
-            self.assertEqual(True,connection.table_exists("{schema}.{table_name}_x".format(
-            schema=TEST_SCHEMA, table_name=TEST_TABLE_NAME)))
+            self.assertEqual(True, connection.table_exists("{schema}.{table_name}_x".format(
+                schema=TEST_SCHEMA, table_name=TEST_TABLE_NAME)))
 
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_create_table_from_dataframe(self):
@@ -168,11 +190,14 @@ class TestConnection(unittest.TestCase):
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
             connection.drop_table(TEST_TABLE)
+            connection.commit()
             connection.create_table_from_dataframe(dataframe, TEST_TABLE)
+            connection.commit()
             self.assertEqual(True, connection.check_table_exists(TEST_TABLE))
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_drop_schema(self):
@@ -185,6 +210,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_drop_table(self):
@@ -197,6 +223,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_dump_tables_csv(self):
@@ -209,6 +236,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_execute(self):
@@ -221,6 +249,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_execute_permit_execption(self):
@@ -233,6 +262,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_a_value(self):
@@ -245,6 +275,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_all_columns_schema(self):
@@ -257,6 +288,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_columns(self):
@@ -270,6 +302,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_conn_url(self):
@@ -281,6 +314,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_create_table(self):
@@ -293,6 +327,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_create_table_cli(self):
@@ -305,6 +340,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_create_table_sqlalchemy(self):
@@ -317,6 +353,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_create_table_via_dump(self):
@@ -329,6 +366,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_db_size(self):
@@ -341,6 +379,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_pandas_frame(self):
@@ -354,6 +393,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_primary_keys(self):
@@ -366,6 +406,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_schema_col_stats(self):
@@ -382,6 +423,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_schema_index(self):
@@ -394,6 +436,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_table_column_types(self):
@@ -406,6 +449,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_table_columns(self):
@@ -418,6 +462,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_table_list(self):
@@ -430,6 +475,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_table_list_via_query(self):
@@ -442,6 +488,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_table_row_count_fast(self):
@@ -458,6 +505,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_tables(self):
@@ -471,6 +519,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_tables_row_count(self):
@@ -487,6 +536,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_uncommon_tables(self):
@@ -499,6 +549,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_get_view_list_via_query(self):
@@ -515,6 +566,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_has_record(self):
@@ -529,6 +581,7 @@ class TestConnection(unittest.TestCase):
             assert True  # TODO: implement your test here
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_import_bulk_dataframe(self):
@@ -541,6 +594,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_import_file_client_side(self):
@@ -553,6 +607,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_import_pyscopg2_copy(self):
@@ -569,6 +624,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_insert_table(self):
@@ -581,6 +637,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_pandas_dump_table_csv(self):
@@ -595,6 +652,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_print_create_table(self):
@@ -608,6 +666,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_print_drop_tables(self):
@@ -620,6 +679,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_print_table_info(self):
@@ -633,6 +693,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_print_tables(self):
@@ -646,6 +707,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_put_pandas_frame(self):
@@ -658,6 +720,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_query(self):
@@ -670,6 +733,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_rollback(self):
@@ -684,6 +748,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_schema_exists(self):
@@ -696,6 +761,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_set_table_owner(self):
@@ -708,6 +774,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_table_exists(self):
@@ -720,6 +787,7 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
 
+            print(e)
             assert False
 
     def test_update(self):
@@ -728,6 +796,7 @@ class TestConnection(unittest.TestCase):
                                     inspect.stack()[0][3])
             self.assertEqual(None, connection.update('update {} set col1=0'.format(TEST_TABLE)))
         except:
+            print(e)
             assert False
 
     def test_truncate_table(self):
@@ -747,12 +816,12 @@ class TestConnection(unittest.TestCase):
             self.populate_test_table();
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
-            connection.execute("update test.test set col2='aaaaa'", catch_exception=False, commit=False)
+            connection.execute(sqlstring="update test.test set col2='aaaaa'", catch_exception=False, commit=False)
             connection.commit()
             self.assertLess(0, connection.get_a_value("select count(*) from test.test where col2='aaaaa'"))
             assert True
         except Exception as e:
-
+            print(e)
             assert False
 
 

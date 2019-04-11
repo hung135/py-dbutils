@@ -76,6 +76,9 @@ class Connection:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.__del__()
 
+    def sqlalchemy_engine_close(self):
+        print("Kill the _sqlalchemy_con")
+        self._sqlalchemy_con=None
     # @migrate_utils.static_func.timer
     def connect_sqlalchemy(self, schema=None, db_type=None):
 
@@ -99,7 +102,9 @@ class Connection:
 
                 if self._sqlalchemy_con is None:
                     self._sqlalchemy_con = sqlalchemy.create_engine(self.url, client_encoding="utf-8",
-                                                                    connect_args={"application_name": self.appname})
+                                                                    connect_args={"application_name": self.appname},pool_size=20,
+                                                                     isolation_level="AUTOCOMMIT")
+
             if db_type.upper() == "MSSQL":
                 self.url = 'mssql+pymssql://{}:{}@{}:{}/{}'
                 self.url = self.url.format(self._userid, self._password, self._host, self._port, self._database_name)
@@ -568,6 +573,7 @@ group by relname;""".format(table_name)
             rows = self._cur.fetchall()
             self._cur.close()
             self._cur = None
+
         else:
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
@@ -599,7 +605,7 @@ group by relname;""".format(table_name)
         self._cur = None
 
 
-    def execute(self, sqlstring, commit=False, catch_exception=True, debug=False):
+    def execute(self, sqlstring, commit=False, catch_exception=True):
         self.create_cur()
         logging.debug(
             "Debug DB Execute: {}:{}:{} \n\t{} ".format(self._userid, self._host, self._database_name, sqlstring))
@@ -651,17 +657,21 @@ group by relname;""".format(table_name)
         if self._cur is None:
             self._cur = self._conn.cursor()
 
-    def drop_table(self, table_name):
+    def drop_table(self, table_name,cascade=False,commit=True):
         self.create_cur()
         logging.debug("Dropping Table(if Exists): {0}".format(table_name))
-        self._cur.execute('Drop table if exists {0}'.format(table_name))
-        self.commit()
+        opt='' if not cascade else 'CASCADE'
+        sql='Drop table if exists {0} {1}'.format(table_name,opt)
+        self._cur.execute(sql)
+        if commit:
+            self.commit()  # if we don't commit that table will be locked
+
 
     def create_table(self, sqlstring):
         self.create_cur()
         if sqlstring.lower().startswith('create table '):
             self._cur.execute(sqlstring)
-            self.commit()
+
         else:
             raise Exception('create tables functions allowed')
 
@@ -799,7 +809,7 @@ group by relname;""".format(table_name)
 
     # @migrate_utils.static_func.timer
     def get_all_columns_schema(self, dbschema, table_name):
-        # print("----- wuh")
+
         sql = """SELECT table_name,column_name,upper(data_type) as type,
         is_identity,
         character_maximum_length
@@ -1061,15 +1071,22 @@ group by relname;""".format(table_name)
     def create_table_from_dataframe(self, dataframe, table_name_fqn):
         if '.' in table_name_fqn:
             if not self.check_table_exists(table_name_fqn):
+                self.create_cur()
                 df = dataframe.head()
                 schema = table_name_fqn.split('.')[0]
                 table_name = table_name_fqn.split('.')[1]
+                self.sqlalchemy_engine_close()
                 sqlalchemy_conn, meta = self.connect_sqlalchemy()
 
+                print(type(sqlalchemy_conn))
+                self.sqlalchemy_engine_close()
                 df.to_sql(table_name, sqlalchemy_conn, schema=schema, if_exists='append', index=False, chunksize=1000)
+                self.sqlalchemy_engine_close()
+
+                self.commit()
                 self.execute('truncate table {}'.format(table_name_fqn))
                 self.set_table_owner(table_name_fqn, 'operational_dba')
-
+                self.commit() # have to commit or we will lock this table
                 return True
             else:
                 print("Table exists")
@@ -1102,6 +1119,7 @@ group by relname;""".format(table_name)
             print('Not Supported')
             raise
         return table_exists
+
 
     # copy using pyscopg to convert a dataframe to a file like object and pass it into pyscopg
     # this does not write to the file system but puts all the data into memory

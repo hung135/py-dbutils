@@ -5,12 +5,15 @@ verify_ssl = true
 
 [dev-packages]
 twine = "*"
-sphinx = "*"
+Sphinx = "*"
+pyscaffold = "*"
 
 [packages]
 psycopg2-binary = "*"
-sqlalchemy = "*"
 pandas = "*"
+SQLAlchemy = "*"
+
 
 [requires]
 python_version = "3.7"
+

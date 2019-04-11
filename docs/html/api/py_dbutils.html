@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>py_dbutils package &#8212; py-dbutils unknown documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -92,7 +94,7 @@ Will check instance variable to decide if a commit is needed</p>
 
 <dl class="method">
 <dt id="py_dbutils.dbconn.Connection.drop_table">
-<code class="descname">drop_table</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.drop_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.drop_table" title="Permalink to this definition">¶</a></dt>
+<code class="descname">drop_table</code><span class="sig-paren">(</span><em>table_name</em>, <em>cascade=False</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.drop_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.drop_table" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -102,7 +104,7 @@ Will check instance variable to decide if a commit is needed</p>
 
 <dl class="method">
 <dt id="py_dbutils.dbconn.Connection.execute">
-<code class="descname">execute</code><span class="sig-paren">(</span><em>sqlstring</em>, <em>commit=False</em>, <em>catch_exception=True</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.execute" title="Permalink to this definition">¶</a></dt>
+<code class="descname">execute</code><span class="sig-paren">(</span><em>sqlstring</em>, <em>commit=False</em>, <em>catch_exception=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.execute" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -118,11 +120,14 @@ Will check instance variable to decide if a commit is needed</p>
 <dl class="method">
 <dt id="py_dbutils.dbconn.Connection.get_columns">
 <code class="descname">get_columns</code><span class="sig-paren">(</span><em>table_name</em>, <em>table_schema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_columns" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)">object</a></p>
-</dd>
-</dl>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)">object</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -139,34 +144,36 @@ Will check instance variable to decide if a commit is needed</p>
 <dt id="py_dbutils.dbconn.Connection.get_create_table_cli">
 <code class="descname">get_create_table_cli</code><span class="sig-paren">(</span><em>table_name</em>, <em>target_name=None</em>, <em>gen_pk=True</em>, <em>gen_index=True</em>, <em>gen_fk=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_create_table_cli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_create_table_cli" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="py_dbutils.dbconn.Connection.get_create_table_sqlalchemy">
 <code class="descname">get_create_table_sqlalchemy</code><span class="sig-paren">(</span><em>table_name</em>, <em>trg_db</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_create_table_sqlalchemy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_create_table_sqlalchemy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -203,34 +210,36 @@ Will check instance variable to decide if a commit is needed</p>
 <dt id="py_dbutils.dbconn.Connection.get_table_column_types">
 <code class="descname">get_table_column_types</code><span class="sig-paren">(</span><em>table_name</em>, <em>trg_schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_table_column_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_table_column_types" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="py_dbutils.dbconn.Connection.get_table_columns">
 <code class="descname">get_table_columns</code><span class="sig-paren">(</span><em>table_name</em>, <em>trg_schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_table_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_table_columns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -272,17 +281,18 @@ Will check instance variable to decide if a commit is needed</p>
 <dt id="py_dbutils.dbconn.Connection.has_record">
 <code class="descname">has_record</code><span class="sig-paren">(</span><em>sqlstring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.has_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.has_record" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>sqlstring</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sqlstring</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -314,17 +324,18 @@ Will check instance variable to decide if a commit is needed</p>
 <dt id="py_dbutils.dbconn.Connection.print_create_table">
 <code class="descname">print_create_table</code><span class="sig-paren">(</span><em>folder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.print_create_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.print_create_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -341,17 +352,18 @@ Will check instance variable to decide if a commit is needed</p>
 <dt id="py_dbutils.dbconn.Connection.print_tables">
 <code class="descname">print_tables</code><span class="sig-paren">(</span><em>table_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.print_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.print_tables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -373,17 +385,18 @@ Will check instance variable to decide if a commit is needed</p>
 <dt id="py_dbutils.dbconn.Connection.schema_exists">
 <code class="descname">schema_exists</code><span class="sig-paren">(</span><em>schema_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.schema_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.schema_exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -392,20 +405,26 @@ Will check instance variable to decide if a commit is needed</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="py_dbutils.dbconn.Connection.sqlalchemy_engine_close">
+<code class="descname">sqlalchemy_engine_close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.sqlalchemy_engine_close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.sqlalchemy_engine_close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="py_dbutils.dbconn.Connection.table_exists">
 <code class="descname">table_exists</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.table_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.table_exists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes a query string and runs it to see if it returns any rows</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>True/False</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>boolean</p>
-</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True/False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -487,6 +506,8 @@ Will check instance variable to decide if a commit is needed</p>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -507,7 +528,7 @@ Will check instance variable to decide if a commit is needed</p>
       &copy;2019, hnguyen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

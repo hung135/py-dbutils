@@ -10,6 +10,7 @@ pyscaffold = "*"
 pymysql = "*"
 pytest = "*"
 pytest-cov = "*"
+pyblizzard = "*"
 
 [packages]
 psycopg2-binary = "*"

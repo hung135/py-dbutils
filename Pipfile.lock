@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b102c2614e939ae73a2b972839794c3d65a35dbe018c12f113d8a09029191ca9"
+            "sha256": "ae21c9ace9ce85f3285eb4d711fef6e345198ceb0b7cd08a2ae3abb835530c59"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -248,6 +248,13 @@
             ],
             "version": "==2.10.1"
         },
+        "jsonpickle": {
+            "hashes": [
+                "sha256:0231d6f7ebc4723169310141352d9c9b7bbbd6f3be110cf634575d2bf2af91f0",
+                "sha256:625098cc8e5854b8c23b587aec33bc8e33e0e597636bfaca76152249c78fe5c1"
+            ],
+            "version": "==1.1"
+        },
         "markupsafe": {
             "hashes": [
                 "sha256:00bc623926325b26bb9605ae9eae8a215691f33cae5df11ca5424f06f2d1f473",
@@ -316,6 +323,13 @@
                 "sha256:dc639b046a6e2cff5bbe40194ad65936d6ba360b52b3c3fe1d08a82dd50b5e53"
             ],
             "version": "==1.8.0"
+        },
+        "pyblizzard": {
+            "hashes": [
+                "sha256:460a4701a88bcaf50ab13932970d1fee8aece054cb404f4b255a25c512f4f16d"
+            ],
+            "index": "pypi",
+            "version": "==1.1"
         },
         "pygments": {
             "hashes": [

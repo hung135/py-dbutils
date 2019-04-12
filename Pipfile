@@ -8,6 +8,8 @@ twine = "*"
 Sphinx = "*"
 pyscaffold = "*"
 pymysql = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [packages]
 psycopg2-binary = "*"

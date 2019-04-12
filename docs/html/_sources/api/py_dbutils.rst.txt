@@ -12,10 +12,26 @@ py\_dbutils.dbconn module
     :undoc-members:
     :show-inheritance:
 
+py\_dbutils.test module
+-----------------------
+
+.. automodule:: py_dbutils.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 py\_dbutils.utils module
 ------------------------
 
 .. automodule:: py_dbutils.utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+py\_dbutils.world module
+------------------------
+
+.. automodule:: py_dbutils.world
     :members:
     :undoc-members:
     :show-inheritance:

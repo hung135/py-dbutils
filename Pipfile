@@ -16,6 +16,4 @@ pyblizzard = "*"
 psycopg2-binary = "*"
 pandas = "*"
 SQLAlchemy = "*"
-
-[requires]
-python_version = "3.6.3"
+ 

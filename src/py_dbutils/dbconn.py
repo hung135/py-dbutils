@@ -752,7 +752,7 @@ group by relname;""".format(table_name)
                 self._cur.execute(sql)
             except Exception as e:
                 # print("Error Execute SQL:{}".format(e))
-                logging.warning("SQL error Occurred But Continuing:\n{}".format(e))
+                logging.warning("SQL error Occurred But Continuing:\n{}\n{}".format(e,sql))
         else:
             self._cur.execute(sql)
         rowcount = self._cur.rowcount

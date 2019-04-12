@@ -13,3 +13,5 @@ before_install:
 install:
   - pip install pipenv
   - pipenv sync
+  - pipenv shell
+  - pipenv install --dev

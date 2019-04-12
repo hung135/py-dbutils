@@ -75,6 +75,7 @@ class TestConnection(unittest.TestCase):
             connection.execute(sqlstring="create schema if not exists {};".format(TEST_SCHEMA))
 
             connection.drop_table(table_name=TEST_TABLE, cascade=True)
+            connection.commit()
 
             connection.execute(sqlstring='create table if not exists {} as select 1 as col1;'.format(TEST_TABLE),
                                commit=True)

@@ -77,7 +77,7 @@ class TestConnection(unittest.TestCase):
             connection.drop_table(table_name=TEST_TABLE, cascade=True)
             connection.commit()
 
-            connection.execute(sqlstring='CREATE TABLE as select 1 as col1;'.format(TEST_TABLE),
+            connection.execute(sqlstring='CREATE TABLE {} as select 1 as col1;'.format(TEST_TABLE),
                                commit=True)
 
             connection.execute(

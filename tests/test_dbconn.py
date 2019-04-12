@@ -72,8 +72,8 @@ class TestConnection(unittest.TestCase):
                                     USERID, HOST, PORT, DATABASE,
                                     DBTYPE, inspect.stack()[0][3])
 
-            connection.execute(sqlstring="create schema if not exists {};".format(TEST_SCHEMA))
-
+            connection.execute(sqlstring="CREATE SCHEMA IF NOT EXISTS {};".format(TEST_SCHEMA),commit=True)
+            
             connection.drop_table(table_name=TEST_TABLE, cascade=True)
             connection.commit()
 

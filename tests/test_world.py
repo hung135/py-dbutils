@@ -48,12 +48,16 @@ class TestDB(unittest.TestCase):
 
     def test_postgres(self):
         x = postgres.DB(port=55432);
-        print(x)
+        
+        x.execute(sqlstring="create schema {};".format(TEST_SCHEMA))
+        x.commit()
         self.populate_test_table(x)
 
     def test_mysql(self):
         x = mysql.DB(userid='root',port=33306);
-        print(x)
+
+        x.execute(sqlstring="create schema {};".format(TEST_SCHEMA))
+        x.commit()
         self.populate_test_table(x)
 
     # def test_sqlalch(self):

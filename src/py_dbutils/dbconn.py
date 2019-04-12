@@ -35,7 +35,13 @@ class Connection:
 
     def __init__(self, dbschema=None, commit=True, password=None, userid=None, host=None, port=5432, database=None,
                  dbtype='POSTGRES', appname='py_dbutils'):
-        """ Default to commit after every transaction
+        """Describe Method:
+
+        Args:(self, dbschema=None, commit=True, password=None, userid=None, host=None, port=5432, database=None,
+          table_name (str): String
+
+        Returns:
+          None: None
         """
         self._cur = None
         self._commit = commit
@@ -71,16 +77,49 @@ class Connection:
         self._sqlalchemy_meta = {}
 
     def __enter__(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        """Describe Method:
+
+        Args:(self, exc_type, exc_val, exc_tb):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.__del__()
 
     def sqlalchemy_engine_close(self):
-        print("Kill the _sqlalchemy_con")
-        self._sqlalchemy_con=None
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
+
+        self._sqlalchemy_con = None
+
     # @migrate_utils.static_func.timer
     def connect_sqlalchemy(self, schema=None, db_type=None):
+        """Describe Method:
+
+        Args:(self, schema=None, db_type=None):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
 
         # import pymssql
         '''Returns a connection and a metadata object'''
@@ -102,8 +141,9 @@ class Connection:
 
                 if self._sqlalchemy_con is None:
                     self._sqlalchemy_con = sqlalchemy.create_engine(self.url, client_encoding="utf-8",
-                                                                    connect_args={"application_name": self.appname},pool_size=20,
-                                                                     isolation_level="AUTOCOMMIT")
+                                                                    connect_args={"application_name": self.appname},
+                                                                    pool_size=20,
+                                                                    isolation_level="AUTOCOMMIT")
 
             if db_type.upper() == "MSSQL":
                 self.url = 'mssql+pymssql://{}:{}@{}:{}/{}'
@@ -126,13 +166,28 @@ class Connection:
         return self._sqlalchemy_con, self._sqlalchemy_meta[schema]
 
     def print_drop_tables(self):
+        """Describe Method:
 
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         con, meta = self.connect_sqlalchemy(self.dbschema, self._dbtype)
         for n, t in meta.tables.items():
             # print(type(n), n, t.name)
             print("drop table if exists {}.{} cascade;".format(self.dbschema, t.name))
 
     def pandas_dump_table_csv(self, table_list, folder, chunksize=100000):
+        """Describe Method:
+
+        Args:(self, table_list, folder, chunksize=100000):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         # def get_pandas_frame(self, table_name,rows=None):
         import pandas as pd
 
@@ -140,8 +195,8 @@ class Connection:
 
         # z=db.get_pandas_frame('errorlog')
         for t in table_list:
-            print("dumping table ",t,self.dbschema)
-            table=t.split(".")[-1]
+            print("dumping table ", t, self.dbschema)
+            table = t.split(".")[-1]
             schema = t.split(".")[0]
             z = pd.read_sql_table(table, conn, schema=schema, index_col=None, coerce_float=True, parse_dates=None,
                                   columns=None, chunksize=chunksize)
@@ -164,6 +219,14 @@ class Connection:
                         print("Records Dumped: {}".format(i * chunksize))  # print(dir(df),type(df))
 
     def dump_tables_csv(self, table_list, folder):
+        """Describe Method:
+
+        Args:(self, table_list, folder):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         import csv
 
         con, meta = self.connect_sqlalchemy(self.dbschema, self._dbtype)
@@ -180,6 +243,14 @@ class Connection:
                 out.writerow(result)
 
     def get_schema_col_stats(self, schema=None):
+        """Describe Method:
+
+        Args:(self, schema=None):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         v_schema = self.dbschema if schema is None else schema
         sql = """select  schemaname,tablename,attname as columnname,n_distinct , reltuples::bigint
             ,( (select   distinct(True)  from pg_index ix,pg_attribute ab where  ab.attnum = ANY(ix.indkey)
@@ -199,6 +270,14 @@ class Connection:
         return self.query(sql)
 
     def get_schema_index(self, schema=None):
+        """Describe Method:
+
+        Args:(self, schema=None):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         import pprint
 
         v_schema = self.dbschema if schema is None else schema
@@ -283,6 +362,14 @@ order by
                 logging.error("Cannot Find Table: {}".format(t))
 
     def get_create_table(self, table_name):
+        """Describe Method:
+
+        Args:(self, table_name):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         sql = """SELECT
   'CREATE TABLE ' || relname || E'\n(\n' ||
   array_to_string(
@@ -315,6 +402,14 @@ group by relname;""".format(table_name)
         return create_sql
 
     def get_create_table_via_dump(self, table_name, target_name=None, gen_pk=True, gen_index=True, gen_fk=True):
+        """Describe Method:
+
+        Args:(self, table_name, target_name=None, gen_pk=True, gen_index=True, gen_fk=True):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         v_source_schema = table_name.split('.')[0]
         v_target_schema = target_name.split('.')[0]
         if target_name is None:
@@ -564,6 +659,14 @@ group by relname;""".format(table_name)
         return False
 
     def query(self, sqlstring):
+        """Describe Method:
+
+        Args:(self, sqlstring):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         """ runs query or procedure that returns record set
         """
@@ -580,6 +683,14 @@ group by relname;""".format(table_name)
         return rows
 
     def insert_table(self, table_name, column_list, values, onconflict=''):
+        """Describe Method:
+
+        Args:(self, table_name, column_list, values, onconflict=''):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         sqlstring = "Insert into " + table_name + " (" + column_list + ") values " + values + " " + onconflict
         self._cur.execute(sqlstring)
@@ -587,6 +698,14 @@ group by relname;""".format(table_name)
         self.last_row_count = self._cur.rowcount
 
     def commit(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         """ Default to commit after every transaction
                 Will check instance variable to decide if a commit is needed
         """
@@ -600,12 +719,27 @@ group by relname;""".format(table_name)
             logging.error(e)
 
     def rollback(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self._cur.execute("ROLLBACK")
         self._cur.close()
         self._cur = None
 
-
     def execute(self, sqlstring, commit=False, catch_exception=True):
+        """Describe Method:
+
+        Args:(self, sqlstring, commit=False, catch_exception=True):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         logging.debug(
             "Debug DB Execute: {}:{}:{} \n\t{} ".format(self._userid, self._host, self._database_name, sqlstring))
@@ -629,6 +763,14 @@ group by relname;""".format(table_name)
         return rowcount
 
     def drop_schema(self, schema):
+        """Describe Method:
+
+        Args:(self, schema):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         logging.debug(
             "Drop Database Schema: \n\tHost:{0}\n\tDatabase:{1}\nSchema:{2}".format(self._host, self._database_name,
@@ -638,6 +780,14 @@ group by relname;""".format(table_name)
         self.commit()
 
     def truncate_table(self, table_name=None, commit=True):
+        """Describe Method:
+
+        Args:(self, table_name=None, commit=True):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         dbschema = table_name.split('.')[0]
         str_string = "Truncating Table: \n\tHost:{0}\n\tDatabase:{1}\n\tTablename:{2}\n\tSchema:{3}"
@@ -647,27 +797,57 @@ group by relname;""".format(table_name)
         if commit:
             self.commit()
 
-
     def update(self, sqlstring):
+        """Describe Method:
+
+        Args:(self, sqlstring):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         self._cur.execute(sqlstring)
         self.commit()
 
     def create_cur(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if self._cur is None:
             self._cur = self._conn.cursor()
 
-    def drop_table(self, table_name,cascade=False,commit=True):
+    def drop_table(self, table_name, cascade=False, commit=True):
+        """Describe Method:
+
+        Args:(self, table_name,cascade=False,commit=True):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         logging.debug("Dropping Table(if Exists): {0}".format(table_name))
-        opt='' if not cascade else 'CASCADE'
-        sql='Drop table if exists {0} {1}'.format(table_name,opt)
+        opt = '' if not cascade else 'CASCADE'
+        sql = 'Drop table if exists {0} {1}'.format(table_name, opt)
         self._cur.execute(sql)
         if commit:
             self.commit()  # if we don't commit that table will be locked
 
-
     def create_table(self, sqlstring):
+        """Describe Method:
+
+        Args:(self, sqlstring):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         if sqlstring.lower().startswith('create table '):
             self._cur.execute(sqlstring)
@@ -677,6 +857,14 @@ group by relname;""".format(table_name)
 
     @property
     def _connect_postgres(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         import psycopg2
 
         try:
@@ -706,6 +894,14 @@ group by relname;""".format(table_name)
         return conn
 
     def _connect_mssql(self, appname='py_dbutils'):
+        """Describe Method:
+
+        Args:(self, appname='py_dbutils'):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         import pymssql
 
         self._password = os.environ.get('MSPASSWORD', None)
@@ -730,6 +926,14 @@ group by relname;""".format(table_name)
         return conn
 
     def _connect_mysql(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         print("Connecting to mysql:")
         # import mysql.connector
         import pymysql
@@ -742,12 +946,36 @@ group by relname;""".format(table_name)
         return conn
 
     def _connect_oracle(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         pass
 
     def _connect_ldap(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         pass
 
     def __del__(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if self.commit:
             self.commit()
             logging.debug("Auto Commit ON: Commiting")
@@ -765,6 +993,14 @@ group by relname;""".format(table_name)
             pass
 
     def copy_to_csv(self, sqlstring, full_file_path, delimiter):
+        """Describe Method:
+
+        Args:(self, sqlstring, full_file_path, delimiter):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         total_rows = 0
         if self._cur is None:
             self._cur = self._conn.cursor()
@@ -788,7 +1024,15 @@ group by relname;""".format(table_name)
         return total_rows
 
     def get_conn_url(self):
-        if self._dbtype.upper() in[ "POSTGRES","CITUS"]:
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
+        if self._dbtype.upper() in ["POSTGRES", "CITUS"]:
             self.url = 'postgresql://{}:{}@{}:{}/{}'
             self.url = self.url.format(self._userid, self._password, self._host, self._port, self._database_name)
 
@@ -796,12 +1040,28 @@ group by relname;""".format(table_name)
 
     # @migrate_utils.static_func.timer
     def get_table_list_via_query(self, dbschema):
+        """Describe Method:
+
+        Args:(self, dbschema):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         sql = """SELECT table_name FROM information_schema.tables a
             WHERE table_schema='{}' and table_type='BASE TABLE'""".format(dbschema)
         result_set = self.query(sql)
         return [r[0] for r in result_set]
 
     def get_view_list_via_query(self, dbschema):
+        """Describe Method:
+
+        Args:(self, dbschema):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         sql = """SELECT table_name FROM information_schema.tables a
             WHERE table_schema='{}' and table_type='VIEW'""".format(dbschema)
         result_set = self.query(sql)
@@ -809,6 +1069,14 @@ group by relname;""".format(table_name)
 
     # @migrate_utils.static_func.timer
     def get_all_columns_schema(self, dbschema, table_name):
+        """Describe Method:
+
+        Args:(self, dbschema, table_name):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
 
         sql = """SELECT table_name,column_name,upper(data_type) as type,
         is_identity,
@@ -836,6 +1104,14 @@ group by relname;""".format(table_name)
     # this one breaks w/ sqlserver
     # @migrate_utils.static_func.timer
     def get_table_list(self, dbschema=None):
+        """Describe Method:
+
+        Args:(self, dbschema=None):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         from sqlalchemy.ext.automap import automap_base
         print("getting schema: {}".format(dbschema))
         Base = automap_base()
@@ -857,6 +1133,14 @@ group by relname;""".format(table_name)
     # returns list of tables that are not assigned to common roles
 
     def get_uncommon_tables(self, common_roles='operational_dba'):
+        """Describe Method:
+
+        Args:(self, common_roles='operational_dba'):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         sql = """SELECT t.table_schema,t.table_name ,u.usename as ownername,p.grantor,p.grantee
             ,c.relname , c.relowner ,p.*
             from information_schema.tables t
@@ -874,6 +1158,14 @@ group by relname;""".format(table_name)
 
     # #@migrate_utils.static_func.timer
     def get_columns(self, table_name, table_schema):
+        """Describe Method:
+
+        Args:(self, table_name, table_schema):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         """
 
         :rtype: object
@@ -893,6 +1185,14 @@ group by relname;""".format(table_name)
     # returns a list of table dict
     # @migrate_utils.static_func.timer
     def get_tables(self, schema=None):
+        """Describe Method:
+
+        Args:(self, schema=None):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
 
         dbschema = self.dbschema
         if schema is not None:
@@ -911,10 +1211,16 @@ group by relname;""".format(table_name)
 
     # @migrate_utils.static_func.timer
     def get_table_row_count_fast(self, table_name, schema=None):
+        """Describe Method:
+
+        Args:(self, table_name, schema=None):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         x = 0
         if self._dbtype in ['POSTGRES', 'CITUS']:
-
-
             row = self.query("""select n_live_tup
                     from pg_stat_user_tables
                     where schemaname='{}' and relname='{}'""".format(schema, table_name))
@@ -924,23 +1230,37 @@ group by relname;""".format(table_name)
         return x
 
     def get_a_value(self, sql):
+        """Describe Method:
 
+        Args:(self, sql):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         x = self.query(sql)
         value = x[0][0]
 
         return value
 
     def get_tables_row_count(self, schema=None):
+        """Describe Method:
+
+        Args:(self, schema=None):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if schema is None:
             schema = self.dbschema
         con, meta = self.connect_sqlalchemy(schema, self._dbtype)
         print(dir(meta.tables))
         print(schema, self._dbtype)
-        tables=self.get_table_list_via_query(schema)
-        table_obj=[]
-        for t in  tables:
-
-            x = self.query("select count(1) from {}.{}".format(schema,t))
+        tables = self.get_table_list_via_query(schema)
+        table_obj = []
+        for t in tables:
+            x = self.query("select count(1) from {}.{}".format(schema, t))
             rowcount = x[0][0]
             # print(type(rowcount),dir(rowcount))
             d = dict({"db": self._database_name, "schema": schema, "table_name": t, "row_counts": rowcount})
@@ -950,6 +1270,14 @@ group by relname;""".format(table_name)
 
     # given a table name we return the a list of columns that are part of the primary key
     def get_primary_keys(self, table_name):
+        """Describe Method:
+
+        Args:(self, table_name):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         sql = """SELECT a.attname, format_type(a.atttypid, a.atttypmod) AS data_type
             FROM   pg_index i
             JOIN   pg_attribute a ON a.attrelid = i.indrelid
@@ -965,19 +1293,33 @@ group by relname;""".format(table_name)
         return field_list
 
     def print_table_info(self, table_name, schema):
+        """Describe Method:
+
+        Args:(self, table_name, schema):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         from sqlalchemy.ext.automap import automap_base
         Base = automap_base()
         # from sqlalchemy.orm import Session
-        engine,meta=self.connect_sqlalchemy()
+        engine, meta = self.connect_sqlalchemy()
         Base.prepare(engine, reflect=True, schema=schema)
         l = eval('Base.classes.{}'.format("{}".format(table_name)))
 
         for m in l.__table__.columns:
             print(m, m.type)
 
-
-
     def get_db_size(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         sql = """SELECT  table_schema,table_name, pg_size_pretty(total_bytes) AS total
     , pg_size_pretty(index_bytes) AS INDEX
     , pg_size_pretty(toast_bytes) AS toast
@@ -1001,6 +1343,14 @@ group by relname;""".format(table_name)
     # this is only in this class for convience atm, should be moved out eventually
 
     def get_pandas_frame(self, table_name_fqn, rows=None):
+        """Describe Method:
+
+        Args:(self, table_name_fqn, rows=None):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         import pandas as pd
         conn, meta = self.connect_sqlalchemy()
 
@@ -1013,6 +1363,14 @@ group by relname;""".format(table_name)
         return z
 
     def put_pandas_frame(self, table_name, df):
+        """Describe Method:
+
+        Args:(self, table_name, df):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         conn, meta = self.connect_sqlalchemy()
         z = df.to_sql(table_name, conn, schema=self.dbschema, index=False, if_exists='append', chunksize=None,
                       dtype=None)
@@ -1022,6 +1380,14 @@ group by relname;""".format(table_name)
     # we need to save that and replace with our current and put it back after we are done
 
     def _get_environment_vars(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         envar = {}
         if self._dbtype == 'POSTGRES':
             envar['PGPASSWORD'] = os.environ['PGPASSWORD']
@@ -1033,6 +1399,14 @@ group by relname;""".format(table_name)
         return envar
 
     def _save_environment_vars(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if self._dbtype in ['POSTGRES', 'CITUS']:
             self._pg_password = os.environ.get('PGPASSWORD', self._password)
             self._pg_userid = os.environ.get('PGUSER', self._userid)
@@ -1042,6 +1416,14 @@ group by relname;""".format(table_name)
             self._pg_database_name = os.environ.get('PGDATABASE', self._database_name)
 
     def _restore_environment_vars(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if self._dbtype in ['POSTGRES', 'CITUS']:
             os.environ['PGPASSWORD'] = self._pg_password
             os.environ['PGUSER'] = self._pg_userid
@@ -1051,6 +1433,14 @@ group by relname;""".format(table_name)
             os.environ['PGDATABASE'] = self._pg_database_name
 
     def _replace_environment_vars(self):
+        """Describe Method:
+
+        Args:(self):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if self._dbtype in ['POSTGRES', 'CITUS']:
             os.environ['PGPASSWORD'] = self._password
             os.environ['PGUSER'] = self._userid
@@ -1060,6 +1450,14 @@ group by relname;""".format(table_name)
             os.environ['PGDATABASE'] = self._database_name
 
     def set_table_owner(self, table_name_fqn, role):
+        """Describe Method:
+
+        Args:(self, table_name_fqn, role):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if self._dbtype == 'POSTGRES':
             sql = """ALTER TABLE {table_name}
                     OWNER to {role}"""
@@ -1069,6 +1467,14 @@ group by relname;""".format(table_name)
             raise
 
     def create_table_from_dataframe(self, dataframe, table_name_fqn):
+        """Describe Method:
+
+        Args:(self, dataframe, table_name_fqn):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if '.' in table_name_fqn:
             if not self.check_table_exists(table_name_fqn):
                 self.create_cur()
@@ -1086,7 +1492,7 @@ group by relname;""".format(table_name)
                 self.commit()
                 self.execute('truncate table {}'.format(table_name_fqn))
                 self.set_table_owner(table_name_fqn, 'operational_dba')
-                self.commit() # have to commit or we will lock this table
+                self.commit()  # have to commit or we will lock this table
                 return True
             else:
                 print("Table exists")
@@ -1096,6 +1502,14 @@ group by relname;""".format(table_name)
             return False
 
     def check_table_exists(self, table_name_fqn):
+        """Describe Method:
+
+        Args:(self, table_name_fqn):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         if self._dbtype == 'POSTGRES':
             table_exists = False
             sql = """select count(*) from information_schema.tables
@@ -1120,10 +1534,17 @@ group by relname;""".format(table_name)
             raise
         return table_exists
 
-
     # copy using pyscopg to convert a dataframe to a file like object and pass it into pyscopg
     # this does not write to the file system but puts all the data into memory
     def copy_from_file(self, dataframe, table_name_fqn, encoding='utf8'):
+        """Describe Method:
+
+        Args:(self, dataframe, table_name_fqn, encoding='utf8'):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         try:
             from StringIO import StringIO
         except ImportError:
@@ -1133,17 +1554,27 @@ group by relname;""".format(table_name)
 
         @contextmanager
         def readStringIO():
-            # from cStringIO import StringIO
-            try:
-                # make sure we are at the begining of the object/file
-                data_stringIO = StringIO()
-                dataframe.to_csv(data_stringIO, header=False, index=False, encoding='utf8')
-                data_stringIO.seek(0)
-                yield data_stringIO
-            finally:
-                data_stringIO.close()
 
-                # print("copy_from_file:", table_name_fqn, len(dataframe))
+            """Describe Method:
+
+            Args:():
+              table_name (str): String
+
+            Returns:
+              None: None
+            """
+        # from cStringIO import StringIO
+        try:
+            # make sure we are at the begining of the object/file
+            data_stringIO = StringIO()
+            dataframe.to_csv(data_stringIO, header=False, index=False, encoding='utf8')
+            data_stringIO.seek(0)
+            yield data_stringIO
+        finally:
+            data_stringIO.close()
+
+            # print("copy_from_file:", table_name_fqn, len(dataframe))
+
         self.create_cur()
         with readStringIO() as f:
             column_list = ','.join(dataframe.columns.values.tolist())
@@ -1153,10 +1584,20 @@ group by relname;""".format(table_name)
             self._cur.copy_expert(cmd_string, f)
             self._conn.commit()
 
+
     # still in the works
 
     def import_bulk_dataframe(self, dataframe, table_name_fqn, file_delimiter=',', header=False, encoding='utf8',
                               in_memory=False):
+        """Describe Method:
+
+        Args:(self, dataframe, table_name_fqn, file_delimiter=',', header=False, encoding='utf8',
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
+
         tempfile = './_tmp_bulk_import.csv'
         if not in_memory:
             dataframe.to_csv(tempfile, header=False, index=False, encoding=encoding)
@@ -1172,7 +1613,7 @@ group by relname;""".format(table_name)
 
             dataframe.to_csv(data_stringIO, header=False, index=False, encoding=encoding)
             params = """--dbname={dbname} --host={host} -c "\copy {table_name}
-            FROM stdin with (format csv, delimiter '{delimiter}', HEADER {header}, ENCODING '{encoding}')" """
+                FROM stdin with (format csv, delimiter '{delimiter}', HEADER {header}, ENCODING '{encoding}')" """
             command_text = params.format(table_name=table_name_fqn,
                                          delimiter=file_delimiter, dbname=self._database_name,
                                          host=self._host, header=header, encoding=encoding)
@@ -1192,21 +1633,39 @@ group by relname;""".format(table_name)
 
             self._restore_environment_vars()
 
+
     # uses pyscopg2 builtin copy commmand delivered with binary
 
     def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter):
+        """Describe Method:
+
+        Args:(self, full_file_path, table_name_fqn, file_delimiter):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
         self.create_cur()
         f = open(full_file_path)
         # cur.copy_from(f, table_name_fqn, columns=('col1', 'col2'), sep=",")
         x = self._cur.copy_from(f, table_name_fqn, sep=",")
 
-
         return x
+
 
     # simple import using client side
     # this assumes the csv has data exactly in the same structure as the target table
     def import_file_client_side(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
                                 encoding='utf8'):
+        """Describe Method:
+
+        Args:(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
+
 
         self._save_environment_vars()
         self._replace_environment_vars()

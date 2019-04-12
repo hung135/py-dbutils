@@ -114,7 +114,6 @@ class TestConnection(unittest.TestCase):
             assert True
         except Exception as e:
             print(e)
-            print(e)
             assert False
 
     def test_copy_from_file(self):
@@ -126,20 +125,23 @@ class TestConnection(unittest.TestCase):
         dataframe = pd.read_csv(TEST_CSV_FILE)
 
         try:
+            self.populate_test_table()
+
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
+            connection.truncate_table(TEST_TABLE)
+            connection.commit()
             engine, meta = connection.connect_sqlalchemy(schema=TEST_SCHEMA, db_type='POSTGRES')
             dataframe.to_sql(name=TEST_TABLE.split('.')[-1], con=engine, index=False, if_exists='replace',
                              schema=TEST_SCHEMA)
 
-            connection.truncate_table(TEST_TABLE)
+
 
             connection.copy_from_file(dataframe, TEST_TABLE, 'UTF-8')
 
             self.assertLess(0, connection.get_a_value("select count(*) from {}".format(TEST_TABLE)))
             assert True
         except Exception as e:
-            print(e)
             print(e)
             assert False
 

@@ -2,7 +2,7 @@ language: python
 sudo: false
 python:
   - "3.6"
-script: py.test -v
+script: 'python -m pytest --cov=pyblizzard tests --cov-report=xml'
 services:
   - docker
 before_install:

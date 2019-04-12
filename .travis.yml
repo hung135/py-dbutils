@@ -12,5 +12,5 @@ before_install:
   - docker run -d -p 33306:3306 -e MYSQL_ROOT_PASSWORD=docker -d mariadb
 install:
   - pip install pipenv
-  - pipenv sync
-  - PIPENV_IGNORE_VIRTUALENVS=1 pipenv install --dev
+  - export PIPENV_IGNORE_VIRTUALENVS=1
+  - pipenv install --dev

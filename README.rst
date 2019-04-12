@@ -1,13 +1,17 @@
 ==========
 py-dbutils
 ==========
+Click on my |ImageLink|_
 
+.. |ImageLink| image:: https://travis-ci.org/hung135/py-dbutils.svg?branch=master
+.. _ImageLink: http://link.url/
 
 Add a short description here!
 
 
 Description
 ===========
+
 
 A longer description of your project goes here...
 

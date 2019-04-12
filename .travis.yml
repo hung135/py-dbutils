@@ -8,8 +8,8 @@ services:
 before_install:
   - docker pull postgres
   - docker pull mariadb
-  - docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=docker -d postgres
-  - docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=docker -d mariadb
+  - docker run -d -p 55432:5432 -e POSTGRES_PASSWORD=docker -d postgres
+  - docker run -d -p 33306:3306 -e MYSQL_ROOT_PASSWORD=docker -d mariadb
 install:
   - pip install pipenv
   - pipenv sync

@@ -14,10 +14,10 @@ docker pull dpage/pgadmin4
 docker stop $(docker ps -aq)
 docker rm $(docker ps -a -q)
 #docker system prune -a -f
-docker run --restart "unless-stopped" --name docker-postgres -p 5432:5432 -e POSTGRES_PASSWORD=docker -d postgres
+docker run --restart "unless-stopped" --name docker-postgres -p 55432:5432 -e POSTGRES_PASSWORD=docker -d postgres
 #sleep 2 && docker run -it --rm -e "PGPASSWORD=docker" --link docker-postgres:postgres postgres psql -h postgres -U postgres
 
-docker run --name docker-mariadb -p 3306:3306 -e MYSQL_ROOT_PASSWORD=docker -d mariadb
+docker run --name docker-mariadb -p 33306:3306 -e MYSQL_ROOT_PASSWORD=docker -d mariadb
 
 export PGDATABASE=postgres
 export PGUSER=postgres

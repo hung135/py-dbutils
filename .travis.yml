@@ -2,7 +2,7 @@ language: python
 sudo: false
 python:
   - "3.6"
-  - "2.7"
+  #- "2.7"
 script: 'pipenv run pytest --cov=pyblizzard tests --cov-report=xml'
 services:
   - docker

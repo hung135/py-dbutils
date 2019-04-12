@@ -48,7 +48,7 @@ class TestDB(unittest.TestCase):
 
     def test_postgres(self):
         x = postgres.DB(port=55432);
-        
+
         x.execute(sqlstring="create schema {};".format(TEST_SCHEMA))
         x.commit()
         self.populate_test_table(x)

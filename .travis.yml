@@ -13,4 +13,4 @@ before_install:
 install:
   - pip install pipenv
   - pipenv sync
-  - pipenv install --dev
+  - PIPENV_IGNORE_VIRTUALENVS=1 pipenv install --dev

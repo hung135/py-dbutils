@@ -1,4 +1,4 @@
-import logging as lg
+
 import os
 # import subprocess as commands
 # import commands
@@ -7,6 +7,7 @@ import datetime
 import sqlalchemy
 
 # import migrate_utils
+import logging as lg
 lg.basicConfig()
 logging = lg.getLogger()
 # logging.setLevel(lg.INFO)

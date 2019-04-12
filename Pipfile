@@ -7,13 +7,12 @@ verify_ssl = true
 twine = "*"
 Sphinx = "*"
 pyscaffold = "*"
+pymysql = "*"
 
 [packages]
 psycopg2-binary = "*"
 pandas = "*"
 SQLAlchemy = "*"
 
-
 [requires]
 python_version = "3.7"
-

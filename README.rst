@@ -3,8 +3,8 @@ py-dbutils
 ==========
 Last build status |ImageLink|_
 
-.. |ImageLink| image:: https://travis-ci.org/hung135/py-dbutils.svg?branch=master
-.. _ImageLink: https://travis-ci.org/hung135/py-dbutils.svg?branch=master
+.. |ImageLink| image:: https://travis-ci.org/hung135/py-dbutils.svg?branch=dev
+.. _ImageLink: hhttps://travis-ci.org/hung135/py-dbutils
 
 Library that talks to multiple databases to use for data pipelines and etl
 

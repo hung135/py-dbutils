@@ -28,9 +28,10 @@ TEST_SCHEMA = 'test'
 TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
-RDBMS=[postgres,mysql]
+RDBMS=[postgres,mysql,mssql]
 PARAMS=[{'port':55432},
-        {'userid':'root','port':33306}
+        {'userid':'root','port':33306},
+{'userid':'sa','port':11433}
         ]
 
 class TestDB(unittest.TestCase):
@@ -68,7 +69,7 @@ class TestDB(unittest.TestCase):
         for db ,params in zip(RDBMS,PARAMS):
             print("------",db)
             x=db.DB(**params)
-            x.execute(sql="create schema {};".format(TEST_SCHEMA),catch_exception=False)
+            x.execute(sql="create schema {};".format(TEST_SCHEMA))
             x.commit()
             self.populate_test_table(x)
 

@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from py_dbutils.rdbms import postgres
-from py_dbutils.rdbms import mysql
+from py_dbutils.rdbms import mysql,mssql
 import inspect
 import os
 
@@ -14,7 +14,7 @@ COMMIT = True
 PASSWORD = 'docker'
 USERID = 'postgres'
 HOST = 'localhost'
-PORT = '5432'
+PORT = '55432'
 DATABASE = 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
@@ -28,7 +28,10 @@ TEST_SCHEMA = 'test'
 TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
-
+RDBMS=[postgres,mysql]
+PARAMS=[{'port':55432},
+        {'userid':'root','port':33306}
+        ]
 
 class TestDB(unittest.TestCase):
 
@@ -46,25 +49,28 @@ class TestDB(unittest.TestCase):
         print("Loaded Test Data")
         print(DB.query("select * from {}".format(TEST_TABLE)))
 
-    def test_postgres(self):
-        x = postgres.DB(port=55432);
+    # def test_postgres(self):
+    #     x = postgres.DB(port=55432);
+    #
+    #     x.execute(sql="create schema {};".format(TEST_SCHEMA))
+    #     x.commit()
+    #     self.populate_test_table(x)
+    #
+    # def test_mysql(self):
+    #     x = mysql.DB(userid='root',port=33306);
+    #
+    #     x.execute(sql="create schema {};".format(TEST_SCHEMA))
+    #     x.commit()
+    #     self.populate_test_table(x)
 
-        x.execute(sql="create schema {};".format(TEST_SCHEMA))
-        x.commit()
-        self.populate_test_table(x)
 
-    def test_mysql(self):
-        x = mysql.DB(userid='root',port=33306);
-
-        x.execute(sql="create schema {};".format(TEST_SCHEMA))
-        x.commit()
-        self.populate_test_table(x)
-
-    # def test_sqlalch(self):
-    #     x = postgres.DB();
-    #     x.connect_SqlAlchemy()
-    #     x = mysql.DB();
-    #     x.connect_SqlAlchemy()
+    def test_all(self):
+        for db ,params in zip(RDBMS,PARAMS):
+            print("------",db)
+            x=db.DB(**params)
+            x.execute(sql="create schema {};".format(TEST_SCHEMA),catch_exception=False)
+            x.commit()
+            self.populate_test_table(x)
 
 
 if __name__ == '__main__':

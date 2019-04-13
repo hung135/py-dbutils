@@ -96,7 +96,7 @@ class DB(object):
                 # print("Error Execute SQL:{}".format(e))
                 logging.warning("SQL error Occurred But Continuing:\n{}".format(e))
         else:
-            self._cur.execute(this_sql)
+            self.cursor.execute(this_sql)
         rowcount = self.cursor.rowcount
         if commit:
             self.commit()

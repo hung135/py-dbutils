@@ -16,4 +16,4 @@ pyblizzard = "*"
 psycopg2-binary = "*"
 pandas = "*"
 SQLAlchemy = "*"
-
+pymssql = "*"

@@ -7,17 +7,16 @@
 
 docker pull postgres
 docker pull mariadb
-docker pull nginx
-docker pull dpage/pgadmin4
+#docker pull dpage/pgadmin4
 
 #clean out stale containers
 docker stop $(docker ps -aq)
 docker rm $(docker ps -a -q)
 #docker system prune -a -f
-docker run --restart "unless-stopped" --name docker-postgres -p 55432:5432 -e POSTGRES_PASSWORD=docker -d postgres
-#sleep 2 && docker run -it --rm -e "PGPASSWORD=docker" --link docker-postgres:postgres postgres psql -h postgres -U postgres
+docker run -d --name docker-postgres -p 55432:5432 -e POSTGRES_PASSWORD=docker -d postgres
 
-docker run --name docker-mariadb -p 33306:3306 -e MYSQL_ROOT_PASSWORD=docker -d mariadb
+docker run -d --name docker-mariadb -p 33306:3306 -e MYSQL_ROOT_PASSWORD=docker -d mariadb
+docker run -d --name mssql-express -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Docker1234' -e 'MSSQL_PID=Express' -p 11433:1433 mcr.microsoft.com/mssql/server:2017-latest-ubuntu
 
 export PGDATABASE=postgres
 export PGUSER=postgres

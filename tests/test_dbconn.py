@@ -13,7 +13,7 @@ COMMIT = True
 PASSWORD = 'docker'
 USERID = 'postgres'
 HOST = 'localhost'
-PORT = '5432'
+PORT = '55432'
 DATABASE = 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
@@ -29,7 +29,7 @@ TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
 
-
+@unittest.skip
 class TestConnection(unittest.TestCase):
 
     def populate_test_table(self):

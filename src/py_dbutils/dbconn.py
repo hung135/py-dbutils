@@ -1564,15 +1564,15 @@ group by relname;""".format(table_name)
             Returns:
               None: None
             """
-        # from cStringIO import StringIO
-        try:
-            # make sure we are at the begining of the object/file
-            data_stringIO = StringIO()
-            dataframe.to_csv(data_stringIO, header=False, index=False, encoding='utf8')
-            data_stringIO.seek(0)
-            yield data_stringIO
-        finally:
-            data_stringIO.close()
+            # from cStringIO import StringIO
+            try:
+                # make sure we are at the begining of the object/file
+                data_stringIO = StringIO()
+                dataframe.to_csv(data_stringIO, header=False, index=False, encoding='utf8')
+                data_stringIO.seek(0)
+                yield data_stringIO
+            finally:
+                data_stringIO.close()
 
             # print("copy_from_file:", table_name_fqn, len(dataframe))
 

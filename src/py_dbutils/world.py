@@ -21,8 +21,7 @@ class DB(object):
 
     def __init__(self):
         print("Init SUERP DB")
-        self.cursor=None
-
+        self.cursor = None
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
@@ -85,7 +84,7 @@ class DB(object):
         """
         self.create_cur()
         logging.debug(
-            "Debug DB Execute: {}:{}:{} \n\t{} ".format(self.userid, self.host, self.dbname, sql))
+            "Debug DB Execute: {}: \n\t{} ".format(self.str, sql))
         rowcount = 0
         this_sql = str(sql).strip()
 
@@ -194,6 +193,143 @@ class ConnRDBMS(object):
                 logging.error("Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
                 sys.exit(1)
 
+    def schema_exists(self, schema_name):
+        """Takes a query string and runs it to see if it returns any rows
+
+        Args:
+          table_name (str): String
+
+        Returns:
+          boolean: True/False
+        """
+        self.create_cur()
+        v_found = False
+
+        v_found = self.has_record(
+            """select 1 from information_schema.schemata where schema_name='{0}' limit 1""".format(schema_name))
+
+        return v_found
+
+    def table_exists(self, fqn_table_name):
+        """Takes a query string and runs it to see if it returns any rows
+
+        Args:
+          table_name (str): String
+
+        Returns:
+          boolean: True/False
+        """
+        self.create_cur()
+
+        v_table_exists = False
+        v_schema = fqn_table_name.split('.')[0]
+        v_table_name = fqn_table_name.split('.')[1]
+        v_table_exists = self.has_record(
+            """select 1 from information_schema.tables where table_schema='{0}' and table_name='{1}'""".format(v_schema,
+                                                                                                               v_table_name))
+
+        return v_table_exists
+
+    def get_a_row(self, sql):
+        """Returns 1 row as tuple:
+            use var,=row for 1 element tuple
+        Args:(self, sql):
+          sql (str): String
+
+        Returns:
+          row: tuple
+        """
+        self.create_cur()
+        self.cursor.execute(sql)
+        row = self.cursor.fetchone()
+        self.cursor.close()
+        self.cursor = None
+
+        return row
+
+    def has_record(self, sql):
+        """Takes a query string and runs it to see if it returns any rows
+
+        Args:
+          sql (str): String
+
+        Returns:
+          boolean: True/False
+        """
+        self.create_cur()
+        rs = None
+        record_len = 0
+        try:
+            row = self.get_a_row(sql)
+        except Exception as e:
+            logging.error("error in dbconn.has_record: {}".format(sql))
+        record_len = len(row)
+        # we need to close this or it will lock the connection
+
+        if record_len > 0:
+            return True
+        return False
+
+    def create_table_from_dataframe(self, dataframe, table_name_fqn,default_owner=None):
+        """Describe Method:
+
+        Args:(self, dataframe, table_name_fqn):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
+        if '.' in table_name_fqn:
+            if not self.table_exists(table_name_fqn):
+                self.create_cur()
+                df = dataframe.head()
+                schema = table_name_fqn.split('.')[0]
+                table_name = table_name_fqn.split('.')[1]
+
+                engine = self.connect_SqlAlchemy()
+
+                df.to_sql(table_name, sqlalchemy_conn, schema=schema, if_exists='append', index=False, chunksize=1000)
+
+
+                self.execute('truncate table {}'.format(table_name_fqn))
+                return True
+            else:
+                logging.info("Table exists: {}".format(table_name_fqn))
+                return False
+        else:
+            logging.error('Please provide fully qualified table name')
+            return False
+
+    def table_exists(self, table_name_fqn):
+        """Describe Method:
+
+        Args:( table_name_fqn):
+          table_name (str): String
+
+        Returns:
+          Boolean: True/False
+        """
+        if self._dbtype == 'POSTGRES':
+            table_exists = False
+            sql = """select count(*) from information_schema.tables
+            WHERE table_type='BASE TABLE'
+            and table_name='{table_name}'  
+            """
+            if '.' in table_name_fqn:
+                table_name = table_name_fqn.split('.')[1]
+                schema = """ and table_schema='{} limit 1'""".format(table_name_fqn.split('.')[0])
+
+                sql = sql.format(table_name=table_name, schema=schema)
+            else:
+                return False
+
+            x, = self.get_a_row(sql)
+            if x > 0:
+                table_exists = True
+        else:
+            print('Not Supported')
+            raise
+        return table_exists
 
 class ConnREST(object):
     def __init__(self):

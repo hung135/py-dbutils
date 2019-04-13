@@ -143,6 +143,22 @@ class DB(object):
         self.cursor.close()
         self.cursor = None
 
+    def query_to_parquet(self, file_path, sql):
+        import pyarrow.parquet as pq
+        import pandas
+        df = pandas.read_sql(sql, self.connect_SqlAlchemy())
+        pq.write_table(df, os.path.abspath(file_path))
+
+    def query_to_hdf5(self, file_path, sql, key='table'):
+        import pandas
+        df = pandas.read_sql(sql, self.connect_SqlAlchemy())
+        df.to_hdf(path_or_buf=os.path.abspath(file_path), key=key)
+
+    def query_to_csv(self, file_path, sql, include_header=True):
+        import pandas
+        df = pandas.read_sql(sql, self.connect_SqlAlchemy())
+        df.to_csv(path_or_buf=os.path.abspath(file_path), header=include_header)
+
 
 class ConnRDBMS(object):
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
@@ -270,7 +286,7 @@ class ConnRDBMS(object):
             return True
         return False
 
-    def create_table_from_dataframe(self, dataframe, table_name_fqn,default_owner=None):
+    def create_table_from_dataframe(self, dataframe, table_name_fqn, default_owner=None):
         """Describe Method:
 
         Args:(self, dataframe, table_name_fqn):
@@ -288,8 +304,7 @@ class ConnRDBMS(object):
 
                 engine = self.connect_SqlAlchemy()
 
-                df.to_sql(table_name, sqlalchemy_conn, schema=schema, if_exists='append', index=False, chunksize=1000)
-
+                df.to_sql(table_name, engine, schema=schema, if_exists='append', index=False, chunksize=1000)
 
                 self.execute('truncate table {}'.format(table_name_fqn))
                 return True
@@ -330,6 +345,7 @@ class ConnRDBMS(object):
             print('Not Supported')
             raise
         return table_exists
+
 
 class ConnREST(object):
     def __init__(self):

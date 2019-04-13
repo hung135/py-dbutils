@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from py_dbutils.rdbms import postgres
-from py_dbutils.rdbms import mysql, mssql,sqlite
+from py_dbutils.rdbms import mysql, mssql, sqlite
 import inspect
 import os
 
@@ -28,42 +28,47 @@ TEST_SCHEMA = 'test'
 TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
-RDBMS = [postgres, mysql, mssql,sqlite]
+RDBMS = [postgres, mysql, mssql, sqlite]
 PARAMS = [{'port': 55432},
           {'userid': 'root', 'port': 33306},
           {'userid': 'sa', 'port': 11433},
-          {'file_path':os.path.join(TEST_OUTPUT_DIR,'sqlite.db')}
+          {'file_path': os.path.join(TEST_OUTPUT_DIR, 'sqlite.db')}
           ]
 
 
 class TestDB(unittest.TestCase):
 
-    def populate_test_table(self, DB):
+    def populate_test_table(self, DB, table_name=TEST_TABLE):
         import pandas as pd
         import os
 
         dataframe = pd.read_csv(TEST_CSV_FILE)
 
         engine = DB.connect_SqlAlchemy()
+        table_split = table_name.split('.')
 
-        dataframe.to_sql(name=TEST_TABLE.split('.')[-1], con=engine, index=False, if_exists='replace',
-                         schema=TEST_SCHEMA)
+        schema = None
+        table = table_name
+        if len(table_split) > 1:
+            table = table_split[-1]
+            schema = table_split[0]
+             
+        dataframe.to_sql(name=table, con=engine, index=False, if_exists='replace', schema=schema)
 
         print("Loaded Test Data")
-        print(DB.query("select * from {}".format(TEST_TABLE)))
+        print(DB.query("select * from {}".format(table_name)))
 
     def test_postgres(self):
         x = postgres.DB(port=55432);
-
+        #self.populate_test_table(x)
         z, = (x.get_a_row('select 1 as col1   '))
 
-    # def test_mysql(self):
-    #     x = mysql.DB(userid='root',port=33306);
-    #
-    #     x.execute(sql="create schema {};".format(TEST_SCHEMA))
-    #     x.commit()
-    #     self.populate_test_table(x)
+    def test_sqlite(self):
+        x = sqlite.DB(os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_sqlite.db'));
+        self.populate_test_table(DB=x, table_name='test')
+        z, = (x.get_a_row('select 1 as col1   '))
 
+    @unittest.skip
     def test_all(self):
         for db, params in zip(RDBMS, PARAMS):
             print("------", db)

@@ -6,6 +6,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../s
 
 from py_dbutils.rdbms import postgres
 from py_dbutils.rdbms import mysql, mssql, sqlite
+from py_dbutils.rdbms import msaccess
 import inspect
 import os
 
@@ -62,6 +63,34 @@ class TestDB(unittest.TestCase):
         x = postgres.DB(port=55432);
         #self.populate_test_table(x)
         z, = (x.get_a_row('select 1 as col1   '))
+
+    def test_msaccess(self):
+        import pandas
+
+        from shutil import copyfile
+        src=os.path.join(curr_file_path, 'sample_data/tf01225343.accdt')
+        dst=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.db')
+        copyfile(src, dst)
+
+
+        x = msaccess.DB(dst);
+        assert isinstance(x, msaccess.DB)
+
+        self.populate_test_table(DB=x, table_name='test')
+        z, = (x.get_a_row('select 1 as col1   '))
+        parquet_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
+        x.query_to_parquet(parquet_file_path,'select * from test')
+        print(pandas.read_parquet(parquet_file_path, engine='pyarrow'))
+
+
+        csv_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
+        x.query_to_csv(csv_file_path,'select * from test')
+        print(pandas.read_csv(csv_file_path))
+
+
+        hdf5_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
+        x.query_to_hdf5(hdf5_file_path,'select * from test')
+        print(pandas.read_hdf(hdf5_file_path,'table'))
 
     def test_sqlite(self):
         import pandas

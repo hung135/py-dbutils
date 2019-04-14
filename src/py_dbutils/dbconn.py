@@ -683,20 +683,20 @@ group by relname;""".format(table_name)
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
         return rows
 
-    def insert_table(self, table_name, column_list, values, onconflict=''):
-        """Describe Method:
-
-        Args:(self, table_name, column_list, values, onconflict=''):
-          table_name (str): String
-
-        Returns:
-          None: None
-        """
-        self.create_cur()
-        sqlstring = "Insert into " + table_name + " (" + column_list + ") values " + values + " " + onconflict
-        self._cur.execute(sqlstring)
-        self.commit()
-        self.last_row_count = self._cur.rowcount
+    # def insert_table(self, table_name, column_list, values, onconflict=''):
+    #     """Describe Method:
+    #
+    #     Args:(self, table_name, column_list, values, onconflict=''):
+    #       table_name (str): String
+    #
+    #     Returns:
+    #       None: None
+    #     """
+    #     self.create_cur()
+    #     sqlstring = "Insert into " + table_name + " (" + column_list + ") values " + values + " " + onconflict
+    #     self._cur.execute(sqlstring)
+    #     self.commit()
+    #     self.last_row_count = self._cur.rowcount
 
     def commit(self):
         """Describe Method:
@@ -1363,19 +1363,7 @@ group by relname;""".format(table_name)
         print(z)
         return z
 
-    def put_pandas_frame(self, table_name, df):
-        """Describe Method:
 
-        Args:(self, table_name, df):
-          table_name (str): String
-
-        Returns:
-          None: None
-        """
-        conn, meta = self.connect_sqlalchemy()
-        z = df.to_sql(table_name, conn, schema=self.dbschema, index=False, if_exists='append', chunksize=None,
-                      dtype=None)
-        return z
 
     # certain commans requires the environment variables for the session
     # we need to save that and replace with our current and put it back after we are done

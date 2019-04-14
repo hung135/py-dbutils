@@ -21,6 +21,7 @@ SQLAlchemy = "*"
 pymssql = "*"
 pyarrow = "*"
 tables = "*"
+pybigquery = "*"
 
 [requires]
 python ="3.6.3"

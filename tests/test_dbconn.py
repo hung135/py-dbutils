@@ -29,7 +29,7 @@ TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
 
-@unittest.skip
+
 class TestConnection(unittest.TestCase):
 
     def populate_test_table(self):
@@ -588,25 +588,18 @@ class TestConnection(unittest.TestCase):
             print(e)
             assert False
 
-    def test_import_bulk_dataframe(self):
 
-        # self.assertEqual(expected, connection.import_bulk_dataframe(dataframe, table_name_fqn, file_delimiter, header, encoding, in_memory))
-        try:
-            connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
-                                    inspect.stack()[0][3])
-
-            assert True
-        except Exception as e:
-
-            print(e)
-            assert False
 
     def test_import_file_client_side(self):
 
         # self.assertEqual(expected, connection.import_file_client_side(full_file_path, table_name_fqn, file_delimiter, header, encoding))
         try:
+            self.populate_test_table()
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
+            connection.truncate_table(TEST_TABLE)
+            connection.commit()
+            self.assertEqual(None, connection.import_file_client_side(TEST_CSV_FILE, TEST_TABLE, ',',header=True))
 
             assert True
         except Exception as e:
@@ -631,18 +624,7 @@ class TestConnection(unittest.TestCase):
             print(e)
             assert False
 
-    def test_insert_table(self):
 
-        # self.assertEqual(expected, connection.insert_table(table_name, column_list, values, onconflict))
-        try:
-            connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
-                                    inspect.stack()[0][3])
-
-            assert True
-        except Exception as e:
-
-            print(e)
-            assert False
 
     def test_pandas_dump_table_csv(self):
 
@@ -715,18 +697,6 @@ class TestConnection(unittest.TestCase):
             print(e)
             assert False
 
-    def test_put_pandas_frame(self):
-
-        # self.assertEqual(expected, connection.put_pandas_frame(table_name, df))
-        try:
-            connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
-                                    inspect.stack()[0][3])
-
-            assert True
-        except Exception as e:
-
-            print(e)
-            assert False
 
     def test_query(self):
 

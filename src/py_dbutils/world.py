@@ -20,20 +20,10 @@ class DB(object):
             """
 
     def __init__(self):
-        print("Init SUERP DB")
+
         self.cursor = None
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
 
-    def __repr__(self):
-        pass
-
-    def __str__(self):
-        pass
-
-    def __del__(self):
-        pass
 
     def query(self, sql):
         """This will execute a query and fetches all the results and closes the curor.
@@ -104,8 +94,6 @@ class DB(object):
 
         return rowcount
 
-    def commit(self):
-        pass
 
     def bulk_load(self):
         pass

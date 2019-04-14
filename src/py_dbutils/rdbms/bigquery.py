@@ -1,5 +1,4 @@
-
-from ..world import ConnRDBMS,ConnREST
+from ..world import ConnRDBMS
 from ..world import DB
 import sqlalchemy
 import sys
@@ -12,7 +11,7 @@ logging = lg.getLogger()
 logging.setLevel(lg.INFO)
 
 
-class DB(ConnREST, DB):
+class DB(ConnRDBMS, DB):
 
     #get from here:
     #https://docs.sqlalchemy.org/en/latest/core/engines.html
@@ -23,11 +22,11 @@ class DB(ConnREST, DB):
 
         self.file_path=os.path.abspath(key_file)
         self.autocommit = autocommit
-        self.project=project
-        self.data_id=data_id
-        self.key_file=key_file
 
-        self.str = 'DB: BIGQuery:{}:{}:autocommit={}'.format(project,data_id,self.autocommit)
+        self.conn = sqlite3.connect(self.file_path)
+        self.cursor=None
+
+        self.str = 'DB: SQLITE:{}:autocommit={}'.format(file_path,self.autocommit)
 
     def connect_SqlAlchemy(self):
         if self.sql_alchemy_uri is None:
@@ -35,7 +34,7 @@ class DB(ConnREST, DB):
             sys.exit(1)
         else:
             try:
-                return sqlalchemy.create_engine(self.sql_alchemy_uri.format(file_path=self.project))
+                return sqlalchemy.create_engine(self.sql_alchemy_uri.format(file_path=self.file_path))
 
             except Exception as e:
                 logging.error("Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))

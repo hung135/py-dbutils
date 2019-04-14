@@ -1635,7 +1635,7 @@ group by relname;""".format(table_name)
 
     # uses pyscopg2 builtin copy commmand delivered with binary
 
-    def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter=',', , header=False,
+    def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter=',',  header=False,
                              encoding='utf8'):
         """Describe Method:
 
@@ -1652,7 +1652,7 @@ group by relname;""".format(table_name)
 
         return x
 
-    def import_file_client_side(self, full_file_path, table_name_fqn, file_delimiter=',', , header=False,
+    def import_file_client_side(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
                                 encoding='utf8'):
         """Describe Method:
 

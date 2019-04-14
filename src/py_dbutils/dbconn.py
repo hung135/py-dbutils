@@ -1,4 +1,3 @@
-
 import os
 # import subprocess as commands
 # import commands
@@ -8,6 +7,7 @@ import sqlalchemy
 
 # import migrate_utils
 import logging as lg
+
 lg.basicConfig()
 logging = lg.getLogger()
 # logging.setLevel(lg.INFO)
@@ -752,7 +752,7 @@ group by relname;""".format(table_name)
                 self._cur.execute(sql)
             except Exception as e:
                 # print("Error Execute SQL:{}".format(e))
-                logging.warning("SQL error Occurred But Continuing:\n{}\n{}".format(e,sql))
+                logging.warning("SQL error Occurred But Continuing:\n{}\n{}".format(e, sql))
         else:
             self._cur.execute(sql)
         rowcount = self._cur.rowcount
@@ -1585,59 +1585,58 @@ group by relname;""".format(table_name)
             self._cur.copy_expert(cmd_string, f)
             self._conn.commit()
 
-
     # still in the works
 
-    def import_bulk_dataframe(self, dataframe, table_name_fqn, file_delimiter=',', header=False, encoding='utf8',
-                              in_memory=False):
-        """Describe Method:
-
-        Args:(self, dataframe, table_name_fqn, file_delimiter=',', header=False, encoding='utf8',
-          table_name (str): String
-
-        Returns:
-          None: None
-        """
-
-        tempfile = './_tmp_bulk_import.csv'
-        if not in_memory:
-            dataframe.to_csv(tempfile, header=False, index=False, encoding=encoding)
-            self.import_file_client_side(full_file_path=tempfile, table_name_fqn=table_name_fqn,
-                                         file_delimiter=file_delimiter, header=header, encoding=encoding)
-        else:
-            # import w/out writing to a file just use available memory
-            import subprocess
-            import StringIO
-            self._save_environment_vars()
-            self._replace_environment_vars()
-            data_stringIO = StringIO.StringIO()
-
-            dataframe.to_csv(data_stringIO, header=False, index=False, encoding=encoding)
-            params = """--dbname={dbname} --host={host} -c "\copy {table_name}
-                FROM stdin with (format csv, delimiter '{delimiter}', HEADER {header}, ENCODING '{encoding}')" """
-            command_text = params.format(table_name=table_name_fqn,
-                                         delimiter=file_delimiter, dbname=self._database_name,
-                                         host=self._host, header=header, encoding=encoding)
-            # print(data_stringIO.getvalue())
-            copy_cmd = """\copy census.geoheader FROM stdin with (format csv, ENCODING '{encoding}')"""
-            print("in memory copy command")
-            p = subprocess.Popen(('/opt/edb/as10/bin/psql',
-                                  "--dbname={dbname}".format(dbname=self._database_name),
-                                  "--host={host}".format(host=self._host),
-                                  "--username={username}".format(username=self._userid),
-                                  "--command=""{cmd}""".format(cmd=copy_cmd.format(encoding=encoding))
-                                  ), env=self._get_environment_vars(), stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-            output, error = p.communicate(data_stringIO.getvalue())
-            if output == '':
-                print(output, error)
-                raise
-
-            self._restore_environment_vars()
-
+    # def import_bulk_dataframe(self, dataframe, table_name_fqn, file_delimiter=',', header=False, encoding='utf8',
+    #                           in_memory=False):
+    #     """Describe Method:
+    #
+    #     Args:(self, dataframe, table_name_fqn, file_delimiter=',', header=False, encoding='utf8',
+    #       table_name (str): String
+    #
+    #     Returns:
+    #       None: None
+    #     """
+    #
+    #     tempfile = './_tmp_bulk_import.csv'
+    #     if not in_memory:
+    #         dataframe.to_csv(tempfile, header=False, index=False, encoding=encoding)
+    #         self.import_file_client_side(full_file_path=tempfile, table_name_fqn=table_name_fqn,
+    #                                      file_delimiter=file_delimiter, header=header, encoding=encoding)
+    #     else:
+    #         # import w/out writing to a file just use available memory
+    #         import subprocess
+    #         import StringIO
+    #         self._save_environment_vars()
+    #         self._replace_environment_vars()
+    #         data_stringIO = StringIO.StringIO()
+    #
+    #         dataframe.to_csv(data_stringIO, header=False, index=False, encoding=encoding)
+    #         params = """--dbname={dbname} --host={host} -c "\copy {table_name}
+    #             FROM stdin with (format csv, delimiter '{delimiter}', HEADER {header}, ENCODING '{encoding}')" """
+    #         command_text = params.format(table_name=table_name_fqn,
+    #                                      delimiter=file_delimiter, dbname=self._database_name,
+    #                                      host=self._host, header=header, encoding=encoding)
+    #         # print(data_stringIO.getvalue())
+    #         copy_cmd = """\copy census.geoheader FROM stdin with (format csv, ENCODING '{encoding}')"""
+    #         print("in memory copy command")
+    #         p = subprocess.Popen(('/opt/edb/as10/bin/psql',
+    #                               "--dbname={dbname}".format(dbname=self._database_name),
+    #                               "--host={host}".format(host=self._host),
+    #                               "--username={username}".format(username=self._userid),
+    #                               "--command=""{cmd}""".format(cmd=copy_cmd.format(encoding=encoding))
+    #                               ), env=self._get_environment_vars(), stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    #         output, error = p.communicate(data_stringIO.getvalue())
+    #         if output == '':
+    #             print(output, error)
+    #             raise
+    #
+    #         self._restore_environment_vars()
 
     # uses pyscopg2 builtin copy commmand delivered with binary
 
-    def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter):
+    def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter=',', , header=False,
+                             encoding='utf8'):
         """Describe Method:
 
         Args:(self, full_file_path, table_name_fqn, file_delimiter):
@@ -1653,43 +1652,59 @@ group by relname;""".format(table_name)
 
         return x
 
-
-    # simple import using client side
-    # this assumes the csv has data exactly in the same structure as the target table
-    def import_file_client_side(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
+    def import_file_client_side(self, full_file_path, table_name_fqn, file_delimiter=',', , header=False,
                                 encoding='utf8'):
         """Describe Method:
 
-        Args:(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
+        Args:(self, full_file_path, table_name_fqn, file_delimiter):
           table_name (str): String
 
         Returns:
           None: None
         """
+        self.create_cur()
+        f = open(full_file_path)
+        # cur.copy_from(f, table_name_fqn, columns=('col1', 'col2'), sep=",")
+        x = self._cur.copy_from(f, table_name_fqn, sep=",")
 
+        return x
 
-        self._save_environment_vars()
-        self._replace_environment_vars()
-        copy_command_client_side = """psql --dbname={3} --host={4} -c "\copy {0} FROM '{1}' with (format csv, delimiter '{2}', HEADER {5}, ENCODING '{6}')" """
-
-        data_file = full_file_path
-
-        t = datetime.datetime.now()
-
-        command_text = copy_command_client_side.format(table_name_fqn, data_file, file_delimiter, self._database_name,
-                                                       self._host, header, encoding)
-        logging.info("Copy Command STARTED:{0} Time:{1}".format(table_name_fqn, t))
-        error_code, txt_out = commands.getstatusoutput(command_text)
-        logging.debug("Copy Command Completed:{0} Time:{1}".format(txt_out, datetime.datetime.now()))
-        logging.debug("Total Time:{0} ".format(datetime.datetime.now() - t))
-        self._restore_environment_vars()
-        if error_code > 0:
-            logging.error(txt_out)
-            logging.error(data_file)
-            logging.error(error_code)
-            raise Exception
-
-        i = txt_out.split()
-        logging.info("Total Rows Loaded: {0}".format(i[1]))
-
-        return i[1]
+    # simple import using client side
+    # this assumes the csv has data exactly in the same structure as the target table
+    # def import_file_client_side(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
+    #                             encoding='utf8'):
+    #     """Describe Method:
+    #
+    #     Args:(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
+    #       table_name (str): String
+    #
+    #     Returns:
+    #       None: None
+    #     """
+    #
+    #
+    #     self._save_environment_vars()
+    #     self._replace_environment_vars()
+    #     copy_command_client_side = """psql --dbname={3} --host={4} -c "\copy {0} FROM '{1}' with (format csv, delimiter '{2}', HEADER {5}, ENCODING '{6}')" """
+    #
+    #     data_file = full_file_path
+    #
+    #     t = datetime.datetime.now()
+    #
+    #     command_text = copy_command_client_side.format(table_name_fqn, data_file, file_delimiter, self._database_name,
+    #                                                    self._host, header, encoding)
+    #     logging.info("Copy Command STARTED:{0} Time:{1}".format(table_name_fqn, t))
+    #     error_code, txt_out = commands.getstatusoutput(command_text)
+    #     logging.debug("Copy Command Completed:{0} Time:{1}".format(txt_out, datetime.datetime.now()))
+    #     logging.debug("Total Time:{0} ".format(datetime.datetime.now() - t))
+    #     self._restore_environment_vars()
+    #     if error_code > 0:
+    #         logging.error(txt_out)
+    #         logging.error(data_file)
+    #         logging.error(error_code)
+    #         raise Exception
+    #
+    #     i = txt_out.split()
+    #     logging.info("Total Rows Loaded: {0}".format(i[1]))
+    #
+    #     return i[1]

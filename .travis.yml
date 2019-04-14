@@ -7,7 +7,7 @@ script: 'pipenv run pytest --cov=pyblizzard tests --cov-report=xml'
 services:
   - docker
 before_install:
-  - docker run -d --name mssql-express -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Docker1234' -e 'MSSQL_PID=Express' -p 11433:1433 mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+  #- docker run -d --name mssql-express -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Docker1234' -e 'MSSQL_PID=Express' -p 11433:1433 mcr.microsoft.com/mssql/server:2017-latest-ubuntu
   - docker pull postgres
   - docker pull mariadb
   - docker run -d -p 55432:5432 -e POSTGRES_PASSWORD=docker -d postgres

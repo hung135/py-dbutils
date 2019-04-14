@@ -20,6 +20,7 @@ pandas = "*"
 SQLAlchemy = "*"
 pymssql = "*"
 pyarrow = "*"
+tables = "*"
 
 [requires]
 python ="3.6.3"

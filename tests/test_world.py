@@ -64,9 +64,25 @@ class TestDB(unittest.TestCase):
         z, = (x.get_a_row('select 1 as col1   '))
 
     def test_sqlite(self):
+        import pandas
         x = sqlite.DB(os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_sqlite.db'));
+        assert isinstance(x, sqlite.DB)
+
         self.populate_test_table(DB=x, table_name='test')
         z, = (x.get_a_row('select 1 as col1   '))
+        parquet_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
+        x.query_to_parquet(parquet_file_path,'select * from test')
+        print(pandas.read_parquet(parquet_file_path, engine='pyarrow'))
+
+
+        csv_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
+        x.query_to_csv(csv_file_path,'select * from test')
+        print(pandas.read_csv(csv_file_path))
+
+
+        hdf5_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
+        x.query_to_hdf5(hdf5_file_path,'select * from test')
+        print(pandas.read_hdf(hdf5_file_path,'table'))
 
     @unittest.skip
     def test_all(self):

@@ -145,14 +145,18 @@ class DB(object):
 
     def query_to_parquet(self, file_path, sql):
         import pyarrow.parquet as pq
+        import pyarrow as pa
         import pandas
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
-        pq.write_table(df, os.path.abspath(file_path))
+        print(file_path,"--------------")
+        table = pa.Table.from_pandas(df)
+        pq.write_table(table, os.path.abspath(file_path))
 
     def query_to_hdf5(self, file_path, sql, key='table'):
         import pandas
+
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
-        df.to_hdf(path_or_buf=os.path.abspath(file_path), key=key)
+        df.to_hdf(path_or_buf=os.path.abspath(file_path), key=key,mode='w')
 
     def query_to_csv(self, file_path, sql, include_header=True):
         import pandas

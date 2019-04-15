@@ -170,59 +170,6 @@ class DB(object):
         df = pandas.DataFrame(data=rows,columns=header)
         df.to_csv(path_or_buf=os.path.abspath(file_path), header=header,index=False)
 
-
-class ConnRDBMS(object):
-    def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
-        self.str = 'DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
-                                                          self.autocommit)
-        try:
-            self.cursor = None
-            self.autocommit = autocommit or True
-            print('INIT DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
-                                                              self.autocommit))
-            logging.debug('Connect: {}:{}:{}'.format(self.host, self.dbname, self.userid))
-        except Exception as e:
-            logging.debug("Can not Use this Class directly: You must instantiate a child")
-            sys.exit(1)
-
-
-    def __repr__(self):
-        return self.str
-
-    def __str__(self):
-
-        return self.str
-
-    def __del__(self):
-        logging.debug("Destroying: {}".format(self.str))
-
-
-
-
-    def authenticate(self):
-        pass
-
-    def close(self):
-        # self.cursor.close()
-        self.conn.close()
-
-    def connect_SqlAlchemy(self):
-        if self.sql_alchemy_uri is None:
-            logging.error("sqlAlchemy not supported for this DB")
-            sys.exit(1)
-        else:
-            try:
-                return sqlalchemy.create_engine(self.sql_alchemy_uri.format(
-                    userid=self.userid,
-                    pwd=self.pwd,
-                    host=self.host,
-                    port=self.port,
-                    db=self.dbname
-                ))
-            except Exception as e:
-                logging.error("Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
-                sys.exit(1)
-
     def schema_exists(self, schema_name):
         """Takes a query string and runs it to see if it returns any rows
 
@@ -338,27 +285,91 @@ class ConnRDBMS(object):
         Returns:
           Boolean: True/False
         """
-        if self._dbtype == 'POSTGRES':
-            table_exists = False
-            sql = """select count(*) from information_schema.tables
-            WHERE table_type='BASE TABLE'
-            and table_name='{table_name}'  
-            """
-            if '.' in table_name_fqn:
-                table_name = table_name_fqn.split('.')[1]
-                schema = """ and table_schema='{} limit 1'""".format(table_name_fqn.split('.')[0])
+        
+        table_exists = False
+        sql = """select count(*) from information_schema.tables
+        WHERE table_type='BASE TABLE'
+        and table_name='{table_name}'  
+        """
+        if '.' in table_name_fqn:
+            table_name = table_name_fqn.split('.')[1]
+            schema = """ and table_schema='{} limit 1'""".format(table_name_fqn.split('.')[0])
 
-                sql = sql.format(table_name=table_name, schema=schema)
-            else:
-                return False
-
-            x, = self.get_a_row(sql)
-            if x > 0:
-                table_exists = True
+            sql = sql.format(table_name=table_name, schema=schema)
         else:
-            print('Not Supported')
-            raise
+            return False
+
+        x, = self.get_a_row(sql)
+        if x > 0:
+            table_exists = True
+        
         return table_exists
+        
+    def get_all_tables(self):
+        """Returns list of all tables visible to this connection
+
+        Args:(self, dbschema):
+          table_name (str): String
+
+        Returns:
+          None: None
+        """
+        sql = """SELECT concat(table_schema,'.',table_name) as table_name FROM information_schema.tables a
+            WHERE table_type='BASE TABLE'"""
+        result_set = self.query(sql)
+        return [r[0] for r in result_set] 
+
+class ConnRDBMS(object):
+    def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
+        self.str = 'DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
+                                                          self.autocommit)
+        try:
+            self.cursor = None
+            self.autocommit = autocommit or True
+            print('INIT DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
+                                                              self.autocommit))
+            logging.debug('Connect: {}:{}:{}'.format(self.host, self.dbname, self.userid))
+        except Exception as e:
+            logging.debug("Can not Use this Class directly: You must instantiate a child")
+            sys.exit(1)
+
+
+    def __repr__(self):
+        return self.str
+
+    def __str__(self):
+
+        return self.str
+
+    def __del__(self):
+        logging.debug("Destroying: {}".format(self.str))
+
+
+
+
+    def authenticate(self):
+        pass
+
+    def close(self):
+        # self.cursor.close()
+        self.conn.close()
+
+    def connect_SqlAlchemy(self):
+        if self.sql_alchemy_uri is None:
+            logging.error("sqlAlchemy not supported for this DB")
+            sys.exit(1)
+        else:
+            try:
+                return sqlalchemy.create_engine(self.sql_alchemy_uri.format(
+                    userid=self.userid,
+                    pwd=self.pwd,
+                    host=self.host,
+                    port=self.port,
+                    db=self.dbname
+                ))
+            except Exception as e:
+                logging.error("Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
+                sys.exit(1)
 
 
 class ConnREST(object):

@@ -676,7 +676,7 @@ group by relname;""".format(table_name)
         if sqlstring.lower().startswith('select') or sqlstring.lower().startswith('call'):
             self._cur.execute(sqlstring)
             rows = self._cur.fetchall()
-            meta = self._curr.description
+            meta = self._cur.description
             self._cur.close()
             self._cur = None
 
@@ -1163,7 +1163,7 @@ group by relname;""".format(table_name)
         return self.query(sql)
 
     # #@migrate_utils.static_func.timer
-    def get_columns(self, table_name, table_schema):
+    def get_columns(self, table_name, table_schema=None):
         """Describe Method:
 
         Args:(self, table_name, table_schema):
@@ -1185,7 +1185,8 @@ group by relname;""".format(table_name)
                 Returns:
                   List: List of Strings
                 """
-        sql="""select * from {} limit 1""".format(table_name)
+        tbl_fqn=table_name if table_schema is None else '{}.{}'.format(table_schema,table_name)
+        sql="""select * from {} limit 1""".format(tbl_fqn)
         self.create_cur()
         
         

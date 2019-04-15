@@ -659,7 +659,7 @@ group by relname;""".format(table_name)
             return True
         return False
 
-    def query(self, sqlstring):
+    def query(self, sqlstring,return_meta=False):
         """Describe Method:
 
         Args:(self, sqlstring):
@@ -671,17 +671,22 @@ group by relname;""".format(table_name)
         self.create_cur()
         """ runs query or procedure that returns record set
         """
+        
         logging.debug('Running Query: {}\n\t{}'.format(datetime.datetime.now().time(), sqlstring))
         if sqlstring.lower().startswith('select') or sqlstring.lower().startswith('call'):
             self._cur.execute(sqlstring)
             rows = self._cur.fetchall()
+            meta = self._curr.description
             self._cur.close()
             self._cur = None
 
         else:
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
-        return rows
+        if return_meta:
+            return rows,meta
+        else:
+            return rows
 
     # def insert_table(self, table_name, column_list, values, onconflict=''):
     #     """Describe Method:
@@ -1173,15 +1178,20 @@ group by relname;""".format(table_name)
         """
         # type: (str, str) -> list
 
-        try:
-            print("Getting Column List from DB: {}.{}".format(table_schema, table_name))
-            con, meta = self.connect_sqlalchemy(table_schema, self._dbtype)
-            table = sqlalchemy.Table(table_name, meta, autoload=True, autoload_with=con)
-            column_list = [c.name for c in table.columns]
-            return list(column_list)
-        except:
-            logging.warning("No Columns found when trying to get Column List: Returning None")
-            return []
+        """This method will select 1 record from the table and return the column names
+
+                Args:(table_name (fully qualified):
+
+                Returns:
+                  List: List of Strings
+                """
+        sql="""select * from {} limit 1""".format(table_name)
+        self.create_cur()
+        
+        
+        dummy,meta=self.query(sqlstring=sql,return_meta=True)
+
+        return [str(r[0]) for r in meta]
 
     # returns a list of table dict
     # @migrate_utils.static_func.timer
@@ -1453,7 +1463,7 @@ group by relname;""".format(table_name)
             self.execute(sql.format(table_name=table_name_fqn, role=role))
         else:
             print('Not Supported')
-            raise
+            sys.exit(1)
 
     def create_table_from_dataframe(self, dataframe, table_name_fqn):
         """Describe Method:

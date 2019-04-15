@@ -4,7 +4,7 @@ from ..world import DB
 import sys
 import os
 import logging as lg
-import pymssql
+
 
 lg.basicConfig()
 logging = lg.getLogger()
@@ -20,6 +20,7 @@ class DB(ConnRDBMS, DB):
     #https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None, port=None, dbname=None, schema=None,
                  label=None):
+        import pymssql # putting here so we don't have to install it
 
         self.autocommit = autocommit
         self.pwd = pwd or os.getenv('MYSQL_PWD', 'Docker1234')

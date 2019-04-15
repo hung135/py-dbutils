@@ -42,13 +42,27 @@ class DB(object):
         if sql.lower().startswith('select') or sql.lower().startswith('call'):
             self.cursor.execute(sql)
             rows = self.cursor.fetchall()
+            meta = self.cursor.description
             self.cursor.close()
             self.cursor = None
 
         else:
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
-        return rows
+        return rows, meta
+
+    def get_table_columns(self,table_name):
+        """This method will select 1 record from the table and return the column names
+
+                Args:(table_name (fully qualified):
+
+                Returns:
+                  List: List of Strings
+                """
+        sql="""select * from {} limit 1""".format(table_name)
+        rows,meta=self.query(sql)
+
+        return [str(r[0]) for r in meta]
 
     def create_cur(self):
         """This method will get called to create a cusor if one does not exist for the instance
@@ -146,14 +160,21 @@ class DB(object):
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
         df.to_hdf(path_or_buf=os.path.abspath(file_path), key=key,mode='w')
 
-    def query_to_csv(self, file_path, sql, include_header=True):
+    def query_to_csv_pandas(self, file_path, sql, include_header=True):
         import pandas
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
         df.to_csv(path_or_buf=os.path.abspath(file_path), header=include_header)
+    def query_to_csv(self, file_path, sql, header=None):
+        import pandas
+        rows,meta=self.query(sql)
+        df = pandas.DataFrame(data=rows,columns=header)
+        df.to_csv(path_or_buf=os.path.abspath(file_path), header=header,index=False)
 
 
 class ConnRDBMS(object):
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
+        self.str = 'DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
+                                                          self.autocommit)
         try:
             self.cursor = None
             self.autocommit = autocommit or True
@@ -163,8 +184,7 @@ class ConnRDBMS(object):
         except Exception as e:
             logging.debug("Can not Use this Class directly: You must instantiate a child")
             sys.exit(1)
-        self.str = 'DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
-                                                          self.autocommit)
+
 
     def __repr__(self):
         return self.str
@@ -175,7 +195,9 @@ class ConnRDBMS(object):
 
     def __del__(self):
         logging.debug("Destroying: {}".format(self.str))
-        self.close()
+
+
+
 
     def authenticate(self):
         pass

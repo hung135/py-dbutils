@@ -40,7 +40,3 @@ class DB(ConnRDBMS, DB):
                 logging.error("Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
                 sys.exit(1)
 
- df = pd.read_gbq(query['query'],
-                project_id=query['project_id'],
-                dataset_id=query['dataset_id'],
-                private_key=SERVICE_ACCOUNT_FILE, dialect='standard')

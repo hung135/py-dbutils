@@ -5,10 +5,11 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from py_dbutils.rdbms import postgres
-from py_dbutils.rdbms import mysql, mssql, sqlite
+from py_dbutils.rdbms import mysql, sqlite , mssql
 from py_dbutils.rdbms import msaccess
 import inspect
 import os
+import pprint
 
 DBSCHEMA = 'postgres'
 COMMIT = True
@@ -58,7 +59,7 @@ class TestDB(unittest.TestCase):
 
         print("Loaded Test Data")
         print(DB.query("select * from {}".format(table_name)))
-
+    @unittest.skip
     def test_postgres(self):
         x = postgres.DB(port=55432);
         #self.populate_test_table(x)
@@ -68,30 +69,26 @@ class TestDB(unittest.TestCase):
         import pandas
 
         from shutil import copyfile
-        src=os.path.join(curr_file_path, 'sample_data/tf01225343.accdt')
-        dst=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.db')
+        src=os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
+        dst=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
-
 
         x = msaccess.DB(dst);
         assert isinstance(x, msaccess.DB)
+        #We don't want to put data into MsAccess we want to get away from access
+        #self.populate_test_table(DB=x, table_name='test')
 
-        self.populate_test_table(DB=x, table_name='test')
-        z, = (x.get_a_row('select 1 as col1   '))
-        parquet_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
-        x.query_to_parquet(parquet_file_path,'select * from test')
-        print(pandas.read_parquet(parquet_file_path, engine='pyarrow'))
+        z=x.get_all_tables()
+        y=x.get_table_columns(z[0])
 
+        d,zz=x.query("select * from tblEmployees")
 
-        csv_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
-        x.query_to_csv(csv_file_path,'select * from test')
+        csv_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
+        x.query_to_csv(file_path=csv_file_path, sql='select * from tblEmployees',header=y)
         print(pandas.read_csv(csv_file_path))
 
 
-        hdf5_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
-        x.query_to_hdf5(hdf5_file_path,'select * from test')
-        print(pandas.read_hdf(hdf5_file_path,'table'))
-
+    @unittest.skip
     def test_sqlite(self):
         import pandas
         x = sqlite.DB(os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_sqlite.db'));

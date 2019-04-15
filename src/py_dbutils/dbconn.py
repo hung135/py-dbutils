@@ -1138,8 +1138,8 @@ group by relname;""".format(table_name)
 
     # returns list of tables that are not assigned to common roles
 
-    def get_uncommon_tables(self, common_roles='operational_dba'):
-        """Describe Method:
+    def get_uncommon_tables(self, common_role='operational_dba'):
+        """an attempt to get a list of tables that are not assignd to common_role
 
         Args:(self, common_roles='operational_dba'):
           table_name (str): String

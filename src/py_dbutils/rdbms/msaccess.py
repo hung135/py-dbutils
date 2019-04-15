@@ -33,12 +33,11 @@ class DB(ConnRDBMS, DB):
 
         self.file_path=os.path.abspath(file_path)
         self.autocommit = autocommit
-        import pprint
-        pprint.pprint(self.classpath)
+         
 
         #need to set this for attempting connection
         self.str = 'DB: MSAccess:{}:autocommit={}'.format(file_path,self.autocommit)
-        print("jdbc:ucanaccess://{file_path};".format(file_path=self.file_path),"------------")
+        #print("jdbc:ucanaccess://{file_path};".format(file_path=self.file_path),"------------")
         self.conn = jaydebeapi.connect(
         "net.ucanaccess.jdbc.UcanaccessDriver",
         "jdbc:ucanaccess://{file_path};".format(file_path=self.file_path),
@@ -50,16 +49,9 @@ class DB(ConnRDBMS, DB):
 
 
     def connect_SqlAlchemy(self):
-        if self.sql_alchemy_uri is None:
-            logging.error("sqlAlchemy not supported for this DB")
+        logging.error("sqlAlchemy not supported for MSAccess")
+        return None
 
-        else:
-            try:
-                return sqlalchemy.create_engine(self.sql_alchemy_uri.format(file_path=self.file_path))
-
-            except Exception as e:
-                logging.error("Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
-                sys.exit(1)
 
     def get_all_tables(self):
 

@@ -85,7 +85,7 @@ class TestDB(unittest.TestCase):
 
         csv_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
         x.query_to_csv(file_path=csv_file_path, sql='select * from tblEmployees',header=y)
-        print(pandas.read_csv(csv_file_path))
+        z=x.connect_SqlAlchemy()
 
 
     @unittest.skip

@@ -275,35 +275,7 @@ class DB(object):
         else:
             logging.error('Please provide fully qualified table name')
             return False
-
-    def table_exists(self, table_name_fqn):
-        """Describe Method:
-
-        Args:( table_name_fqn):
-          table_name (str): String
-
-        Returns:
-          Boolean: True/False
-        """
-        
-        table_exists = False
-        sql = """select count(*) from information_schema.tables
-        WHERE table_type='BASE TABLE'
-        and table_name='{table_name}'  
-        """
-        if '.' in table_name_fqn:
-            table_name = table_name_fqn.split('.')[1]
-            schema = """ and table_schema='{} limit 1'""".format(table_name_fqn.split('.')[0])
-
-            sql = sql.format(table_name=table_name, schema=schema)
-        else:
-            return False
-
-        x, = self.get_a_row(sql)
-        if x > 0:
-            table_exists = True
-        
-        return table_exists
+ 
         
     def get_all_tables(self):
         """Returns list of all tables visible to this connection

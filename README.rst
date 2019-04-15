@@ -3,17 +3,16 @@ py-dbutils
 ==========
 
 
-Add a short description here!
+Python Wrapper to interface with various databases.
+
 
 
 Description
 ===========
 
-A longer description of your project goes here...
+This package wrappers high level call need to interface with a database.
+Get the programmer out of worrying about how to connect to and manage a database connection.
+Start using it.
 
 
-Note
-====
-
-This project has been set up using PyScaffold 3.1. For details and usage
-information on PyScaffold see https://pyscaffold.org/.
+ 

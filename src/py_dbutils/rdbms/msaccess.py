@@ -1,5 +1,5 @@
-from ..world import ConnRDBMS
-from ..world import DB
+from ..parents import ConnRDBMS
+from ..parents import DB
 import sqlalchemy
 import sys
 import os

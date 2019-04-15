@@ -1,6 +1,6 @@
 
-from ..world import ConnRDBMS,ConnREST
-from ..world import DB
+from ..parents import ConnRDBMS,ConnREST
+from ..parents import DB
 import sqlalchemy
 import sys
 import os

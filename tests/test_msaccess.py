@@ -2,10 +2,10 @@ import unittest
 import os
 import sys
 
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from py_dbutils.rdbms import postgres
-from py_dbutils.rdbms import mysql, sqlite , mssql
+from py_dbutils.rdbms import mysql, sqlite, mssql
 from py_dbutils.rdbms import msaccess
 import inspect
 import os
@@ -43,64 +43,60 @@ class TestMsAccess(unittest.TestCase):
     def populate_test_table(self, DB, table_name=TEST_TABLE):
         import pandas as pd
         import os
-        sql="""INSERT INTO {table} ({columns}) VALUES 
+        sql = """INSERT INTO {table} ({columns}) VALUES 
                 {values}"""
-        create_sql="create table {table} ({columns})"
-        dataframe = pd.read_csv(TEST_CSV_FILE,index_col=False)
-        dataframe.col1='asdfasdf"asdasdf'
-        columns=','.join(dataframe.columns)
+        create_sql = "create table {table} ({columns})"
+        dataframe = pd.read_csv(TEST_CSV_FILE, index_col=False)
+        dataframe.col1 = 'asdfasdf"asdasdf'
+        columns = ','.join(dataframe.columns)
 
-        columns_values=['{} CHAR'.format(c) for c in dataframe.columns]
-        rows=[]
+        columns_values = ['{} CHAR'.format(c) for c in dataframe.columns]
+        rows = []
 
-        for key,value in dataframe.iterrows():
-            x=[]
+        for key, value in dataframe.iterrows():
+            x = []
             for c in value:
                 x.append('"{}"'.format(c.replace('"', '""')))
-            y=','.join(x)
+            y = ','.join(x)
             rows.append('({})'.format(y))
 
-        values=',\n'.join(rows)
-        DB.execute(create_sql.format(table=table_name,columns=','.join(columns_values)))
-        DB.execute(sql.format(table=table_name,columns=columns,values=values))
+        values = ',\n'.join(rows)
+        DB.execute(create_sql.format(table=table_name, columns=','.join(columns_values)))
+        DB.execute(sql.format(table=table_name, columns=columns, values=values))
 
-            #rows+="\n,("+(','.join(c.replace("'","''")) for c in row)+")"
-
-
-
-
+        # rows+="\n,("+(','.join(c.replace("'","''")) for c in row)+")"
 
     def test_msaccess(self):
         import pandas
 
         from shutil import copyfile
-        src=os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
-        dst=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
+        src = os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
+        dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
         x = msaccess.DB(dst);
         assert isinstance(x, msaccess.DB)
-        #We don't want to put data into MsAccess we want to get away from access
+        # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')
 
-        z=x.get_all_tables()
-        y=x.get_table_columns(z[0])
+        z = x.get_all_tables()
+        y = x.get_table_columns(z[0])
         print(z)
-        d,zz=x.query("select * from tblEmployees")
+        d, zz = x.query("select * from tblEmployees")
 
         csv_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
-        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees',file_format='CSV',header=y)
+        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees', file_format='CSV', header=y)
 
-        #make sure we log error
-        z=x.connect_SqlAlchemy()
+        # make sure we log error
+        z = x.connect_SqlAlchemy()
 
-        parquet_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
-        x.query_to_file(parquet_file_path,'select * from test',file_format='PARQUET')
+        parquet_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
+        x.query_to_file(parquet_file_path, 'select * from test', file_format='PARQUET')
         print(pandas.read_parquet(parquet_file_path, engine='pyarrow'))
 
-        hdf5_file_path=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
-        x.query_to_file(hdf5_file_path,'select * from test',file_format='HDF5',hdf5_key='table')
-        print(pandas.read_hdf(hdf5_file_path,'table'))
+        hdf5_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
+        x.query_to_file(hdf5_file_path, 'select * from test', file_format='HDF5', hdf5_key='table')
+        print(pandas.read_hdf(hdf5_file_path, 'table'))
 
 
 if __name__ == '__main__':

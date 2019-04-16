@@ -2,12 +2,13 @@ import unittest
 import os
 import sys
 
-#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from py_dbutils.rdbms import postgres
 import inspect
 import os
 import pprint
+import pandas as pd
 
 DBSCHEMA = 'postgres'
 COMMIT = True
@@ -28,7 +29,7 @@ TEST_SCHEMA = 'test'
 TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
-RDBMS = [postgres     ]
+RDBMS = [postgres]
 PARAMS = [{'port': 55432}
           ]
 
@@ -36,7 +37,6 @@ PARAMS = [{'port': 55432}
 class TestPostgres(unittest.TestCase):
 
     def populate_test_table(self, DB, table_name=TEST_TABLE):
-        import pandas as pd
         import os
 
         dataframe = pd.read_csv(TEST_CSV_FILE)
@@ -55,38 +55,47 @@ class TestPostgres(unittest.TestCase):
         print("Loaded Test Data")
         print(DB.query("select * from {}".format(table_name)))
 
-
-
     def test_postgres(self):
-        import pandas
-
         from shutil import copyfile
-        src=os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
-        dst=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
+        src = os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
+        dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
         x = postgres.DB(port=55432);
         assert isinstance(x, postgres.DB)
-        #We don't want to put data into MsAccess we want to get away from access
+        # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')
 
-        z =x.get_all_tables()
+        z = x.get_all_tables()
 
         print(z)
-        y= x.get_table_columns('test.test')
-        #make sure we log error
-        z=x.connect_SqlAlchemy()
+        y = x.get_table_columns('test.test')
+        # make sure we log error
+        z = x.connect_SqlAlchemy()
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_postres.csv')
-        x.query_to_file(file, 'select * from test',header=y, file_format='CSV')
-        print(pandas.read_csv(file))
+        x.query_to_file(file, 'select * from test', header=y, file_format='CSV')
+        print(pd.read_csv(file))
 
-        file=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
-        x.query_to_file(file,'select * from test',file_format='PARQUET')
-        print(pandas.read_parquet(file, engine='pyarrow'))
+        file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
+        x.query_to_file(file, 'select * from test', file_format='PARQUET')
+        print(pd.read_parquet(file, engine='pyarrow'))
 
-        file=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
-        x.query_to_file(file,'select * from test',file_format='HDF5',hdf5_key='table')
-        print(pandas.read_hdf(file,'table'))
+        file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
+        x.query_to_file(file, 'select * from test', file_format='HDF5', hdf5_key='table')
+        print(pd.read_hdf(file, 'table'))
+
+    def test_bulk_load_dataframe(self):
+        db = postgres.DB(port=55432);
+        df = pd.read_csv(TEST_CSV_FILE)
+        print(db.get_table_columns(TEST_TABLE))
+        db.execute('truncate table test.test')
+        db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8', workingpath='MEMORY')
+        db.execute('truncate table test.test')
+        db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8',
+                               workingpath=os.path.join(curr_file_path, TEST_OUTPUT_DIR))
+        db.commit()
+        print("-----ddddddddd----")
+        print(db.query('select * from test.test'))
 
 
 if __name__ == '__main__':

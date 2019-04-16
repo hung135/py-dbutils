@@ -67,15 +67,18 @@ class DB(ConnRDBMS, DB):
                 data_stringIO.close()
 
         self.create_cur()
-        column_list = '","'.join(dataframe.columns.values.tolist())
+        column_list = ['{}'.format(c) for c in dataframe.columns.values.tolist()]
+        print(column_list)
         if workingpath == 'MEMORY':
             with readStringIO() as f:
 
                 cmd_string = """COPY {table} ({columns}) FROM STDIN WITH (FORMAT CSV)""".format(table=table_name_fqn,
-                                                                                                columns=column_list)
+                                                                                                columns=','.join(
+                                                                                                    column_list))
                 self.cursor.copy_expert(cmd_string, f)
         else:
             tmp_file = os.path.join(workingpath, '_tmp_file.csv')
             dataframe.to_csv(tmp_file, header=False, index=False, encoding='utf8')
-            self.cursor.copy_from(tmp_file, table_name_fqn, columns=column_list, sep=",")
-
+            print(column_list)
+            with open(tmp_file) as f:
+                self.cursor.copy_from(f, table_name_fqn, columns=column_list, sep=",")

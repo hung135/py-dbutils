@@ -1,5 +1,5 @@
 import os
-# import subprocess as commands
+import subprocess as commands
 # import commands
 import sys
 import datetime
@@ -413,6 +413,7 @@ group by relname;""".format(table_name)
         """
         v_source_schema = table_name.split('.')[0]
         v_target_schema = target_name.split('.')[0]
+        v_index_sql=''
         if target_name is None:
             target_name = table_name
 
@@ -579,7 +580,6 @@ group by relname;""".format(table_name)
 
         return table.columns
 
-
     def schema_exists(self, schema_name):
         """Takes a query string and runs it to see if it returns any rows
 
@@ -640,7 +640,7 @@ group by relname;""".format(table_name)
             return True
         return False
 
-    def query(self, sqlstring,return_meta=False):
+    def query(self, sqlstring, return_meta=False):
         """Describe Method:
 
         Args:(self, sqlstring):
@@ -652,7 +652,7 @@ group by relname;""".format(table_name)
         self.create_cur()
         """ runs query or procedure that returns record set
         """
-        
+
         logging.debug('Running Query: {}\n\t{}'.format(datetime.datetime.now().time(), sqlstring))
         if sqlstring.lower().startswith('select') or sqlstring.lower().startswith('call'):
             self._cur.execute(sqlstring)
@@ -665,7 +665,7 @@ group by relname;""".format(table_name)
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
         if return_meta:
-            return rows,meta
+            return rows, meta
         else:
             return rows
 
@@ -1145,20 +1145,6 @@ group by relname;""".format(table_name)
 
     # #@migrate_utils.static_func.timer
     def get_columns(self, table_name, table_schema=None):
-        """Describe Method:
-
-        Args:(self, table_name, table_schema):
-          table_name (str): String
-
-        Returns:
-          None: None
-        """
-        """
-
-        :rtype: object
-        """
-        # type: (str, str) -> list
-
         """This method will select 1 record from the table and return the column names
 
                 Args:(table_name (fully qualified):
@@ -1166,12 +1152,11 @@ group by relname;""".format(table_name)
                 Returns:
                   List: List of Strings
                 """
-        tbl_fqn=table_name if table_schema is None else '{}.{}'.format(table_schema,table_name)
-        sql="""select * from {} limit 1""".format(tbl_fqn)
+        tbl_fqn = table_name if table_schema is None else '{}.{}'.format(table_schema, table_name)
+        sql = """select * from {} limit 1""".format(tbl_fqn)
         self.create_cur()
-        
-        
-        dummy,meta=self.query(sqlstring=sql,return_meta=True)
+
+        dummy, meta = self.query(sqlstring=sql, return_meta=True)
 
         return [str(r[0]) for r in meta]
 
@@ -1355,8 +1340,6 @@ group by relname;""".format(table_name)
         print(z)
         return z
 
-
-
     # certain commans requires the environment variables for the session
     # we need to save that and replace with our current and put it back after we are done
 
@@ -1511,8 +1494,8 @@ group by relname;""".format(table_name)
                     print('warning multiple tables found')
                 table_exists = True
         else:
-            print('Not Supported')
-            raise
+            logging('Not Supported')
+            sys.exit(1)
         return table_exists
 
     # copy using pyscopg to convert a dataframe to a file like object and pass it into pyscopg
@@ -1615,7 +1598,7 @@ group by relname;""".format(table_name)
 
     # uses pyscopg2 builtin copy commmand delivered with binary
 
-    def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter=',',  header=False,
+    def import_pyscopg2_copy(self, full_file_path, table_name_fqn, file_delimiter=',', header=False,
                              encoding='utf8'):
         """Describe Method:
 

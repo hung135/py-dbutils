@@ -23,8 +23,6 @@ class DB(object):
 
         self.cursor = None
 
-
-
     def query(self, sql):
         """This will execute a query and fetches all the results and closes the curor.
             this is not meant to be a data store but a utility to pull bits of data from the database
@@ -49,9 +47,9 @@ class DB(object):
         else:
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
-        return rows if isinstance(rows,list) else list(rows), meta
+        return rows if isinstance(rows, list) else list(rows), meta
 
-    def get_table_columns(self,table_name):
+    def get_table_columns(self, table_name):
         """This method will select 1 record from the table and return the column names
 
                 Args:(table_name (fully qualified):
@@ -59,8 +57,8 @@ class DB(object):
                 Returns:
                   List: List of Strings
                 """
-        sql="""select * from {} limit 1""".format(table_name)
-        rows,meta=self.query(sql)
+        sql = """select * from {} limit 1""".format(table_name)
+        rows, meta = self.query(sql)
 
         return [str(r[0]) for r in meta]
 
@@ -108,7 +106,6 @@ class DB(object):
 
         return rowcount
 
-
     def bulk_load(self):
         pass
 
@@ -150,7 +147,7 @@ class DB(object):
         import pyarrow as pa
         import pandas
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
-        print(file_path,"--------------")
+        print(file_path, "--------------")
         table = pa.Table.from_pandas(df)
         pq.write_table(table, os.path.abspath(file_path))
 
@@ -178,9 +175,8 @@ class DB(object):
         """
         import pandas
 
-
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
-        df.to_hdf(path_or_buf=os.path.abspath(file_path), key=key,mode='w')
+        df.to_hdf(path_or_buf=os.path.abspath(file_path), key=key, mode='w')
 
     def query_to_csv(self, file_path, sql, include_header=True):
         """Uses Pandas and SqlAchemy to dump data to a CSV file
@@ -193,7 +189,7 @@ class DB(object):
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
         df.to_csv(path_or_buf=os.path.abspath(file_path), header=include_header)
 
-    def query_to_file(self, file_path, sql,file_format='CSV', header=None,hdf5_key=None):
+    def query_to_file(self, file_path, sql, file_format='CSV', header=None, hdf5_key=None):
         """Generic Query to file will work for any database we can make a connection to w/out the need for SQLalchemy
         :param file_path:
         :param sql:
@@ -203,19 +199,18 @@ class DB(object):
         :return:
         """
         import pandas
-        rows,meta=self.query(sql)
-        print(header,"----xxxxx---",rows)
-        df = pandas.DataFrame(data=rows,columns=header)
-        if file_format=='CSV':
-            df.to_csv(path_or_buf=os.path.abspath(file_path), header=header,index=False)
-        if file_format=='PARQUET':
-            #keeps from having to import this dependency if we never use this file format
+        rows, meta = self.query(sql)
+        df = pandas.DataFrame(data=rows, columns=header)
+        if file_format == 'CSV':
+            df.to_csv(path_or_buf=os.path.abspath(file_path), header=header, index=False)
+        if file_format == 'PARQUET':
+            # keeps from having to import this dependency if we never use this file format
             import pyarrow.parquet as pq
             import pyarrow as pa
             table = pa.Table.from_pandas(df)
             pq.write_table(table, os.path.abspath(file_path))
-        if file_format=='HDF5':
-            df.to_hdf(path_or_buf=os.path.abspath(file_path), key=hdf5_key,mode='w')
+        if file_format == 'HDF5':
+            df.to_hdf(path_or_buf=os.path.abspath(file_path), key=hdf5_key, mode='w')
 
     def schema_exists(self, schema_name):
         """Takes a query string and runs it to see if it returns any rows
@@ -322,8 +317,7 @@ class DB(object):
         else:
             logging.error('Please provide fully qualified table name')
             return False
- 
-        
+
     def get_all_tables(self):
         """Returns list of all tables visible to this connection
 
@@ -335,8 +329,9 @@ class DB(object):
         """
         sql = """SELECT concat(table_schema,'.',table_name) as table_name FROM information_schema.tables a
             WHERE table_type='BASE TABLE'"""
-        result_set,meta = self.query(sql)
-        return [r[0] for r in result_set] 
+        result_set, meta = self.query(sql)
+        return [r[0] for r in result_set]
+
 
 class ConnRDBMS(object):
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
@@ -352,7 +347,6 @@ class ConnRDBMS(object):
             logging.debug("Can not Use this Class directly: You must instantiate a child")
             sys.exit(1)
 
-
     def __repr__(self):
         return self.str
 
@@ -362,9 +356,6 @@ class ConnRDBMS(object):
 
     def __del__(self):
         logging.debug("Destroying: {}".format(self.str))
-
-
-
 
     def authenticate(self):
         pass

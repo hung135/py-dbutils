@@ -299,6 +299,7 @@ class TestConnection(unittest.TestCase):
 
         # self.assertEqual(expected, connection.get_columns(table_name, table_schema))
         try:
+            self.populate_test_table()
             connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
                                     inspect.stack()[0][3])
             x = connection.get_columns('test', TEST_SCHEMA)
@@ -456,18 +457,6 @@ class TestConnection(unittest.TestCase):
             print(e)
             assert False
 
-    def test_get_table_columns(self):
-
-        # self.assertEqual(expected, connection.get_table_columns(table_name, trg_schema))
-        try:
-            connection = Connection(DBSCHEMA, COMMIT, PASSWORD, USERID, HOST, PORT, DATABASE, DBTYPE,
-                                    inspect.stack()[0][3])
-
-            assert True
-        except Exception as e:
-
-            print(e)
-            assert False
 
     def test_get_table_list(self):
 

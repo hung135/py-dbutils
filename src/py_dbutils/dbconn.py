@@ -579,25 +579,6 @@ group by relname;""".format(table_name)
 
         return table.columns
 
-    def get_table_columns(self, table_name, trg_schema=None):
-        """Takes a query string and runs it to see if it returns any rows
-
-        Args:
-          table_name (str): String
-
-        Returns:
-          boolean: True/False
-        """
-        self.create_cur()
-
-        if trg_schema is None:
-            schema = self.dbschema
-        else:
-            schema = trg_schema
-        con, meta = self.connect_sqlalchemy()
-        table = sqlalchemy.Table(table_name, meta, schema=schema, autoload=True, autoload_with=con)
-
-        return [c.name for c in table.columns]
 
     def schema_exists(self, schema_name):
         """Takes a query string and runs it to see if it returns any rows

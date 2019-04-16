@@ -154,21 +154,67 @@ class DB(object):
         table = pa.Table.from_pandas(df)
         pq.write_table(table, os.path.abspath(file_path))
 
-    def query_to_hdf5(self, file_path, sql, key='table'):
+    def query_to_parquet(self, file_path, sql):
+        """
+        Uses Pandas and SqlAchemy to dump data to a parquet file
+        :param file_path:
+        :param sql:
+        :return:
+        """
+        import pyarrow.parquet as pq
+        import pyarrow as pa
         import pandas
+        df = pandas.read_sql(sql, self.connect_SqlAlchemy())
+
+        table = pa.Table.from_pandas(df)
+        pq.write_table(table, os.path.abspath(file_path))
+
+    def query_to_hdf5(self, file_path, sql, key='table'):
+        """Uses Pandas and SqlAchemy to dump data to a CSV file
+        :param file_path:
+        :param sql:
+        :param key: They Grouping in which the data falls under inside HDF5
+        :return:
+        """
+        import pandas
+
 
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
         df.to_hdf(path_or_buf=os.path.abspath(file_path), key=key,mode='w')
 
-    def query_to_csv_pandas(self, file_path, sql, include_header=True):
+    def query_to_csv(self, file_path, sql, include_header=True):
+        """Uses Pandas and SqlAchemy to dump data to a CSV file
+        :param file_path:
+        :param sql:
+        :param include_header:
+        :return:
+        """
         import pandas
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
         df.to_csv(path_or_buf=os.path.abspath(file_path), header=include_header)
-    def query_to_csv(self, file_path, sql, header=None):
+
+    def query_to_file(self, file_path, sql,file_format='CSV', header=None,hdf5_key=None):
+        """Generic Query to file will work for any database we can make a connection to w/out the need for SQLalchemy
+        :param file_path:
+        :param sql:
+        :param file_format:
+        :param header:
+        :param hdf5_key:
+        :return:
+        """
         import pandas
         rows,meta=self.query(sql)
         df = pandas.DataFrame(data=rows,columns=header)
-        df.to_csv(path_or_buf=os.path.abspath(file_path), header=header,index=False)
+        if file_format=='CSV':
+            df.to_csv(path_or_buf=os.path.abspath(file_path), header=header,index=False)
+        if file_format=='PARQUET':
+            #keeps from having to import this dependency if we never use this file format
+            import pyarrow.parquet as pq
+            import pyarrow as pa
+            table = pa.Table.from_pandas(df)
+            pq.write_table(table, os.path.abspath(file_path))
+        if file_format=='HDF5':
+            df.to_hdf(path_or_buf=os.path.abspath(file_path), key=hdf5_key,mode='w')
 
     def schema_exists(self, schema_name):
         """Takes a query string and runs it to see if it returns any rows

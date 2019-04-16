@@ -2,7 +2,7 @@ import unittest
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+#sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 from py_dbutils.rdbms import postgres
 from py_dbutils.rdbms import mysql, sqlite , mssql
@@ -65,27 +65,6 @@ class TestDB(unittest.TestCase):
         #self.populate_test_table(x)
         z, = (x.get_a_row('select 1 as col1   '))
 
-    def test_msaccess(self):
-        import pandas
-
-        from shutil import copyfile
-        src=os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
-        dst=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
-        copyfile(src, dst)
-
-        x = msaccess.DB(dst);
-        assert isinstance(x, msaccess.DB)
-        #We don't want to put data into MsAccess we want to get away from access
-        #self.populate_test_table(DB=x, table_name='test')
-
-        z=x.get_all_tables()
-        y=x.get_table_columns(z[0])
-
-        d,zz=x.query("select * from tblEmployees")
-
-        csv_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
-        x.query_to_csv(file_path=csv_file_path, sql='select * from tblEmployees',header=y)
-        z=x.connect_SqlAlchemy()
 
 
     @unittest.skip

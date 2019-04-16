@@ -67,7 +67,7 @@ class DB(ConnRDBMS, DB):
                 data_stringIO.close()
 
         self.create_cur()
-        column_list = ['{}'.format(c) for c in dataframe.columns.values.tolist()]
+        column_list = ['"{}"'.format(c) for c in dataframe.columns.values.tolist()]
         print(column_list)
         if workingpath == 'MEMORY':
             with readStringIO() as f:

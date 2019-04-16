@@ -334,7 +334,7 @@ class DB(object):
         """
         sql = """SELECT concat(table_schema,'.',table_name) as table_name FROM information_schema.tables a
             WHERE table_type='BASE TABLE'"""
-        result_set = self.query(sql)
+        result_set,meta = self.query(sql)
         return [r[0] for r in result_set] 
 
 class ConnRDBMS(object):

@@ -1,0 +1,1161 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>py_dbutils package &#8212; py-dbutils unknown documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="py_dbutils" href="modules.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="py-dbutils-package">
+<h1>py_dbutils package<a class="headerlink" href="#py-dbutils-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-py_dbutils.dbconn">
+<span id="py-dbutils-dbconn-module"></span><h2>py_dbutils.dbconn module<a class="headerlink" href="#module-py_dbutils.dbconn" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="py_dbutils.dbconn.Connection">
+<em class="property">class </em><code class="descclassname">py_dbutils.dbconn.</code><code class="descname">Connection</code><span class="sig-paren">(</span><em>dbschema=None</em>, <em>commit=True</em>, <em>password=None</em>, <em>userid=None</em>, <em>host=None</em>, <em>port=5432</em>, <em>database=None</em>, <em>dbtype='POSTGRES'</em>, <em>appname='py_dbutils'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.check_table_exists">
+<code class="descname">check_table_exists</code><span class="sig-paren">(</span><em>table_name_fqn</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.check_table_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.check_table_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name_fqn):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.commit">
+<code class="descname">commit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.connect_sqlalchemy">
+<code class="descname">connect_sqlalchemy</code><span class="sig-paren">(</span><em>schema=None</em>, <em>db_type=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.connect_sqlalchemy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.connect_sqlalchemy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, schema=None, db_type=None):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.copy_from_file">
+<code class="descname">copy_from_file</code><span class="sig-paren">(</span><em>dataframe</em>, <em>table_name_fqn</em>, <em>encoding='utf8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.copy_from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.copy_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, dataframe, table_name_fqn, encoding=’utf8’):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.copy_to_csv">
+<code class="descname">copy_to_csv</code><span class="sig-paren">(</span><em>sqlstring</em>, <em>full_file_path</em>, <em>delimiter</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.copy_to_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.copy_to_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, sqlstring, full_file_path, delimiter):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.create_cur">
+<code class="descname">create_cur</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.create_cur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.create_cur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.create_table">
+<code class="descname">create_table</code><span class="sig-paren">(</span><em>sqlstring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.create_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.create_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, sqlstring):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.create_table_from_dataframe">
+<code class="descname">create_table_from_dataframe</code><span class="sig-paren">(</span><em>dataframe</em>, <em>table_name_fqn</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.create_table_from_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.create_table_from_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, dataframe, table_name_fqn):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.drop_schema">
+<code class="descname">drop_schema</code><span class="sig-paren">(</span><em>schema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.drop_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.drop_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, schema):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.drop_table">
+<code class="descname">drop_table</code><span class="sig-paren">(</span><em>table_name</em>, <em>cascade=False</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.drop_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.drop_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name,cascade=False,commit=True):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.dump_tables_csv">
+<code class="descname">dump_tables_csv</code><span class="sig-paren">(</span><em>table_list</em>, <em>folder</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.dump_tables_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.dump_tables_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_list, folder):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>sqlstring</em>, <em>commit=False</em>, <em>catch_exception=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, sqlstring, commit=False, catch_exception=True):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_a_value">
+<code class="descname">get_a_value</code><span class="sig-paren">(</span><em>sql</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_a_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_a_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, sql):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_all_columns_schema">
+<code class="descname">get_all_columns_schema</code><span class="sig-paren">(</span><em>dbschema</em>, <em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_all_columns_schema"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_all_columns_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, dbschema, table_name):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_columns">
+<code class="descname">get_columns</code><span class="sig-paren">(</span><em>table_name</em>, <em>table_schema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name, table_schema):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_conn_url">
+<code class="descname">get_conn_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_conn_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_conn_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_create_table">
+<code class="descname">get_create_table</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_create_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_create_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_create_table_cli">
+<code class="descname">get_create_table_cli</code><span class="sig-paren">(</span><em>table_name</em>, <em>target_name=None</em>, <em>gen_pk=True</em>, <em>gen_index=True</em>, <em>gen_fk=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_create_table_cli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_create_table_cli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_create_table_sqlalchemy">
+<code class="descname">get_create_table_sqlalchemy</code><span class="sig-paren">(</span><em>table_name</em>, <em>trg_db</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_create_table_sqlalchemy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_create_table_sqlalchemy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_create_table_via_dump">
+<code class="descname">get_create_table_via_dump</code><span class="sig-paren">(</span><em>table_name</em>, <em>target_name=None</em>, <em>gen_pk=True</em>, <em>gen_index=True</em>, <em>gen_fk=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_create_table_via_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_create_table_via_dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name, target_name=None, gen_pk=True, gen_index=True, gen_fk=True):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_db_size">
+<code class="descname">get_db_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_db_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_db_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_pandas_frame">
+<code class="descname">get_pandas_frame</code><span class="sig-paren">(</span><em>table_name_fqn</em>, <em>rows=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_pandas_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_pandas_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name_fqn, rows=None):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_primary_keys">
+<code class="descname">get_primary_keys</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_primary_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_primary_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_schema_col_stats">
+<code class="descname">get_schema_col_stats</code><span class="sig-paren">(</span><em>schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_schema_col_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_schema_col_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, schema=None):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_schema_index">
+<code class="descname">get_schema_index</code><span class="sig-paren">(</span><em>schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_schema_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_schema_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, schema=None):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_table_column_types">
+<code class="descname">get_table_column_types</code><span class="sig-paren">(</span><em>table_name</em>, <em>trg_schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_table_column_types"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_table_column_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_table_columns">
+<code class="descname">get_table_columns</code><span class="sig-paren">(</span><em>table_name</em>, <em>trg_schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_table_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_table_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_table_list">
+<code class="descname">get_table_list</code><span class="sig-paren">(</span><em>dbschema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_table_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_table_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, dbschema=None):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_table_list_via_query">
+<code class="descname">get_table_list_via_query</code><span class="sig-paren">(</span><em>dbschema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_table_list_via_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_table_list_via_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, dbschema):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_table_row_count_fast">
+<code class="descname">get_table_row_count_fast</code><span class="sig-paren">(</span><em>table_name</em>, <em>schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_table_row_count_fast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_table_row_count_fast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name, schema=None):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_tables">
+<code class="descname">get_tables</code><span class="sig-paren">(</span><em>schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, schema=None):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_tables_row_count">
+<code class="descname">get_tables_row_count</code><span class="sig-paren">(</span><em>schema=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_tables_row_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_tables_row_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, schema=None):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_uncommon_tables">
+<code class="descname">get_uncommon_tables</code><span class="sig-paren">(</span><em>common_roles='operational_dba'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_uncommon_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_uncommon_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, common_roles=’operational_dba’):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.get_view_list_via_query">
+<code class="descname">get_view_list_via_query</code><span class="sig-paren">(</span><em>dbschema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.get_view_list_via_query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.get_view_list_via_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, dbschema):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.has_record">
+<code class="descname">has_record</code><span class="sig-paren">(</span><em>sqlstring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.has_record"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.has_record" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sqlstring</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.import_bulk_dataframe">
+<code class="descname">import_bulk_dataframe</code><span class="sig-paren">(</span><em>dataframe</em>, <em>table_name_fqn</em>, <em>file_delimiter='</em>, <em>'</em>, <em>header=False</em>, <em>encoding='utf8'</em>, <em>in_memory=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.import_bulk_dataframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.import_bulk_dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, dataframe, table_name_fqn, file_delimiter=’,’, header=False, encoding=’utf8’,</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.import_file_client_side">
+<code class="descname">import_file_client_side</code><span class="sig-paren">(</span><em>full_file_path</em>, <em>table_name_fqn</em>, <em>file_delimiter='</em>, <em>'</em>, <em>header=False</em>, <em>encoding='utf8'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.import_file_client_side"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.import_file_client_side" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, full_file_path, table_name_fqn, file_delimiter=’,’, header=False,</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.import_pyscopg2_copy">
+<code class="descname">import_pyscopg2_copy</code><span class="sig-paren">(</span><em>full_file_path</em>, <em>table_name_fqn</em>, <em>file_delimiter</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.import_pyscopg2_copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.import_pyscopg2_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, full_file_path, table_name_fqn, file_delimiter):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.insert_table">
+<code class="descname">insert_table</code><span class="sig-paren">(</span><em>table_name</em>, <em>column_list</em>, <em>values</em>, <em>onconflict=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.insert_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.insert_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name, column_list, values, onconflict=’‘):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.pandas_dump_table_csv">
+<code class="descname">pandas_dump_table_csv</code><span class="sig-paren">(</span><em>table_list</em>, <em>folder</em>, <em>chunksize=100000</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.pandas_dump_table_csv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.pandas_dump_table_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_list, folder, chunksize=100000):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.print_create_table">
+<code class="descname">print_create_table</code><span class="sig-paren">(</span><em>folder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.print_create_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.print_create_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.print_drop_tables">
+<code class="descname">print_drop_tables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.print_drop_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.print_drop_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.print_table_info">
+<code class="descname">print_table_info</code><span class="sig-paren">(</span><em>table_name</em>, <em>schema</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.print_table_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.print_table_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name, schema):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.print_tables">
+<code class="descname">print_tables</code><span class="sig-paren">(</span><em>table_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.print_tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.print_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.put_pandas_frame">
+<code class="descname">put_pandas_frame</code><span class="sig-paren">(</span><em>table_name</em>, <em>df</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.put_pandas_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.put_pandas_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name, df):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>sqlstring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, sqlstring):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.rollback">
+<code class="descname">rollback</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.rollback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.rollback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.schema_exists">
+<code class="descname">schema_exists</code><span class="sig-paren">(</span><em>schema_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.schema_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.schema_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.set_table_owner">
+<code class="descname">set_table_owner</code><span class="sig-paren">(</span><em>table_name_fqn</em>, <em>role</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.set_table_owner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.set_table_owner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name_fqn, role):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.sqlalchemy_engine_close">
+<code class="descname">sqlalchemy_engine_close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.sqlalchemy_engine_close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.sqlalchemy_engine_close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.table_exists">
+<code class="descname">table_exists</code><span class="sig-paren">(</span><em>table_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.table_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.table_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.truncate_table">
+<code class="descname">truncate_table</code><span class="sig-paren">(</span><em>table_name=None</em>, <em>commit=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.truncate_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.truncate_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, table_name=None, commit=True):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.dbconn.Connection.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>sqlstring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/dbconn.html#Connection.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.dbconn.Connection.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describe Method:</p>
+<dl class="simple">
+<dt>Args:(self, sqlstring):</dt><dd><p>table_name (str): String</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3.7/library/constants.html#None" title="(in Python v3.7)">None</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-py_dbutils.test">
+<span id="py-dbutils-test-module"></span><h2>py_dbutils.test module<a class="headerlink" href="#module-py_dbutils.test" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-py_dbutils.utils">
+<span id="py-dbutils-utils-module"></span><h2>py_dbutils.utils module<a class="headerlink" href="#module-py_dbutils.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="py_dbutils.utils.add_column">
+<code class="descclassname">py_dbutils.utils.</code><code class="descname">add_column</code><span class="sig-paren">(</span><em>db</em>, <em>table_name</em>, <em>column_name</em>, <em>data_type</em>, <em>nullable=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/utils.html#add_column"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.utils.add_column" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="py_dbutils.utils.get_schema_except">
+<code class="descclassname">py_dbutils.utils.</code><code class="descname">get_schema_except</code><span class="sig-paren">(</span><em>db</em>, <em>execpt_schema_list=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/utils.html#get_schema_except"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.utils.get_schema_except" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="py_dbutils.utils.purge_schema_except">
+<code class="descclassname">py_dbutils.utils.</code><code class="descname">purge_schema_except</code><span class="sig-paren">(</span><em>db</em>, <em>schema_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/utils.html#purge_schema_except"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.utils.purge_schema_except" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-py_dbutils.world">
+<span id="py-dbutils-world-module"></span><h2>py_dbutils.world module<a class="headerlink" href="#module-py_dbutils.world" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="py_dbutils.world.Connection">
+<em class="property">class </em><code class="descclassname">py_dbutils.world.</code><code class="descname">Connection</code><a class="reference internal" href="../_modules/py_dbutils/world.html#Connection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.Connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="py_dbutils.world.Connection.bulk_load">
+<code class="descname">bulk_load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/world.html#Connection.bulk_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.Connection.bulk_load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.world.Connection.commit">
+<code class="descname">commit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/world.html#Connection.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.Connection.commit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.world.Connection.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/world.html#Connection.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.Connection.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.world.Connection.query">
+<code class="descname">query</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/world.html#Connection.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.Connection.query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="py_dbutils.world.DB">
+<em class="property">class </em><code class="descclassname">py_dbutils.world.</code><code class="descname">DB</code><a class="reference internal" href="../_modules/py_dbutils/world.html#DB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.DB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.7/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Takes a query string and runs it to see if it returns any rows</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>table_name</strong> (<a class="reference external" href="https://docs.python.org/3.7/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – String</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True/False</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>boolean</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="py_dbutils.world.DB.bulk_load">
+<code class="descname">bulk_load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/world.html#DB.bulk_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.DB.bulk_load" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.world.DB.commit">
+<code class="descname">commit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/world.html#DB.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.DB.commit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.world.DB.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/world.html#DB.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.DB.execute" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="py_dbutils.world.DB.query">
+<code class="descname">query</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/py_dbutils/world.html#DB.query"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#py_dbutils.world.DB.query" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-py_dbutils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-py_dbutils" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">py-dbutils</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog.html">Changelog</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Module Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">py_dbutils package</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">py_dbutils</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">py_dbutils</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, hnguyen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/py_dbutils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

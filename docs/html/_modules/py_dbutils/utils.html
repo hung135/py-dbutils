@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>py_dbutils.utils &#8212; py-dbutils unknown documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for py_dbutils.utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+
+<div class="viewcode-block" id="purge_schema_except"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.utils.purge_schema_except">[docs]</a><span class="k">def</span> <span class="nf">purge_schema_except</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">schema_list</span><span class="p">):</span>
+    <span class="c1"># this will run through and drop all schemas except for those in the schema_list</span>
+    <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">drop_schema_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sql_drop_schema</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;DROP schema </span><span class="si">{}</span><span class="s2"> &quot;&quot;&quot;</span>
+    <span class="n">dbtype</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">_dbtype</span>
+
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;POSTGRES&#39;</span><span class="p">,</span> <span class="s1">&#39;MAPD&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT schema_name from information_schema.schemata&quot;&quot;&quot;</span>
+        <span class="n">sql_drop_schema</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;DROP schema </span><span class="si">{}</span><span class="s2"> CASCADE&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ORACLE&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT DISTINCT USERNAME from SYS.ALL_USERS&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;MSSQL&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT schema_name FROM sys.schemas&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;VERTICA&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT schema_name FROM sys.schemas&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;SQLITE&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT table_schema FROM v_catalog.tables&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sql_all_schemas</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Database Not Supported: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">_dbtype</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">sql_all_schemas</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rs</span><span class="p">:</span>
+            <span class="n">schema_name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">schema_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">schema_list</span><span class="p">:</span>
+                <span class="n">drop_schema_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">schema_name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;These schemas will be dropped, if you answer &#39;yess!!!&#39;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">drop_schema_list</span><span class="p">)</span>
+
+        <span class="n">reply</span> <span class="o">=</span> <span class="n">raw_input</span><span class="p">(</span><span class="s2">&quot;Are you Sure? Type: yes!!! &gt;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reply</span> <span class="o">==</span> <span class="s1">&#39;yes!!!&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">schema_name</span> <span class="ow">in</span> <span class="n">drop_schema_list</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_drop_schema</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema_name</span><span class="p">))</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Dropped Schema: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema_name</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error Dropping Schema: </span><span class="si">{}</span><span class="se">\n\t</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">schema_name</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Nothing was Done!&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_schema_except"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.utils.get_schema_except">[docs]</a><span class="k">def</span> <span class="nf">get_schema_except</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">execpt_schema_list</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="c1"># this will run through and drop all schemas except for those in the schema_list</span>
+    <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">schema_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sql_drop_schema</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;DROP schema </span><span class="si">{}</span><span class="s2"> &quot;&quot;&quot;</span>
+    <span class="n">dbtype</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">_dbtype</span>
+
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;POSTGRES&#39;</span><span class="p">,</span> <span class="s1">&#39;MAPD&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT schema_name from information_schema.schemata&quot;&quot;&quot;</span>
+        <span class="n">sql_drop_schema</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;DROP schema </span><span class="si">{}</span><span class="s2"> CASCADE&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ORACLE&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT DISTINCT USERNAME from SYS.ALL_USERS&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;MSSQL&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT schema_name FROM sys.schemas&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;VERTICA&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT schema_name FROM sys.schemas&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">dbtype</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;SQLITE&#39;</span><span class="p">]:</span>
+        <span class="n">sql_all_schemas</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;SELECT table_schema FROM v_catalog.tables&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sql_all_schemas</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Database Not Supported: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">_dbtype</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">sql_all_schemas</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rs</span><span class="p">:</span>
+            <span class="n">schema_name</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">schema_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">execpt_schema_list</span><span class="p">:</span>
+                <span class="n">schema_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">schema_name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">schema_list</span></div>
+<span class="c1"># adds a column to a table in datbase</span>
+
+
+<div class="viewcode-block" id="add_column"><a class="viewcode-back" href="../../api/py_dbutils.html#py_dbutils.utils.add_column">[docs]</a><span class="k">def</span> <span class="nf">add_column</span><span class="p">(</span><span class="n">db</span><span class="p">,</span> <span class="n">table_name</span><span class="p">,</span> <span class="n">column_name</span><span class="p">,</span> <span class="n">data_type</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="n">data_type_formatted</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;Integer&quot;</span><span class="p">:</span>
+        <span class="n">data_type_formatted</span> <span class="o">=</span> <span class="s2">&quot;INTEGER&quot;</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;String&quot;</span><span class="p">:</span>
+        <span class="n">data_type_formatted</span> <span class="o">=</span> <span class="s2">&quot;VARCHAR(100)&quot;</span>
+    <span class="k">elif</span> <span class="n">data_type</span> <span class="o">==</span> <span class="s2">&quot;uuid&quot;</span><span class="p">:</span>
+        <span class="n">data_type_formatted</span> <span class="o">=</span> <span class="s2">&quot;UUID&quot;</span>
+
+    <span class="n">base_command</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;ALTER TABLE </span><span class="si">{table_name}</span><span class="s2"> ADD column </span><span class="si">{column_name}</span><span class="s2"> </span><span class="si">{data_type}</span><span class="s2"> </span><span class="si">{nullable}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">sql_command</span> <span class="o">=</span> <span class="n">base_command</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">table_name</span><span class="o">=</span><span class="n">table_name</span><span class="p">,</span> <span class="n">column_name</span><span class="o">=</span><span class="n">column_name</span><span class="p">,</span> <span class="n">data_type</span><span class="o">=</span><span class="n">data_type_formatted</span><span class="p">,</span>
+                                      <span class="n">nullable</span><span class="o">=</span><span class="n">nullable</span><span class="p">)</span>
+
+    <span class="n">db</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sql_command</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">py-dbutils</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/modules.html">Module Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, hnguyen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

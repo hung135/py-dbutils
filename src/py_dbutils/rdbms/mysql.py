@@ -30,7 +30,7 @@ class DB(ConnRDBMS, DB):
 
 
         conn = pymysql.connect(user=self.userid, password=self.pwd,
-                               host=self.host, port=port,
+                               host=self.host, port=int(port),
                                database=self.dbname)
         self.conn = conn
 

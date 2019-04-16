@@ -49,7 +49,7 @@ class DB(object):
         else:
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
-        return rows, meta
+        return rows if isinstance(rows,list) else list(rows), meta
 
     def get_table_columns(self,table_name):
         """This method will select 1 record from the table and return the column names
@@ -204,6 +204,7 @@ class DB(object):
         """
         import pandas
         rows,meta=self.query(sql)
+        print(header,"----xxxxx---",rows)
         df = pandas.DataFrame(data=rows,columns=header)
         if file_format=='CSV':
             df.to_csv(path_or_buf=os.path.abspath(file_path), header=header,index=False)

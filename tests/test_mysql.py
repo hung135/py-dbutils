@@ -4,19 +4,19 @@ import sys
 
 #sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
-from py_dbutils.rdbms import postgres
+from py_dbutils.rdbms import mysql
 import inspect
 import os
 import pprint
 
-DBSCHEMA = 'postgres'
+DBSCHEMA = 'mysql'
 COMMIT = True
 PASSWORD = 'docker'
-USERID = 'postgres'
+USERID = 'root'
 HOST = 'localhost'
-PORT = '55432'
-DATABASE = 'postgres'
-DBTYPE = 'POSTGRES'
+PORT = '33306'
+DATABASE = 'mysql'
+
 APPNAME = 'test_connection'
 
 TEST_OUTPUT_DIR = "_testoutput"
@@ -28,12 +28,12 @@ TEST_SCHEMA = 'test'
 TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
-RDBMS = [postgres     ]
+RDBMS = [mysql     ]
 PARAMS = [{'port': 55432}
           ]
 
 
-class TestPostgres(unittest.TestCase):
+class TestMysql(unittest.TestCase):
 
     def populate_test_table(self, DB, table_name=TEST_TABLE):
         import pandas as pd
@@ -57,7 +57,7 @@ class TestPostgres(unittest.TestCase):
 
 
 
-    def test_postgres(self):
+    def test_mysql(self):
         import pandas
 
         from shutil import copyfile
@@ -65,19 +65,21 @@ class TestPostgres(unittest.TestCase):
         dst=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        x = postgres.DB(port=55432);
-        assert isinstance(x, postgres.DB)
+        x = mysql.DB(port=PORT,userid=USERID,host=HOST);
+        assert isinstance(x, mysql.DB)
         #We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')
 
         z =x.get_all_tables()
 
         print(z)
-        y= x.get_table_columns('test.test')
+        y= x.get_table_columns('mysql.test')
         #make sure we log error
         z=x.connect_SqlAlchemy()
-        file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_postres.csv')
-        x.query_to_file(file, 'select * from test',header=y, file_format='CSV')
+
+        print(y)
+        file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_mysql.csv')
+        x.query_to_file(file, 'select * from test', header=y,file_format='CSV')
         print(pandas.read_csv(file))
 
         file=os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')

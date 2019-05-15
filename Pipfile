@@ -13,6 +13,7 @@ pytest-cov = "*"
 pyblizzard = "*"
 pyarrow = "*"
 cython = "==0.29.6"
+pylint = "*"
 
 [packages]
 psycopg2-binary = "*"

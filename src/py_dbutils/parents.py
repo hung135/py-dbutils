@@ -2,6 +2,7 @@ import sys
 import os
 import logging as lg
 import datetime
+from abc import ABCMeta, abstractmethod #define interfaces
 
 lg.basicConfig()
 logging = lg.getLogger()
@@ -18,7 +19,7 @@ class DB(object):
             Returns:
               boolean: True/False
             """
-
+    conn=None
     def __init__(self):
 
         self.cursor = None
@@ -59,7 +60,7 @@ class DB(object):
                 """
         sql = """select * from {} limit 1""".format(table_name)
         rows, meta = self.query(sql)
-
+        #will fail if we get no rows
         return [str(r[0]) for r in meta]
 
     def create_cur(self):
@@ -86,7 +87,7 @@ class DB(object):
         """
         self.create_cur()
         logging.debug(
-            "Debug DB Execute: {}: \n\t{} ".format(self.str, sql))
+            "Debug DB Execute: {}: \n\t{} ".format(self.__str__(), sql))
         rowcount = 0
         this_sql = str(sql).strip()
 
@@ -102,7 +103,7 @@ class DB(object):
         if commit:
             self.commit()
 
-        logging.debug("DB SQL Execute Completed: {}".format(self.str))
+        logging.debug("DB SQL Execute Completed: {}".format(self.__str__()))
 
         return rowcount
 
@@ -142,14 +143,7 @@ class DB(object):
         self.cursor.close()
         self.cursor = None
 
-    def query_to_parquet(self, file_path, sql):
-        import pyarrow.parquet as pq
-        import pyarrow as pa
-        import pandas
-        df = pandas.read_sql(sql, self.connect_SqlAlchemy())
-        print(file_path, "--------------")
-        table = pa.Table.from_pandas(df)
-        pq.write_table(table, os.path.abspath(file_path))
+
 
     def query_to_parquet(self, file_path, sql):
         """
@@ -199,7 +193,7 @@ class DB(object):
         :return:
         """
         import pandas
-        rows, meta = self.query(sql)
+        rows,  = self.query(sql)
         df = pandas.DataFrame(data=rows, columns=header)
         if file_format == 'CSV':
             df.to_csv(path_or_buf=os.path.abspath(file_path), header=header, index=False)
@@ -276,19 +270,22 @@ class DB(object):
           boolean: True/False
         """
         self.create_cur()
-        rs = None
+         
         record_len = 0
         try:
             row = self.get_a_row(sql)
         except Exception as e:
-            logging.error("error in dbconn.has_record: {}".format(sql))
+            logging.error("error in dbconn.has_record: {}\n{}".format(sql,e))
         record_len = len(row)
         # we need to close this or it will lock the connection
 
         if record_len > 0:
             return True
         return False
-
+    
+    #ensure this method gets implement or inherited somewhere by child
+    @abstractmethod 
+    def connect_SqlAlchemy(self): raise NotImplementedError
     def create_table_from_dataframe(self, dataframe, table_name_fqn, default_owner=None):
         """Describe Method:
 
@@ -305,7 +302,7 @@ class DB(object):
                 schema = table_name_fqn.split('.')[0]
                 table_name = table_name_fqn.split('.')[1]
 
-                engine = self.connect_SqlAlchemy()
+                engine = self.connect_SqlAlchemy() #dependent on the child
 
                 df.to_sql(table_name, engine, schema=schema, if_exists='append', index=False, chunksize=1000)
 
@@ -329,11 +326,19 @@ class DB(object):
         """
         sql = """SELECT concat(table_schema,'.',table_name) as table_name FROM information_schema.tables a
             WHERE table_type='BASE TABLE'"""
-        result_set, meta = self.query(sql)
+        result_set,  = self.query(sql)
         return [r[0] for r in result_set]
 
 
 class ConnRDBMS(object):
+    userid=None
+    pwd=None
+    host=None
+    port=None
+    dbname=None
+    autocommit=True
+    sql_alchemy_uri=None
+    conn=None
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
         self.str = 'DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
                                                           self.autocommit)
@@ -343,19 +348,23 @@ class ConnRDBMS(object):
             print('INIT DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
                                                               self.autocommit))
             logging.debug('Connect: {}:{}:{}'.format(self.host, self.dbname, self.userid))
-        except Exception as e:
+        except Exception:
             logging.debug("Can not Use this Class directly: You must instantiate a child")
             sys.exit(1)
 
     def __repr__(self):
-        return self.str
+        return self.__str__()
 
     def __str__(self):
-
-        return self.str
+        str=None
+        try:
+            str=self.str
+        except Exception:
+            pass
+        return str
 
     def __del__(self):
-        logging.debug("Destroying: {}".format(self.str))
+        logging.debug("Destroying: {}".format(self.__str__()))
 
     def authenticate(self):
         pass
@@ -365,6 +374,7 @@ class ConnRDBMS(object):
         self.conn.close()
 
     def connect_SqlAlchemy(self):
+        
         if self.sql_alchemy_uri is None:
             logging.error("sqlAlchemy not supported for this DB")
             sys.exit(1)

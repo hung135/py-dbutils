@@ -39,13 +39,16 @@ PARAMS = [{'port': 55432},
 
 
 class TestDB(unittest.TestCase):
-
+    def clean_test_db(self, DB):
+        DB.execute('drop schema {} cascade'.format(TEST_SCHEMA))
+        DB.commit()
     def populate_test_table(self, DB, table_name=TEST_TABLE):
         import pandas as pd
         import os
 
         dataframe = pd.read_csv(TEST_CSV_FILE)
-
+        DB.execute('create schema {}'.format(TEST_SCHEMA))
+      
         engine = DB.connect_SqlAlchemy()
         table_split = table_name.split('.')
 
@@ -59,10 +62,20 @@ class TestDB(unittest.TestCase):
 
         print("Loaded Test Data")
         print(DB.query("select * from {}".format(table_name)))
-    @unittest.skip
+     
     def test_postgres(self):
-        x = postgres.DB(port=55432);
-        #self.populate_test_table(x)
+        x = postgres.DB(port=55432)
+        self.clean_test_db(x)
+        try:
+            fail_db = postgres.DB() #purpose fail
+        except Exception as e:
+            print("Purposely Fail test Destroy",e)
+        
+        self.populate_test_table(x)
+        x.execute("truncate table test.test")
+        x.commit()
+        x_cols=x.get_table_columns('test.test')
+        print("-----------------cols",x_cols,x.get_a_row('select count(*) from test.test'))
         z, = (x.get_a_row('select 1 as col1   '))
 
 

@@ -12,11 +12,11 @@ import pandas as pd
 
 DBSCHEMA = 'postgres'
 COMMIT = True
-PASSWORD = 'docker'
-USERID = 'postgres'
-HOST = 'localhost'
-PORT = '55432'
-DATABASE = 'postgres'
+PASSWORD = os.getenv('PGPASSWORD', None) or 'secret99'
+USERID = os.getenv('PGUSER', None) or 'postgres'
+HOST = os.getenv('PGHOST', None) or 'localhost'
+PORT = os.getenv('PGPORT', None) or '55432'
+DATABASE = os.getenv('PGDATABASE', None) or 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
 
@@ -30,7 +30,7 @@ TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
 RDBMS = [postgres]
-PARAMS = [{'port': 55432}
+PARAMS = [{'port': PORT}
           ]
 
 
@@ -61,7 +61,7 @@ class TestPostgres(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        x = postgres.DB(port=55432);
+        x = postgres.DB(port=PORT);
         assert isinstance(x, postgres.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')
@@ -85,7 +85,7 @@ class TestPostgres(unittest.TestCase):
         print(pd.read_hdf(file, 'table'))
 
     def test_bulk_load_dataframe(self):
-        db = postgres.DB(port=55432);
+        db = postgres.DB(port=PORT);
         df = pd.read_csv(TEST_CSV_FILE)
         print(db.get_table_columns(TEST_TABLE))
         db.execute('truncate table test.test')
@@ -94,7 +94,7 @@ class TestPostgres(unittest.TestCase):
         db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8',
                                workingpath=os.path.join(curr_file_path, TEST_OUTPUT_DIR))
         db.commit()
-        print("-----ddddddddd----")
+       
         print(db.query('select * from test.test'))
 
 

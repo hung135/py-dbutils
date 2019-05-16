@@ -1,5 +1,5 @@
 from ..parents import ConnRDBMS
-from ..parents import DB
+from ..parents import DB as DATABASE
 import psycopg2
 import sys
 import os
@@ -10,7 +10,7 @@ logging = lg.getLogger()
 logging.setLevel(lg.INFO)
 
 
-class DB(ConnRDBMS, DB):
+class DB(ConnRDBMS, DATABASE):
     sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}'
 
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None,

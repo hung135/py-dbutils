@@ -13,13 +13,15 @@ import pprint
 
 DBSCHEMA = 'postgres'
 COMMIT = True
-PASSWORD = 'docker'
+PASSWORD = os.getenv('PGPASSWORD', None) or 'docker'
 USERID = 'postgres'
-HOST = 'localhost'
-PORT = '55432'
-DATABASE = 'postgres'
+   
+HOST = os.getenv('PGHOST', None) or 'localhost'
+PORT = os.getenv('PGPORT', None) or '5432'
+DATABASE = os.getenv('PGDATABASE', None) or 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
+print("--------",HOST)
 
 TEST_OUTPUT_DIR = "_testoutput"
 curr_file_path = os.path.join(os.path.dirname(__file__))
@@ -31,7 +33,7 @@ TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
 RDBMS = [postgres, mysql, mssql, sqlite]
-PARAMS = [{'port': 55432},
+PARAMS = [{'port': PORT},
           {'userid': 'root', 'port': 33306},
           {'userid': 'sa', 'port': 11433},
           {'file_path': os.path.join(TEST_OUTPUT_DIR, 'sqlite.db')}
@@ -64,7 +66,8 @@ class TestDB(unittest.TestCase):
         print(DB.query("select * from {}".format(table_name)))
      
     def test_postgres(self):
-        x = postgres.DB(port=55432)
+        
+        x = postgres.DB(port=PORT,pwd='postgres')
         self.clean_test_db(x)
         try:
             fail_db = postgres.DB() #purpose fail

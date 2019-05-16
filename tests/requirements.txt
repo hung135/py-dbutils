@@ -16,3 +16,4 @@
 # scipy==1.0
 psycopg2
 pandas
+jaydebeapi

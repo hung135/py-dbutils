@@ -10,11 +10,11 @@ import os
 
 DBSCHEMA = 'postgres'
 COMMIT = True
-PASSWORD = 'docker'
+PASSWORD = 'secret99'
 USERID = 'postgres'
-HOST = 'localhost'
-PORT = '55432'
-DATABASE = 'postgres'
+HOST = os.getenv('PGHOST', None) or 'localhost'
+PORT = os.getenv('PGPORT', None) or '55432'
+DATABASE = os.getenv('PGDATABASE', None) or 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
 

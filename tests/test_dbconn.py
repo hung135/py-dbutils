@@ -10,8 +10,8 @@ import os
 
 DBSCHEMA = 'postgres'
 COMMIT = True
-PASSWORD = 'secret99'
-USERID = 'postgres'
+PASSWORD = os.getenv('PGPASSWORD', None) or 'secret99'
+USERID = os.getenv('PGUSER', None) or 'postgres'
 HOST = os.getenv('PGHOST', None) or 'localhost'
 PORT = os.getenv('PGPORT', None) or '55432'
 DATABASE = os.getenv('PGDATABASE', None) or 'postgres'

@@ -21,6 +21,7 @@ services:
       - PGUSER=docker
       - PGPASSWORD=docker
       - PYTHONPATH=/workspace/src
+      - PGPORT=5432
     
   pgdb:
     image: postgres

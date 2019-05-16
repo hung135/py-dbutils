@@ -21,7 +21,7 @@ PORT = os.getenv('PGPORT', None) or '5432'
 DATABASE = os.getenv('PGDATABASE', None) or 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
-print("--------",HOST)
+print("--------",HOST,PASSWORD)
 
 TEST_OUTPUT_DIR = "_testoutput"
 curr_file_path = os.path.join(os.path.dirname(__file__))
@@ -67,7 +67,7 @@ class TestDB(unittest.TestCase):
      
     def test_postgres(self):
         
-        x = postgres.DB(port=PORT,pwd='postgres')
+        x = postgres.DB(port=PORT,pwd=PASSWORD)
         self.clean_test_db(x)
         try:
             fail_db = postgres.DB() #purpose fail

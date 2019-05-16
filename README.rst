@@ -20,20 +20,6 @@ I will focus on python 3.7 just to discourage people from continuing the python 
 Move to 3.6+ and get learn something new.
 
 
-Pypi builds:
-https://pypi.org/project/py-dbutils/
-
-pip install py_dbtuils
-===========
-This package wraps high level calls needed to interface with a database.
-Get the programmer out of worrying about how to connect to and manage a database connection.
-Start using it.
-    Currently supports:
-        postgres
-        mysql
-        mssql
-        msaccess
-        sqlite
  
 
  

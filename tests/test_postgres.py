@@ -10,7 +10,7 @@ import os
 import pprint
 import pandas as pd
 
-DBSCHEMA = 'postgres'
+DBSCHEMA = 'test'
 COMMIT = True
 PASSWORD = os.getenv('PGPASSWORD', None) or 'secret99'
 USERID = os.getenv('PGUSER', None) or 'postgres'
@@ -38,18 +38,19 @@ class TestPostgres(unittest.TestCase):
 
     def populate_test_table(self, DB, table_name=TEST_TABLE):
         import os
-
+        DB.execute("Create schema {}".format(DBSCHEMA))
+        DB.commit()
         dataframe = pd.read_csv(TEST_CSV_FILE)
 
         engine = DB.connect_SqlAlchemy()
         table_split = table_name.split('.')
 
-        schema = None
+        schema = DBSCHEMA
         table = table_name
         if len(table_split) > 1:
             table = table_split[-1]
             schema = table_split[0]
-
+        
         dataframe.to_sql(name=table, con=engine, index=False, if_exists='replace', schema=schema)
 
         print("Loaded Test Data")
@@ -62,6 +63,7 @@ class TestPostgres(unittest.TestCase):
         copyfile(src, dst)
 
         x = postgres.DB(port=PORT);
+        
         assert isinstance(x, postgres.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')
@@ -88,7 +90,7 @@ class TestPostgres(unittest.TestCase):
         db = postgres.DB(port=PORT);
         df = pd.read_csv(TEST_CSV_FILE)
         print(db.get_table_columns(TEST_TABLE))
-        db.execute('truncate table test.test')
+        #db.execute('truncate table test.test')
         db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8', workingpath='MEMORY')
         db.execute('truncate table test.test')
         db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8',

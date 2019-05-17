@@ -11,7 +11,8 @@ COPY .devcontainer/settings.vscode.json /root/.vscode-remote/data/Machine/settin
 ENV PYTHONUNBUFFERED 1
 
 # Install git, process tools
-RUN apt-get update && apt-get -y install git procps fish postgresql-client 
+RUN apt-get update && apt-get -y install git procps fish postgresql-client default-jre
+#RUN apt-get -y install python3-tables
 
 RUN mkdir /workspace
 WORKDIR /workspace

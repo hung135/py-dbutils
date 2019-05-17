@@ -34,6 +34,7 @@ class DB(object):
         Returns:
           None: None
         """
+        meta=None
         self.create_cur()
         """ runs query or procedure that returns record set
         """
@@ -48,6 +49,7 @@ class DB(object):
         else:
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
+        
         return rows if isinstance(rows, list) else list(rows), meta
 
     def get_table_columns(self, table_name):
@@ -193,7 +195,7 @@ class DB(object):
         :return:
         """
         import pandas
-        rows,  = self.query(sql)
+        rows,meta  = self.query(sql)
         df = pandas.DataFrame(data=rows, columns=header)
         if file_format == 'CSV':
             df.to_csv(path_or_buf=os.path.abspath(file_path), header=header, index=False)

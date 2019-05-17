@@ -20,4 +20,4 @@ pandas
 pymysql
 jaydebeapi
 pyarrow
-hdfs
+tables

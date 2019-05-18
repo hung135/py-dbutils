@@ -1,5 +1,5 @@
 from ..parents import ConnRDBMS
-from ..parents import DB
+from ..parents import DB as PARENT
 
 import sys
 import os
@@ -11,7 +11,7 @@ logging = lg.getLogger()
 logging.setLevel(lg.INFO)
 
 
-class DB(ConnRDBMS, DB):
+class DB(ConnRDBMS, PARENT):
 
     #get from here:
     #https://docs.sqlalchemy.org/en/latest/core/engines.html

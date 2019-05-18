@@ -16,6 +16,7 @@ services:
     links:
       - pgdb
       - mysqldb
+      - mssqldb
     environment:
       - PGHOST=pgdb
       - PGDATABASE=postgres
@@ -28,6 +29,10 @@ services:
       - MYSQL_PASSWORD=docker
       - MYSQL_HOST=mysqldb
       - MYSQL_PORT=3306    
+      - MS_PASSWORD=Docker1234
+      - MS_PORT=1433
+      - MS_USER=sa
+      - MS_DATABASE=master
   pgdb:
     image: postgres
     restart: always
@@ -49,5 +54,14 @@ services:
         MYSQL_PASSWORD: docker
         MYSQL_HOST: mysqldb
         MYSQL_PORT: 3306
-
+  mssqldb:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    restart: always
+    ports: 
+      - 1433:1433
+    environment:
+        ACCEPT_EULA: 'Y'
+        SA_PASSWORD: Docker1234
+        MSSQL_PID: Express
+        
  

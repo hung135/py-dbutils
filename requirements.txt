@@ -21,3 +21,4 @@ pymysql
 jaydebeapi
 pyarrow
 tables
+pymssql

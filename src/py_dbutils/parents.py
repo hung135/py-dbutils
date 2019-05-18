@@ -20,10 +20,8 @@ class DB(object):
               boolean: True/False
             """
     conn=None
-    def __init__(self):
-
-        self.cursor = None
-
+    cursor = None
+  
     def query(self, sql):
         """This will execute a query and fetches all the results and closes the curor.
             this is not meant to be a data store but a utility to pull bits of data from the database
@@ -40,6 +38,8 @@ class DB(object):
         """
         logging.debug('Running Query: {}\n\t{}'.format(datetime.datetime.now().time(), sql))
         if sql.lower().startswith('select') or sql.lower().startswith('call'):
+            
+            print("---in parent",sql)
             self.cursor.execute(sql)
             rows = self.cursor.fetchall()
             meta = self.cursor.description
@@ -60,7 +60,9 @@ class DB(object):
                 Returns:
                   List: List of Strings
                 """
+            
         sql = """select * from {} limit 1""".format(table_name)
+        print("------------------",sql)
         rows, meta = self.query(sql)
         #will fail if we get no rows
         return [str(r[0]) for r in meta]

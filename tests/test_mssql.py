@@ -70,8 +70,8 @@ class TestMssql(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        #x = mssql.DB(port=PORT, userid=USERID, host=HOST,dbname=DATABASE)
-        x = mssql.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE);
+        x = mssql.DB(port=PORT, userid=USERID, host=HOST,dbname=DATABASE)
+        #x = mssql.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE)
         assert isinstance(x, mssql.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, fqn_table_name=TEST_TABLE)

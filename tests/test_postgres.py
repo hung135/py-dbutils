@@ -36,17 +36,17 @@ PARAMS = [{'port': PORT}
 
 class TestPostgres(unittest.TestCase):
 
-    def populate_test_table(self, DB, table_name=TEST_TABLE):
+    def populate_test_table(self, DB, fqn_table_name=TEST_TABLE):
         import os
         DB.execute("Create schema {}".format(DBSCHEMA))
         DB.commit()
         dataframe = pd.read_csv(TEST_CSV_FILE)
 
         engine = DB.connect_SqlAlchemy()
-        table_split = table_name.split('.')
+        table_split = fqn_table_name.split('.')
 
         schema = DBSCHEMA
-        table = table_name
+        table = fqn_table_name
         if len(table_split) > 1:
             table = table_split[-1]
             schema = table_split[0]
@@ -54,7 +54,7 @@ class TestPostgres(unittest.TestCase):
         dataframe.to_sql(name=table, con=engine, index=False, if_exists='replace', schema=schema)
 
         print("Loaded Test Data")
-        print(DB.query("select * from {}".format(table_name)))
+        print(DB.query("select * from {}".format(TEST_TABLE)))
 
     def test_postgres(self):
         from shutil import copyfile
@@ -67,24 +67,24 @@ class TestPostgres(unittest.TestCase):
         
         assert isinstance(x, postgres.DB)
         # We don't want to put data into MsAccess we want to get away from access
-        self.populate_test_table(DB=x, table_name='test')
+        self.populate_test_table(DB=x, fqn_table_name=TEST_TABLE)
 
         z = x.get_all_tables()
 
         print(z)
-        y = x.get_table_columns('test.test')
+        y = x.get_table_columns(TEST_TABLE)
         # make sure we log error
         z = x.connect_SqlAlchemy()
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_postres.csv')
-        x.query_to_file(file, 'select * from test', header=y, file_format='CSV')
+        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE), header=y, file_format='CSV')
         print(pd.read_csv(file))
 
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
-        x.query_to_file(file, 'select * from test', file_format='PARQUET')
+        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE), file_format='PARQUET')
         print(pd.read_parquet(file, engine='pyarrow'))
 
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
-        x.query_to_file(file, 'select * from test', file_format='HDF5', hdf5_key='table')
+        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE), file_format='HDF5', hdf5_key='table')
         print(pd.read_hdf(file, 'table'))
 
     def test_bulk_load_dataframe(self):
@@ -93,12 +93,12 @@ class TestPostgres(unittest.TestCase):
         print(db.get_table_columns(TEST_TABLE))
         #db.execute('truncate table test.test')
         db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8', workingpath='MEMORY')
-        db.execute('truncate table test.test')
+        db.execute('truncate table {}'.format(TEST_TABLE))
         db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8',
                                workingpath=os.path.join(curr_file_path, TEST_OUTPUT_DIR))
         db.commit()
        
-        print(db.query('select * from test.test'))
+        print(db.query('select * from {}'.format(TEST_TABLE)))
 
 
 if __name__ == '__main__':

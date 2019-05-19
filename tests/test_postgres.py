@@ -12,10 +12,10 @@ import pandas as pd
 
 DBSCHEMA = 'test'
 COMMIT = True
-PASSWORD = os.getenv('PGPASSWORD', None) or 'secret99'
-USERID = os.getenv('PGUSER', None) or 'postgres'
+PASSWORD = os.getenv('PGPASSWORD', None) or 'docker'
+USERID = os.getenv('PGUSER', None) or 'docker'
 HOST = os.getenv('PGHOST', None) or 'localhost'
-PORT = os.getenv('PGPORT', None) or '55432'
+PORT = os.getenv('PGPORT', None) or '5432'
 DATABASE = os.getenv('PGDATABASE', None) or 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
@@ -62,7 +62,8 @@ class TestPostgres(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        x = postgres.DB(port=PORT);
+        print("-------------------------",USERID)
+        x = postgres.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE)
         
         assert isinstance(x, postgres.DB)
         # We don't want to put data into MsAccess we want to get away from access
@@ -87,7 +88,7 @@ class TestPostgres(unittest.TestCase):
         print(pd.read_hdf(file, 'table'))
 
     def test_bulk_load_dataframe(self):
-        db = postgres.DB(port=PORT);
+        db = postgres.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE)
         df = pd.read_csv(TEST_CSV_FILE)
         print(db.get_table_columns(TEST_TABLE))
         #db.execute('truncate table test.test')

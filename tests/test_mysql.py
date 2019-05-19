@@ -16,9 +16,9 @@ DBSCHEMA = 'test'
 COMMIT = True
 PASSWORD = os.getenv('MYSQL_PASSWORD', None) or 'docker'
 USERID = os.getenv('MYSQL_USER', None) or 'docker'
-HOST = os.getenv('MYSQL_HOST', None) or 'mysqldb'
+HOST = os.getenv('MYSQL_HOST', None) or 'localhost'
 PORT = os.getenv('MYSQL_PORT', None) or '3306'
-DATABASE = os.getenv('MYSQL_DATABASE', None) or 'fail'
+DATABASE = os.getenv('MYSQL_DATABASE', None) or 'test'
 DBTYPE = 'MYSQL'
 APPNAME = 'test_connection'
 
@@ -70,7 +70,8 @@ class TestMysql(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        x = mysql.DB(port=PORT, userid=USERID, host=HOST,dbname=DATABASE)
+        #x = mysql.DB(port=PORT, userid=USERID, host=HOST,dbname=DATABASE)
+        x = mysql.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE);
         assert isinstance(x, mysql.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')

@@ -14,7 +14,7 @@ import pprint
 DBSCHEMA = 'postgres'
 COMMIT = True
 PASSWORD = os.getenv('PGPASSWORD', None) or 'docker'
-USERID = 'postgres'
+USERID = os.getenv('PGUSER', None) or 'docker'
    
 HOST = os.getenv('PGHOST', None) or 'localhost'
 PORT = os.getenv('PGPORT', None) or '5432'
@@ -33,9 +33,9 @@ TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
 RDBMS = [postgres, mysql, mssql, sqlite]
-PARAMS = [{'port': PORT},
-          {'userid': 'root', 'port': 33306},
-          {'userid': 'sa', 'port': 11433},
+PARAMS = [{'port': PORT, 'user': USERID},
+          {'userid': 'root', 'port': 3306},
+          {'userid': 'sa', 'port': 1433},
           {'file_path': os.path.join(TEST_OUTPUT_DIR, 'sqlite.db')}
           ]
 
@@ -67,7 +67,7 @@ class TestDB(unittest.TestCase):
      
     def test_postgres(self):
         
-        x = postgres.DB(port=PORT,pwd=PASSWORD)
+        x = postgres.DB(port=PORT,pwd=PASSWORD,userid=USERID)
         self.clean_test_db(x)
         try:
             fail_db = postgres.DB() #purpose fail
@@ -116,5 +116,4 @@ class TestDB(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    pass
-    #unittest.main()
+    unittest.main()

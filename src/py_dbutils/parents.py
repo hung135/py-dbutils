@@ -20,10 +20,8 @@ class DB(object):
               boolean: True/False
             """
     conn=None
-    def __init__(self):
-
-        self.cursor = None
-
+    cursor = None
+  
     def query(self, sql):
         """This will execute a query and fetches all the results and closes the curor.
             this is not meant to be a data store but a utility to pull bits of data from the database
@@ -34,11 +32,14 @@ class DB(object):
         Returns:
           None: None
         """
+        meta=None
         self.create_cur()
         """ runs query or procedure that returns record set
         """
         logging.debug('Running Query: {}\n\t{}'.format(datetime.datetime.now().time(), sql))
         if sql.lower().startswith('select') or sql.lower().startswith('call'):
+            
+            print("---in parent",sql)
             self.cursor.execute(sql)
             rows = self.cursor.fetchall()
             meta = self.cursor.description
@@ -48,6 +49,7 @@ class DB(object):
         else:
             raise Exception('Only Selects allowed')
         logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
+        
         return rows if isinstance(rows, list) else list(rows), meta
 
     def get_table_columns(self, table_name):
@@ -58,7 +60,9 @@ class DB(object):
                 Returns:
                   List: List of Strings
                 """
+            
         sql = """select * from {} limit 1""".format(table_name)
+        print("------------------",sql)
         rows, meta = self.query(sql)
         #will fail if we get no rows
         return [str(r[0]) for r in meta]
@@ -193,7 +197,7 @@ class DB(object):
         :return:
         """
         import pandas
-        rows,  = self.query(sql)
+        rows,meta  = self.query(sql)
         df = pandas.DataFrame(data=rows, columns=header)
         if file_format == 'CSV':
             df.to_csv(path_or_buf=os.path.abspath(file_path), header=header, index=False)
@@ -326,7 +330,7 @@ class DB(object):
         """
         sql = """SELECT concat(table_schema,'.',table_name) as table_name FROM information_schema.tables a
             WHERE table_type='BASE TABLE'"""
-        result_set,  = self.query(sql)
+        result_set, meta = self.query(sql)
         return [r[0] for r in result_set]
 
 

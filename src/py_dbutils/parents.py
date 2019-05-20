@@ -78,7 +78,7 @@ class DB(object):
         if self.cursor is None:
             self.cursor = self.conn.cursor()
 
-    def execute(self, sql, commit=self.autocommit, catch_exception=True):
+    def execute(self, sql, commit=None, catch_exception=True):
         """Take a sql string specific to DB instance type and executes
 
         Args:
@@ -105,7 +105,7 @@ class DB(object):
         else:
             self.cursor.execute(this_sql)
         rowcount = self.cursor.rowcount
-        if commit:
+        if commit or self.autocommit:
             self.commit()
 
         logging.debug("DB SQL Execute Completed: {}".format(self.__str__()))

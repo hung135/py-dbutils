@@ -78,7 +78,7 @@ class DB(object):
         if self.cursor is None:
             self.cursor = self.conn.cursor()
 
-    def execute(self, sql, commit=False, catch_exception=True):
+    def execute(self, sql, commit=self.autocommit, catch_exception=True):
         """Take a sql string specific to DB instance type and executes
 
         Args:
@@ -98,6 +98,7 @@ class DB(object):
         if catch_exception:
             try:
                 self.cursor.execute(this_sql)
+                
             except Exception as e:
                 # print("Error Execute SQL:{}".format(e))
                 logging.warning("SQL error Occurred But Continuing:\n{}".format(e))

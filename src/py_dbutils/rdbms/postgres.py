@@ -23,7 +23,7 @@ class DB(ConnRDBMS, DATABASE):
         self.port = port or os.getenv('PGPORT', 5432)
         self.dbname = dbname or os.getenv('PGDATABASE', 'postgres')
         self.label = label or 'py_dbutils'
-    
+        self.schema= schema
         conn = psycopg2.connect(dbname=self.dbname, user=self.userid, password=self.pwd, port=self.port,
                                 host=self.host, application_name=self.label, sslmode=self.ssl)
         conn.set_client_encoding('UNICODE')

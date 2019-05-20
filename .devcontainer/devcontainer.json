@@ -2,7 +2,7 @@
 {
 	"name": "Python 3 & PostgreSQL",
 	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
+	"service": "app1",
 	"workspaceFolder": "/workspace",
 	"extensions": [
 		"ms-python.python"

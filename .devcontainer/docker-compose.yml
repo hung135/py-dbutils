@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  app:
+  app1:
     build: 
       context: ..
       dockerfile: .devcontainer/Dockerfile
@@ -14,39 +14,56 @@ services:
     # Overrides default command so things don't shut down after the process ends - useful for debugging
     command: sleep infinity
     links:
-      - pgdb
-      - mysqldb
-      - mssqldb
+      - pgdb1
+      - mysqldb1
+      - mssqldb1
     environment:
-      - PGHOST=pgdb
-      - PGDATABASE=postgres
-      - PGUSER=docker
-      - PGPASSWORD=docker
-      - PYTHONPATH=/workspace/src
-      - PGPORT=5432
-      - MYSQL_DATABASE=test
-      - MYSQL_USER=docker
-      - MYSQL_PASSWORD=docker
-      - MYSQL_HOST=mysqldb
-      - MYSQL_PORT=3306    
-      - MS_PASSWORD=Docker1234
-      - MS_PORT=1433
-      - MS_HOST=mssqldb
-      - MS_USER=sa
-      - MS_DATABASE=master
-  pgdb:
+      PGHOST: pgdb1
+      PGDATABASE: postgres
+      PGUSER: docker
+      PGPASSWORD: docker
+      PYTHONPATH: /workspace/src
+      PGPORT: 5432
+      MYSQL_DATABASE: test
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      MYSQL_HOST: mysqldb1
+      MYSQL_PORT: 3306    
+      MS_PASSWORD: Docker1234
+      MS_PORT: 1433
+      MS_HOST: mssqldb1
+      MS_USER: sa
+      MS_DATABASE: master
+      
+      # - PGHOST=pgdb1
+      # - PGDATABASE=postgres
+      # - PGUSER=docker
+      # - PGPASSWORD=docker
+      # - PYTHONPATH=/workspace/src
+      # - PGPORT=15432
+      # - MYSQL_DATABASE=test
+      # - MYSQL_USER=docker
+      # - MYSQL_PASSWORD=docker
+      # - MYSQL_HOST=mysqldb1
+      # - MYSQL_PORT=13306    
+      # - MS_PASSWORD=Docker1234
+      # - MS_PORT=11433
+      # - MS_HOST=mssqldb1
+      # - MS_USER=sa
+      # - MS_DATABASE=master
+  pgdb1:
     image: postgres
     restart: always
     ports: 
-      - 5432:5432
+      - 15432:5432
     environment:
       POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
-  mysqldb:
+  mysqldb1:
     image: mariadb
     restart: always
     ports: 
-      - 3306:3306
+      - 13306:3306
 
     environment:
         MYSQL_ROOT_PASSWORD: root
@@ -55,11 +72,11 @@ services:
         MYSQL_PASSWORD: docker
         MYSQL_HOST: mysqldb
         MYSQL_PORT: 3306
-  mssqldb:
+  mssqldb1:
     image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
     restart: always
     ports: 
-      - 1433:1433
+      - 11433:1433
     environment:
         ACCEPT_EULA: 'Y'
         SA_PASSWORD: Docker1234

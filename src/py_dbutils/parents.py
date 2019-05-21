@@ -279,9 +279,10 @@ class DB(object):
         record_len = 0
         try:
             row = self.get_a_row(sql)
+            record_len = len(row)
         except Exception as e:
             logging.error("error in dbconn.has_record: {}\n{}".format(sql,e))
-        record_len = len(row)
+        
         # we need to close this or it will lock the connection
 
         if record_len > 0:

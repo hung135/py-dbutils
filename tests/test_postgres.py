@@ -96,10 +96,21 @@ class TestPostgres(unittest.TestCase):
         db.execute('truncate table {}'.format(TEST_TABLE))
         db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8',
                                workingpath=os.path.join(curr_file_path, TEST_OUTPUT_DIR))
-        db.commit()
+    
        
         print(db.query('select * from {}'.format(TEST_TABLE)))
 
-
+    def test_db_has_record(self):
+        db = postgres.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE)
+        df = pd.read_csv(TEST_CSV_FILE)
+        print(db.get_table_columns(TEST_TABLE))
+        #db.execute('truncate table test.test')
+        db.bulk_load_dataframe(dataframe=df, table_name_fqn=TEST_TABLE, encoding='utf8', workingpath='MEMORY')
+        db.has_record('select 1 from {}'.format(TEST_TABLE))
+        db.execute('truncate table {}'.format(TEST_TABLE))
+ 
+        db.has_record('select 1 from {}'.format(TEST_TABLE))
+       
+        print(db.query('select * from {}'.format(TEST_TABLE)))
 if __name__ == '__main__':
     unittest.main()

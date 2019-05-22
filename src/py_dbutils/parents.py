@@ -39,7 +39,7 @@ class DB(object):
         logging.debug('Running Query: {}\n\t{}'.format(datetime.datetime.now().time(), sql))
         if sql.lower().startswith('select') or sql.lower().startswith('call'):
             
-            print("---in parent",sql)
+             
             self.cursor.execute(sql)
             rows = self.cursor.fetchall()
             meta = self.cursor.description
@@ -62,7 +62,7 @@ class DB(object):
                 """
             
         sql = """select * from {} limit 1""".format(table_name)
-        print("------------------",sql)
+        
         rows, meta = self.query(sql)
         #will fail if we get no rows
         return [str(r[0]) for r in meta]

@@ -77,7 +77,39 @@ class DB(object):
         """
         if self.cursor is None:
             self.cursor = self.conn.cursor()
+    def execute_script_file_obj(self, file_object):
+        """Take a sql file object specific to DB instance type and executes
 
+        Args:
+          file object: String
+          commit(Boolean): True/False
+          catch_exception(Boolean): True/False
+
+        Returns:
+          None: None
+        """
+        self.create_cur()
+ 
+        self.cursor.execute(file_object.read())
+        if commit or self.autocommit:
+            self.commit()
+    def execute_script_file(self, file_path):
+        """Take a sql file specific to DB instance type and executes
+
+        Args:
+          file path: String
+          commit(Boolean): True/False
+          catch_exception(Boolean): True/False
+
+        Returns:
+          None: None
+        """
+        self.create_cur()
+         
+        with open(file_path,"r") as f:
+            self.cursor.execute(f.read())
+        if commit or self.autocommit:
+            self.commit()
     def execute(self, sql, commit=None, catch_exception=True):
         """Take a sql string specific to DB instance type and executes
 

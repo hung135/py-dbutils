@@ -49,8 +49,9 @@ class DB(ConnRDBMS, DB):
 
 
     def connect_SqlAlchemy(self):
-        logging.error("sqlAlchemy not supported for MSAccess")
-        return None
+        
+        raise Exception('sqlAlchemy not supported for MSAccess')
+         
 
 
     def get_all_tables(self):

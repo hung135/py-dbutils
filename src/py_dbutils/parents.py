@@ -279,14 +279,12 @@ class DB(object):
         record_len = 0
         try:
             row = self.get_a_row(sql)
-            record_len = len(row)
+            if row is None:
+                return False
+            else: 
+                return true
         except Exception as e:
-            logging.error("error in dbconn.has_record: {}\n{}".format(sql,e))
-        
-        # we need to close this or it will lock the connection
-
-        if record_len > 0:
-            return True
+            logging.error("Error in db.has_record: {}\n{}".format(sql,e))
         return False
     
     #ensure this method gets implement or inherited somewhere by child

@@ -39,7 +39,7 @@ class DB(object):
         logging.debug('Running Query: {}\n\t{}'.format(datetime.datetime.now().time(), sql))
         if sql.lower().startswith('select') or sql.lower().startswith('call'):
             
-            print("---in parent",sql)
+             
             self.cursor.execute(sql)
             rows = self.cursor.fetchall()
             meta = self.cursor.description
@@ -62,7 +62,7 @@ class DB(object):
                 """
             
         sql = """select * from {} limit 1""".format(table_name)
-        print("------------------",sql)
+        
         rows, meta = self.query(sql)
         #will fail if we get no rows
         return [str(r[0]) for r in meta]
@@ -77,7 +77,39 @@ class DB(object):
         """
         if self.cursor is None:
             self.cursor = self.conn.cursor()
+    def execute_script_file_obj(self, file_object):
+        """Take a sql file object specific to DB instance type and executes
 
+        Args:
+          file object: String
+          commit(Boolean): True/False
+          catch_exception(Boolean): True/False
+
+        Returns:
+          None: None
+        """
+        self.create_cur()
+ 
+        self.cursor.execute(file_object.read())
+        if commit or self.autocommit:
+            self.commit()
+    def execute_script_file(self, file_path):
+        """Take a sql file specific to DB instance type and executes
+
+        Args:
+          file path: String
+          commit(Boolean): True/False
+          catch_exception(Boolean): True/False
+
+        Returns:
+          None: None
+        """
+        self.create_cur()
+         
+        with open(file_path,"r") as f:
+            self.cursor.execute(f.read())
+        if commit or self.autocommit:
+            self.commit()
     def execute(self, sql, commit=None, catch_exception=True):
         """Take a sql string specific to DB instance type and executes
 
@@ -279,14 +311,12 @@ class DB(object):
         record_len = 0
         try:
             row = self.get_a_row(sql)
-            record_len = len(row)
+            if row is None:
+                return False
+            else: 
+                return true
         except Exception as e:
-            logging.error("error in dbconn.has_record: {}\n{}".format(sql,e))
-        
-        # we need to close this or it will lock the connection
-
-        if record_len > 0:
-            return True
+            logging.error("Error in db.has_record: {}\n{}".format(sql,e))
         return False
     
     #ensure this method gets implement or inherited somewhere by child

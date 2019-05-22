@@ -112,5 +112,11 @@ class TestPostgres(unittest.TestCase):
         db.has_record('select 1 from {}'.format(TEST_TABLE))
        
         print(db.query('select * from {}'.format(TEST_TABLE)))
+    def test_execute_script_file(self):
+        #TODO
+        pass
+    def test_execute_script_file_object(self):
+        #TODO
+        pass
 if __name__ == '__main__':
     unittest.main()

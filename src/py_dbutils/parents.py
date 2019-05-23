@@ -225,8 +225,8 @@ class DB(object):
         :param file_path:
         :param sql:
         :param file_format:
-        :param header:
-        :param hdf5_key:
+        :param header: 
+        :param hdf5_key: Only needed when format is HDF5
         :return:
         """
         import pandas

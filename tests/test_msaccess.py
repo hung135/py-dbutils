@@ -74,22 +74,25 @@ class TestMsAccess(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        x = msaccess.DB(dst);
+        x = msaccess.DB(dst)
         assert isinstance(x, msaccess.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')
 
         z = x.get_all_tables()
         y = x.get_table_columns(z[0])
-        print(z)
-        d, zz = x.query("select * from tblEmployees")
-
+        
+        d, zz = x.query("select * from {}".format(z[0]))
+        print(len(d))
         csv_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
         x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees', file_format='CSV', header=y)
-
+        print(csv_file_path)
         # make sure we log error
-        z = x.connect_SqlAlchemy()
-
+        
+        try:
+            z = x.connect_SqlAlchemy()
+        except Exception as e:
+            print('Testing Exception Raised', e)
         parquet_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
         x.query_to_file(parquet_file_path, 'select * from test', file_format='PARQUET')
         print(pandas.read_parquet(parquet_file_path, engine='pyarrow'))

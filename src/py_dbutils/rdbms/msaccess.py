@@ -33,11 +33,10 @@ class DB(ConnRDBMS, DB):
 
         self.file_path=os.path.abspath(file_path)
         self.autocommit = autocommit
-         
-
+          
         #need to set this for attempting connection
         self.str = 'DB: MSAccess:{}:autocommit={}'.format(file_path,self.autocommit)
-        #print("jdbc:ucanaccess://{file_path};".format(file_path=self.file_path),"------------")
+         
         self.conn = jaydebeapi.connect(
         "net.ucanaccess.jdbc.UcanaccessDriver",
         "jdbc:ucanaccess://{file_path};".format(file_path=self.file_path),
@@ -49,12 +48,11 @@ class DB(ConnRDBMS, DB):
 
 
     def connect_SqlAlchemy(self):
-        logging.error("sqlAlchemy not supported for MSAccess")
-        return None
-
+        
+        raise Exception('sqlAlchemy not supported for MSAccess')
+         
 
     def get_all_tables(self):
-
         results = self.conn.jconn.getMetaData().getTables(None, None, "%", None)
         table_reader_cursor = self.conn.cursor()
         table_reader_cursor._rs = results

@@ -374,6 +374,7 @@ class ConnRDBMS(object):
     dbname=None
     autocommit=True
     sql_alchemy_uri=None
+    connected_uri=None
     conn=None
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
         self.str = 'DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
@@ -416,6 +417,12 @@ class ConnRDBMS(object):
             sys.exit(1)
         else:
             try:
+                self.connected_uri=self.sql_alchemy_uri.format(
+                    userid=self.userid,
+                    pwd=self.pwd,
+                    host=self.host,
+                    port=self.port,
+                    db=self.dbname)
                 return sqlalchemy.create_engine(self.sql_alchemy_uri.format(
                     userid=self.userid,
                     pwd=self.pwd,

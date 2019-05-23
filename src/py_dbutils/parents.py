@@ -314,7 +314,7 @@ class DB(object):
             if row is None:
                 return False
             else: 
-                return true
+                return True
         except Exception as e:
             logging.error("Error in db.has_record: {}\n{}".format(sql,e))
         return False

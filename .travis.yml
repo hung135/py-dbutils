@@ -6,11 +6,11 @@ python:
 script: 'pipenv run pytest tests'
 env:
   PGDATABASE: postgres
-  PGUSER: docker
+  PGUSER: postgres
   PGPASSWORD: docker
   PGPORT: 55432
   MYSQL_DATABASE: test
-  MYSQL_USER: docker
+  MYSQL_USER: root
   MYSQL_PASSWORD: docker
   MYSQL_PORT: 33306    
   

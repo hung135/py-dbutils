@@ -8,11 +8,11 @@ env:
   PGDATABASE: postgres
   PGUSER: docker
   PGPASSWORD: docker
-  PGPORT: 5432
+  PGPORT: 55432
   MYSQL_DATABASE: test
   MYSQL_USER: docker
   MYSQL_PASSWORD: docker
-  MYSQL_PORT: 3306    
+  MYSQL_PORT: 33306    
   
 #script: 'pipenv run pytest --cov=pyblizzard tests --cov-report=xml'
 services:

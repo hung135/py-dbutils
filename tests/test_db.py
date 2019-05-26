@@ -13,13 +13,15 @@ import pprint
 
 DBSCHEMA = 'postgres'
 COMMIT = True
-PASSWORD = 'docker'
-USERID = 'postgres'
-HOST = 'localhost'
-PORT = '55432'
-DATABASE = 'postgres'
+PASSWORD = os.getenv('PGPASSWORD', None) or 'docker'
+USERID = os.getenv('PGUSER', None) or 'docker'
+   
+HOST = os.getenv('PGHOST', None) or 'localhost'
+PORT = os.getenv('PGPORT', None) or '5432'
+DATABASE = os.getenv('PGDATABASE', None) or 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
+
 
 TEST_OUTPUT_DIR = "_testoutput"
 curr_file_path = os.path.join(os.path.dirname(__file__))
@@ -31,21 +33,24 @@ TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
 RDBMS = [postgres, mysql, mssql, sqlite]
-PARAMS = [{'port': 55432},
-          {'userid': 'root', 'port': 33306},
-          {'userid': 'sa', 'port': 11433},
+PARAMS = [{'port': PORT, 'user': USERID},
+          {'userid': 'root', 'port': 3306},
+          {'userid': 'sa', 'port': 1433},
           {'file_path': os.path.join(TEST_OUTPUT_DIR, 'sqlite.db')}
           ]
 
 
 class TestDB(unittest.TestCase):
-
+    def clean_test_db(self, DB):
+        DB.execute('drop schema {} cascade'.format(TEST_SCHEMA))
+        DB.commit()
     def populate_test_table(self, DB, table_name=TEST_TABLE):
         import pandas as pd
         import os
 
         dataframe = pd.read_csv(TEST_CSV_FILE)
-
+        DB.execute('create schema {}'.format(TEST_SCHEMA))
+      
         engine = DB.connect_SqlAlchemy()
         table_split = table_name.split('.')
 
@@ -59,10 +64,21 @@ class TestDB(unittest.TestCase):
 
         print("Loaded Test Data")
         print(DB.query("select * from {}".format(table_name)))
-    @unittest.skip
+     
     def test_postgres(self):
-        x = postgres.DB(port=55432);
-        #self.populate_test_table(x)
+        
+        x = postgres.DB(port=PORT,pwd=PASSWORD,userid=USERID)
+        self.clean_test_db(x)
+        try:
+            fail_db = postgres.DB() #purpose fail
+        except Exception as e:
+            print("Purposely Fail test Destroy",e)
+        
+        self.populate_test_table(x)
+        x.execute("truncate table test.test")
+        x.commit()
+        x_cols=x.get_table_columns('test.test')
+        
         z, = (x.get_a_row('select 1 as col1   '))
 
 
@@ -92,7 +108,6 @@ class TestDB(unittest.TestCase):
     @unittest.skip
     def test_all(self):
         for db, params in zip(RDBMS, PARAMS):
-            print("------", db)
             x = db.DB(**params)
             x.execute(sql="create schema {};".format(TEST_SCHEMA))
             x.commit()

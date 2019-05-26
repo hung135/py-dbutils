@@ -4,7 +4,16 @@ python:
   - "3.6"
   #- "2.7"
 script: 'pipenv run pytest tests'
-
+env:
+  PGDATABASE: postgres
+  PGUSER: postgres
+  PGPASSWORD: docker
+  PGPORT: 55432
+  MYSQL_DATABASE: mysql
+  MYSQL_USER: root
+  MYSQL_PASSWORD: docker
+  MYSQL_PORT: 33306    
+  
 #script: 'pipenv run pytest --cov=pyblizzard tests --cov-report=xml'
 services:
   - docker

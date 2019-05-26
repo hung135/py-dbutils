@@ -1,5 +1,5 @@
 from ..parents import ConnRDBMS
-from ..parents import DB
+from ..parents import DB as DATABASE
 import psycopg2
 import sys
 import os
@@ -10,7 +10,7 @@ logging = lg.getLogger()
 logging.setLevel(lg.INFO)
 
 
-class DB(ConnRDBMS, DB):
+class DB(ConnRDBMS, DATABASE):
     sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}'
 
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None,
@@ -23,7 +23,7 @@ class DB(ConnRDBMS, DB):
         self.port = port or os.getenv('PGPORT', 5432)
         self.dbname = dbname or os.getenv('PGDATABASE', 'postgres')
         self.label = label or 'py_dbutils'
-
+        self.schema = schema
         conn = psycopg2.connect(dbname=self.dbname, user=self.userid, password=self.pwd, port=self.port,
                                 host=self.host, application_name=self.label, sslmode=self.ssl)
         conn.set_client_encoding('UNICODE')
@@ -60,22 +60,29 @@ class DB(ConnRDBMS, DB):
             try:
                 # make sure we are at the begining of the object/file
                 data_stringIO = StringIO()
-                dataframe.to_csv(data_stringIO, header=False, index=False, encoding='utf8')
+                dataframe.to_csv(data_stringIO, header=False,
+                                 index=False, encoding='utf8')
                 data_stringIO.seek(0)
                 yield data_stringIO
             finally:
                 data_stringIO.close()
 
         self.create_cur()
-        column_list = '","'.join(dataframe.columns.values.tolist())
+        column_list = ['"{}"'.format(c)
+                       for c in dataframe.columns.values.tolist()]
+        print(column_list)
         if workingpath == 'MEMORY':
             with readStringIO() as f:
 
                 cmd_string = """COPY {table} ({columns}) FROM STDIN WITH (FORMAT CSV)""".format(table=table_name_fqn,
-                                                                                                columns=column_list)
+                                                                                                columns=','.join(
+                                                                                                    column_list))
                 self.cursor.copy_expert(cmd_string, f)
         else:
             tmp_file = os.path.join(workingpath, '_tmp_file.csv')
-            dataframe.to_csv(tmp_file, header=False, index=False, encoding='utf8')
-            self.cursor.copy_from(tmp_file, table_name_fqn, columns=column_list, sep=",")
-
+            dataframe.to_csv(tmp_file, header=False,
+                             index=False, encoding='utf8')
+            print(column_list)
+            with open(tmp_file) as f:
+                self.cursor.copy_from(
+                    f, table_name_fqn, columns=column_list, sep=",")

@@ -3,22 +3,13 @@ import os
 import sys
 
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
-
-from py_dbutils.rdbms import postgres
-from py_dbutils.rdbms import mysql, sqlite, mssql
-from py_dbutils.rdbms import msaccess
+ 
+from py_dbutils.rdbms import  sqlite
+ 
 import inspect
 import os
 import pprint
 
-DBSCHEMA = 'postgres'
-COMMIT = True
-PASSWORD = 'docker'
-USERID = 'postgres'
-HOST = 'localhost'
-PORT = '55432'
-DATABASE = 'postgres'
-DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
 
 TEST_OUTPUT_DIR = "_testoutput"
@@ -31,15 +22,13 @@ TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(
     os.path.dirname(__file__), 'sample_data/unittest.csv'))
-RDBMS = [postgres, mysql, mssql, sqlite]
-PARAMS = [{'port': 55432},
-          {'userid': 'root', 'port': 33306},
-          {'userid': 'sa', 'port': 11433},
+RDBMS = [sqlite]
+PARAMS = [
           {'file_path': os.path.join(TEST_OUTPUT_DIR, 'sqlite.db')}
           ]
 
 
-class TestMsAccess(unittest.TestCase):
+class TestSqlLite(unittest.TestCase):
 
     def populate_test_table(self, DB, table_name=TEST_TABLE):
         import pandas as pd
@@ -69,27 +58,25 @@ class TestMsAccess(unittest.TestCase):
 
         # rows+="\n,("+(','.join(c.replace("'","''")) for c in row)+")"
 
-    def test_msaccess(self):
+    def test_sqlite(self):
         import pandas
-
-        from shutil import copyfile
-        src = os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
-        dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
-        copyfile(src, dst)
-
-        x = msaccess.DB(dst)
-        assert isinstance(x, msaccess.DB)
-        # We don't want to put data into MsAccess we want to get away from access
-        self.populate_test_table(DB=x, table_name='test')
+        
+        dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'sqlite.db')
+        
+        #connects to or creates an empty sqlite db
+        x = sqlite.DB(dst)
+        assert isinstance(x, sqlite.DB)
+        
+        self.populate_test_table(DB=x, table_name=TEST_TABLE_NAME)
 
         z = x.get_all_tables()
         y = x.get_table_columns(z[0])
 
-        d, zz = x.query("select * from {}".format(z[0]))
-        print(len(d))
+        d, _ = x.query("select * from {}".format(z[0]))
+        
         csv_file_path = os.path.join(
             curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
-        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees',
+        x.query_to_file(file_path=csv_file_path, sql='select * from {}'.format(TEST_TABLE_NAME),
                         file_format='CSV', header=True)
 
         with open(csv_file_path, 'r') as f:
@@ -97,7 +84,7 @@ class TestMsAccess(unittest.TestCase):
                 print("Header line: 1")
                 print(line)
                 break
-        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees',
+        x.query_to_file(file_path=csv_file_path, sql='select * from {}'.format(TEST_TABLE_NAME),
                         file_format='CSV', header=False)
 
         with open(csv_file_path, 'r') as f:
@@ -106,11 +93,10 @@ class TestMsAccess(unittest.TestCase):
                 print(line)
                 break
 
-        test_header = ['employid', 'last_name', 'first " name', 'title', 'titile of, courtesey', 'dob',
-                       'hire_date', 'addre', 'city', 'region', 'zipcode', 'country', 'Home_phone', 'ext', 'notes', 'reports_to']
+        test_header = ['column1','column2','column3']
 
-        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees', file_format='CSV',
-                        header=test_header)
+        x.query_to_file(file_path=csv_file_path, sql='select * from {}'.format(TEST_TABLE_NAME),
+                        file_format='CSV', header=test_header)
 
         with open(csv_file_path, 'r') as f:
             for line in f:
@@ -120,10 +106,10 @@ class TestMsAccess(unittest.TestCase):
 
         # make sure we log error
 
-        try:
-            z = x.connect_SqlAlchemy()
-        except Exception as e:
-            print('Testing Exception Raised', e)
+        #Test sqlalchemy
+        z = x.connect_SqlAlchemy()
+        print("SQL Alchemy Works")
+
         parquet_file_path = os.path.join(
             curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
         x.query_to_file(parquet_file_path, 'select * from test',

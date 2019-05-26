@@ -21,6 +21,7 @@ class DB(object):
             """
     conn=None
     cursor = None
+    autocommit = True
   
     def query(self, sql):
         """This will execute a query and fetches all the results and closes the curor.
@@ -30,7 +31,8 @@ class DB(object):
           sql (str): Sql compliant sytanx for the specific database type
 
         Returns:
-          None: None
+          Results: Results
+          List of Tuples: Column Name, Data Type
         """
         meta=None
         self.create_cur()
@@ -220,20 +222,33 @@ class DB(object):
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
         df.to_csv(path_or_buf=os.path.abspath(file_path), header=include_header)
 
-    def query_to_file(self, file_path, sql, file_format='CSV', header=None, hdf5_key=None):
+    def query_to_file(self, file_path, sql, file_format='CSV', header=True, hdf5_key=None):
         """Generic Query to file will work for any database we can make a connection to w/out the need for SQLalchemy
         :param file_path:
         :param sql:
         :param file_format:
-        :param header: 
+        :param header: Boolean (Print Header in File: True/False) or your list of header names
         :param hdf5_key: Only needed when format is HDF5
         :return:
         """
         import pandas
         rows,meta  = self.query(sql)
-        df = pandas.DataFrame(data=rows, columns=header)
+         
+        column_list=[]
+        for a in meta:
+            column_list.append(a[0])
+        csv_header=None
+        if header==True:
+            
+            csv_header=column_list
+        elif header is None or header==False:
+            csv_header=False
+        else:
+            csv_header=header
+        df = pandas.DataFrame(data=rows, columns=column_list)
+
         if file_format == 'CSV':
-            df.to_csv(path_or_buf=os.path.abspath(file_path), header=header, index=False)
+            df.to_csv(path_or_buf=os.path.abspath(file_path), header=csv_header, index=False)
         if file_format == 'PARQUET':
             # keeps from having to import this dependency if we never use this file format
             import pyarrow.parquet as pq

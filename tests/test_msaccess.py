@@ -85,8 +85,36 @@ class TestMsAccess(unittest.TestCase):
         d, zz = x.query("select * from {}".format(z[0]))
         print(len(d))
         csv_file_path = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.csv')
-        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees', file_format='CSV', header=y)
-        print(csv_file_path)
+        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees', 
+                        file_format='CSV', header=True)
+        
+        with open(csv_file_path,'r') as f:
+           for line in f:
+               print("Header line: 1")
+               print(line)
+               break
+        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees', 
+                        file_format='CSV', header=False)
+                
+        with open(csv_file_path,'r') as f:
+           for line in f:
+               print("No Header line: 1")
+               print(line)
+               break
+
+        test_header=['employid','last_name','first " name','title','titile of, courtesey'
+,'dob','hire_date','addre','city','region','zipcode'
+,'country','Home_phone','ext','notes','reports_to']
+
+        x.query_to_file(file_path=csv_file_path, sql='select * from tblEmployees', file_format='CSV', 
+                        header=test_header)
+                
+        with open(csv_file_path,'r') as f:
+           for line in f:
+               print("My supplied headers line: 1")
+               print(line)
+               break
+
         # make sure we log error
         
         try:

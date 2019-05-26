@@ -1,13 +1,13 @@
+import sqlalchemy
 import sys
 import os
 import logging as lg
 import datetime
-from abc import ABCMeta, abstractmethod #define interfaces
+#from abc import ABCMeta, abstractmethod  # define interfaces
 
 lg.basicConfig()
 logging = lg.getLogger()
 logging.setLevel(lg.INFO)
-import sqlalchemy
 
 
 class DB(object):
@@ -19,10 +19,10 @@ class DB(object):
             Returns:
               boolean: True/False
             """
-    conn=None
+    conn = None
     cursor = None
     autocommit = True
-  
+
     def query(self, sql):
         """This will execute a query and fetches all the results and closes the curor.
             this is not meant to be a data store but a utility to pull bits of data from the database
@@ -34,14 +34,14 @@ class DB(object):
           Results: Results
           List of Tuples: Column Name, Data Type
         """
-        meta=None
+        meta = None
         self.create_cur()
         """ runs query or procedure that returns record set
         """
-        logging.debug('Running Query: {}\n\t{}'.format(datetime.datetime.now().time(), sql))
+        logging.debug('Running Query: {}\n\t{}'.format(
+            datetime.datetime.now().time(), sql))
         if sql.lower().startswith('select') or sql.lower().startswith('call'):
-            
-             
+
             self.cursor.execute(sql)
             rows = self.cursor.fetchall()
             meta = self.cursor.description
@@ -50,8 +50,9 @@ class DB(object):
 
         else:
             raise Exception('Only Selects allowed')
-        logging.debug('Query Completed: {}'.format(datetime.datetime.now().time()))
-        
+        logging.debug('Query Completed: {}'.format(
+            datetime.datetime.now().time()))
+
         return rows if isinstance(rows, list) else list(rows), meta
 
     def get_table_columns(self, table_name):
@@ -62,11 +63,11 @@ class DB(object):
                 Returns:
                   List: List of Strings
                 """
-            
+
         sql = """select * from {} limit 1""".format(table_name)
-        
+
         rows, meta = self.query(sql)
-        #will fail if we get no rows
+        # will fail if we get no rows
         return [str(r[0]) for r in meta]
 
     def create_cur(self):
@@ -79,6 +80,7 @@ class DB(object):
         """
         if self.cursor is None:
             self.cursor = self.conn.cursor()
+
     def execute_script_file_obj(self, file_object):
         """Take a sql file object specific to DB instance type and executes
 
@@ -91,10 +93,11 @@ class DB(object):
           None: None
         """
         self.create_cur()
- 
+
         self.cursor.execute(file_object.read())
         if commit or self.autocommit:
             self.commit()
+
     def execute_script_file(self, file_path):
         """Take a sql file specific to DB instance type and executes
 
@@ -107,11 +110,12 @@ class DB(object):
           None: None
         """
         self.create_cur()
-         
-        with open(file_path,"r") as f:
+
+        with open(file_path, "r") as f:
             self.cursor.execute(f.read())
         if commit or self.autocommit:
             self.commit()
+
     def execute(self, sql, commit=None, catch_exception=True):
         """Take a sql string specific to DB instance type and executes
 
@@ -132,10 +136,11 @@ class DB(object):
         if catch_exception:
             try:
                 self.cursor.execute(this_sql)
-                
+
             except Exception as e:
                 # print("Error Execute SQL:{}".format(e))
-                logging.warning("SQL error Occurred But Continuing:\n{}".format(e))
+                logging.warning(
+                    "SQL error Occurred But Continuing:\n{}".format(e))
         else:
             self.cursor.execute(this_sql)
         rowcount = self.cursor.rowcount
@@ -182,8 +187,6 @@ class DB(object):
         self.cursor.close()
         self.cursor = None
 
-
-
     def query_to_parquet(self, file_path, sql):
         """
         Uses Pandas and SqlAchemy to dump data to a parquet file
@@ -220,7 +223,8 @@ class DB(object):
         """
         import pandas
         df = pandas.read_sql(sql, self.connect_SqlAlchemy())
-        df.to_csv(path_or_buf=os.path.abspath(file_path), header=include_header)
+        df.to_csv(path_or_buf=os.path.abspath(
+            file_path), header=include_header)
 
     def query_to_file(self, file_path, sql, file_format='CSV', header=True, hdf5_key=None):
         """Generic Query to file will work for any database we can make a connection to w/out the need for SQLalchemy
@@ -232,23 +236,24 @@ class DB(object):
         :return:
         """
         import pandas
-        rows,meta  = self.query(sql)
-         
-        column_list=[]
+        rows, meta = self.query(sql)
+
+        column_list = []
         for a in meta:
             column_list.append(a[0])
-        csv_header=None
-        if header==True:
-            
-            csv_header=column_list
-        elif header is None or header==False:
-            csv_header=False
+        csv_header = None
+        if header == True:
+
+            csv_header = column_list
+        elif header is None or header == False:
+            csv_header = False
         else:
-            csv_header=header
+            csv_header = header
         df = pandas.DataFrame(data=rows, columns=column_list)
 
         if file_format == 'CSV':
-            df.to_csv(path_or_buf=os.path.abspath(file_path), header=csv_header, index=False)
+            df.to_csv(path_or_buf=os.path.abspath(file_path),
+                      header=csv_header, index=False)
         if file_format == 'PARQUET':
             # keeps from having to import this dependency if we never use this file format
             import pyarrow.parquet as pq
@@ -256,7 +261,8 @@ class DB(object):
             table = pa.Table.from_pandas(df)
             pq.write_table(table, os.path.abspath(file_path))
         if file_format == 'HDF5':
-            df.to_hdf(path_or_buf=os.path.abspath(file_path), key=hdf5_key, mode='w')
+            df.to_hdf(path_or_buf=os.path.abspath(
+                file_path), key=hdf5_key, mode='w')
 
     def schema_exists(self, schema_name):
         """Takes a query string and runs it to see if it returns any rows
@@ -322,21 +328,21 @@ class DB(object):
           boolean: True/False
         """
         self.create_cur()
-         
-        record_len = 0
+
         try:
             row = self.get_a_row(sql)
             if row is None:
                 return False
-            else: 
+            else:
                 return True
         except Exception as e:
-            logging.error("Error in db.has_record: {}\n{}".format(sql,e))
+            logging.error("Error in db.has_record: {}\n{}".format(sql, e))
         return False
-    
-    #ensure this method gets implement or inherited somewhere by child
-    @abstractmethod 
+
+    # ensure this method gets implement or inherited somewhere by child
+    @abstractmethod
     def connect_SqlAlchemy(self): raise NotImplementedError
+
     def create_table_from_dataframe(self, dataframe, table_name_fqn, default_owner=None):
         """Describe Method:
 
@@ -353,9 +359,10 @@ class DB(object):
                 schema = table_name_fqn.split('.')[0]
                 table_name = table_name_fqn.split('.')[1]
 
-                engine = self.connect_SqlAlchemy() #dependent on the child
+                engine = self.connect_SqlAlchemy()  # dependent on the child
 
-                df.to_sql(table_name, engine, schema=schema, if_exists='append', index=False, chunksize=1000)
+                df.to_sql(table_name, engine, schema=schema,
+                          if_exists='append', index=False, chunksize=1000)
 
                 self.execute('truncate table {}'.format(table_name_fqn))
                 return True
@@ -382,15 +389,16 @@ class DB(object):
 
 
 class ConnRDBMS(object):
-    userid=None
-    pwd=None
-    host=None
-    port=None
-    dbname=None
-    autocommit=True
-    sql_alchemy_uri=None
-    connected_uri=None
-    conn=None
+    userid = None
+    pwd = None
+    host = None
+    port = None
+    dbname = None
+    autocommit = True
+    sql_alchemy_uri = None
+    connected_uri = None
+    conn = None
+
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
         self.str = 'DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
                                                           self.autocommit)
@@ -399,18 +407,20 @@ class ConnRDBMS(object):
             self.autocommit = autocommit or True
             print('INIT DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
                                                               self.autocommit))
-            logging.debug('Connect: {}:{}:{}'.format(self.host, self.dbname, self.userid))
+            logging.debug('Connect: ){}:{}:{}'.format(
+                self.host, self.dbname, self.userid))
         except Exception:
-            logging.debug("Can not Use this Class directly: You must instantiate a child")
+            logging.debug(
+                "Can not U)se this Class directly: You must instantiate a child")
             sys.exit(1)
 
     def __repr__(self):
         return self.__str__()
 
     def __str__(self):
-        str=None
+        str = None
         try:
-            str=self.str
+            str = self.str
         except Exception:
             pass
         return str
@@ -426,13 +436,13 @@ class ConnRDBMS(object):
         self.conn.close()
 
     def connect_SqlAlchemy(self):
-        
+
         if self.sql_alchemy_uri is None:
             logging.error("sqlAlchemy not supported for this DB")
             sys.exit(1)
         else:
             try:
-                self.connected_uri=self.sql_alchemy_uri.format(
+                self.connected_uri = self.sql_alchemy_uri.format(
                     userid=self.userid,
                     pwd=self.pwd,
                     host=self.host,
@@ -446,7 +456,8 @@ class ConnRDBMS(object):
                     db=self.dbname
                 ))
             except Exception as e:
-                logging.error("Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
+                logging.error(
+                    "Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
                 sys.exit(1)
 
 

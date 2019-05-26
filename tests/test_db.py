@@ -21,7 +21,7 @@ PORT = os.getenv('PGPORT', None) or '5432'
 DATABASE = os.getenv('PGDATABASE', None) or 'postgres'
 DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
-print("--------",HOST,PASSWORD)
+
 
 TEST_OUTPUT_DIR = "_testoutput"
 curr_file_path = os.path.join(os.path.dirname(__file__))
@@ -78,7 +78,7 @@ class TestDB(unittest.TestCase):
         x.execute("truncate table test.test")
         x.commit()
         x_cols=x.get_table_columns('test.test')
-        print("-----------------cols",x_cols,x.get_a_row('select count(*) from test.test'))
+        
         z, = (x.get_a_row('select 1 as col1   '))
 
 
@@ -108,7 +108,6 @@ class TestDB(unittest.TestCase):
     @unittest.skip
     def test_all(self):
         for db, params in zip(RDBMS, PARAMS):
-            print("------", db)
             x = db.DB(**params)
             x.execute(sql="create schema {};".format(TEST_SCHEMA))
             x.commit()

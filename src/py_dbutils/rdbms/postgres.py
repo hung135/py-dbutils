@@ -23,7 +23,7 @@ class DB(ConnRDBMS, DATABASE):
         self.port = port or os.getenv('PGPORT', 5432)
         self.dbname = dbname or os.getenv('PGDATABASE', 'postgres')
         self.label = label or 'py_dbutils'
-        self.schema= schema
+        self.schema = schema
         conn = psycopg2.connect(dbname=self.dbname, user=self.userid, password=self.pwd, port=self.port,
                                 host=self.host, application_name=self.label, sslmode=self.ssl)
         conn.set_client_encoding('UNICODE')
@@ -60,14 +60,16 @@ class DB(ConnRDBMS, DATABASE):
             try:
                 # make sure we are at the begining of the object/file
                 data_stringIO = StringIO()
-                dataframe.to_csv(data_stringIO, header=False, index=False, encoding='utf8')
+                dataframe.to_csv(data_stringIO, header=False,
+                                 index=False, encoding='utf8')
                 data_stringIO.seek(0)
                 yield data_stringIO
             finally:
                 data_stringIO.close()
 
         self.create_cur()
-        column_list = ['"{}"'.format(c) for c in dataframe.columns.values.tolist()]
+        column_list = ['"{}"'.format(c)
+                       for c in dataframe.columns.values.tolist()]
         print(column_list)
         if workingpath == 'MEMORY':
             with readStringIO() as f:
@@ -78,7 +80,9 @@ class DB(ConnRDBMS, DATABASE):
                 self.cursor.copy_expert(cmd_string, f)
         else:
             tmp_file = os.path.join(workingpath, '_tmp_file.csv')
-            dataframe.to_csv(tmp_file, header=False, index=False, encoding='utf8')
+            dataframe.to_csv(tmp_file, header=False,
+                             index=False, encoding='utf8')
             print(column_list)
             with open(tmp_file) as f:
-                self.cursor.copy_from(f, table_name_fqn, columns=column_list, sep=",")
+                self.cursor.copy_from(
+                    f, table_name_fqn, columns=column_list, sep=",")

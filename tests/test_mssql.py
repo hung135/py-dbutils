@@ -22,10 +22,6 @@ DATABASE = os.getenv('MS_DATABASE', None) or 'master'
 DBTYPE = 'MSSQL'
 APPNAME = 'test_connection'
 
-        
-       
-     
-
 TEST_OUTPUT_DIR = "_testoutput"
 curr_file_path = os.path.join(os.path.dirname(__file__))
 if not os.path.exists(os.path.join(curr_file_path, TEST_OUTPUT_DIR)):
@@ -34,12 +30,13 @@ if not os.path.exists(os.path.join(curr_file_path, TEST_OUTPUT_DIR)):
 TEST_SCHEMA = 'dbo'
 TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
-TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
+TEST_CSV_FILE = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), 'sample_data/unittest.csv'))
 RDBMS = [mssql]
 PARAMS = [{'port': PORT}
           ]
 
-@unittest.skip("Travis don't support MS SQLserver")
+@unittest.skipIf(not os.path.exists("/workspace"), "Travis don't support MS SQLserver")
 class TestMssql(unittest.TestCase):
 
     def populate_test_table(self, DB, fqn_table_name=TEST_TABLE):
@@ -57,9 +54,10 @@ class TestMssql(unittest.TestCase):
             table = table_split[-1]
             schema = table_split[0]
 
-        dataframe.to_sql(name=table, con=engine, index=False, if_exists='replace', schema=schema)
+        dataframe.to_sql(name=table, con=engine, index=False,
+                         if_exists='replace', schema=schema)
 
-        print("Loaded Test Data",TEST_TABLE,schema)
+        print("Loaded Test Data", TEST_TABLE, schema)
         print(DB.query("select * from {}".format(fqn_table_name)))
 
     def test_mssql(self):
@@ -70,7 +68,7 @@ class TestMssql(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        x = mssql.DB(port=PORT, userid=USERID, host=HOST,dbname=DATABASE)
+        x = mssql.DB(port=PORT, userid=USERID, host=HOST, dbname=DATABASE)
         #x = mssql.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE)
         assert isinstance(x, mssql.DB)
         # We don't want to put data into MsAccess we want to get away from access
@@ -79,13 +77,14 @@ class TestMssql(unittest.TestCase):
         z = x.get_all_tables()
 
         print(z)
-        y = x.get_table_columns('{}.{}'.format(TEST_SCHEMA,TEST_TABLE_NAME))
+        y = x.get_table_columns('{}.{}'.format(TEST_SCHEMA, TEST_TABLE_NAME))
         # make sure we log error
         z = x.connect_SqlAlchemy()
 
         print(y)
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_mssql.csv')
-        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE_NAME), header=y, file_format='CSV')
+        x.query_to_file(
+            file, 'select * from {}'.format(TEST_TABLE_NAME), header=y, file_format='CSV')
         print(pandas.read_csv(file))
 
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
@@ -93,7 +92,8 @@ class TestMssql(unittest.TestCase):
         print(pandas.read_parquet(file, engine='pyarrow'))
 
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
-        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE_NAME), file_format='HDF5', hdf5_key='table')
+        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE_NAME),
+                        file_format='HDF5', hdf5_key='table')
         print(pandas.read_hdf(file, 'table'))
 
 

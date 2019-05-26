@@ -22,10 +22,6 @@ DATABASE = os.getenv('MYSQL_DATABASE', None) or 'test'
 DBTYPE = 'MYSQL'
 APPNAME = 'test_connection'
 
-        
-       
-     
-
 TEST_OUTPUT_DIR = "_testoutput"
 curr_file_path = os.path.join(os.path.dirname(__file__))
 if not os.path.exists(os.path.join(curr_file_path, TEST_OUTPUT_DIR)):
@@ -34,7 +30,8 @@ if not os.path.exists(os.path.join(curr_file_path, TEST_OUTPUT_DIR)):
 TEST_SCHEMA = 'test'
 TEST_TABLE_NAME = 'test'
 TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
-TEST_CSV_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'sample_data/unittest.csv'))
+TEST_CSV_FILE = os.path.abspath(os.path.join(
+    os.path.dirname(__file__), 'sample_data/unittest.csv'))
 RDBMS = [mysql]
 PARAMS = [{'port': PORT}
           ]
@@ -57,7 +54,8 @@ class TestMysql(unittest.TestCase):
             table = table_split[-1]
             schema = table_split[0]
 
-        dataframe.to_sql(name=table, con=engine, index=False, if_exists='replace', schema=schema)
+        dataframe.to_sql(name=table, con=engine, index=False,
+                         if_exists='replace', schema=schema)
 
         print("Loaded Test Data")
         print(DB.query("select * from {}".format(table_name)))
@@ -71,7 +69,8 @@ class TestMysql(unittest.TestCase):
         copyfile(src, dst)
 
         #x = mysql.DB(port=PORT, userid=USERID, host=HOST,dbname=DATABASE)
-        x = mysql.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE);
+        x = mysql.DB(port=PORT, userid=USERID, host=HOST,
+                     pwd=PASSWORD, dbname=DATABASE)
         assert isinstance(x, mysql.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')
@@ -79,13 +78,14 @@ class TestMysql(unittest.TestCase):
         z = x.get_all_tables()
 
         print(z)
-        y = x.get_table_columns('{}.{}'.format(DATABASE,TEST_TABLE_NAME))
+        y = x.get_table_columns('{}.{}'.format(DATABASE, TEST_TABLE_NAME))
         # make sure we log error
         z = x.connect_SqlAlchemy()
 
         print(y)
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_mysql.csv')
-        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE_NAME), header=y, file_format='CSV')
+        x.query_to_file(
+            file, 'select * from {}'.format(TEST_TABLE_NAME), header=y, file_format='CSV')
         print(pandas.read_csv(file))
 
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.parquet')
@@ -93,7 +93,8 @@ class TestMysql(unittest.TestCase):
         print(pandas.read_parquet(file, engine='pyarrow'))
 
         file = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test.hdf5')
-        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE_NAME), file_format='HDF5', hdf5_key='table')
+        x.query_to_file(file, 'select * from {}'.format(TEST_TABLE_NAME),
+                        file_format='HDF5', hdf5_key='table')
         print(pandas.read_hdf(file, 'table'))
 
 

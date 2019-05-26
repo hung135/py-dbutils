@@ -3,22 +3,13 @@ import os
 import sys
 
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
-
-from py_dbutils.rdbms import postgres
-from py_dbutils.rdbms import mysql, sqlite, mssql
-from py_dbutils.rdbms import msaccess
+ 
+from py_dbutils.rdbms import  sqlite
+ 
 import inspect
 import os
 import pprint
 
-DBSCHEMA = 'postgres'
-COMMIT = True
-PASSWORD = 'docker'
-USERID = 'postgres'
-HOST = 'localhost'
-PORT = '55432'
-DATABASE = 'postgres'
-DBTYPE = 'POSTGRES'
 APPNAME = 'test_connection'
 
 TEST_OUTPUT_DIR = "_testoutput"
@@ -32,9 +23,7 @@ TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(
     os.path.dirname(__file__), 'sample_data/unittest.csv'))
 RDBMS = [postgres, mysql, mssql, sqlite]
-PARAMS = [{'port': 55432},
-          {'userid': 'root', 'port': 33306},
-          {'userid': 'sa', 'port': 11433},
+PARAMS = [
           {'file_path': os.path.join(TEST_OUTPUT_DIR, 'sqlite.db')}
           ]
 
@@ -69,16 +58,14 @@ class TestMsAccess(unittest.TestCase):
 
         # rows+="\n,("+(','.join(c.replace("'","''")) for c in row)+")"
 
-    def test_msaccess(self):
+    def test_sqlight(self):
         import pandas
-
-        from shutil import copyfile
-        src = os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
-        dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
-        copyfile(src, dst)
-
-        x = msaccess.DB(dst)
-        assert isinstance(x, msaccess.DB)
+        
+        dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'sqlite.db')
+        
+        #connects to or creates an empty sqlite db
+        x = sqlite.DB(dst)
+        assert isinstance(x, sqlite.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')
 

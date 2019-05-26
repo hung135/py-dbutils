@@ -9,7 +9,7 @@ env:
   PGUSER: postgres
   PGPASSWORD: docker
   PGPORT: 55432
-  MYSQL_DATABASE: test
+  MYSQL_DATABASE: mysql
   MYSQL_USER: root
   MYSQL_PASSWORD: docker
   MYSQL_PORT: 33306    

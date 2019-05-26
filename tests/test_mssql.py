@@ -39,7 +39,7 @@ RDBMS = [mssql]
 PARAMS = [{'port': PORT}
           ]
 
-@unittest.skip()
+@unittest.skip("Travis don't support MS SQLserver")
 class TestMssql(unittest.TestCase):
 
     def populate_test_table(self, DB, fqn_table_name=TEST_TABLE):

@@ -3,7 +3,7 @@ import sys
 import os
 import logging as lg
 import datetime
-#from abc import ABCMeta, abstractmethod  # define interfaces
+from abc import ABCMeta, abstractmethod  # define interfaces
 
 lg.basicConfig()
 logging = lg.getLogger()

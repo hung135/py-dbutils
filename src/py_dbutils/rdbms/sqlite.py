@@ -40,3 +40,7 @@ class DB(ConnRDBMS, ParentDB):
                 logging.error(
                     "Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
                 sys.exit(1)
+    def get_all_tables(self):
+        get_table_sql="SELECT name FROM sqlite_master WHERE type='table'"
+        result_set, meta = self.query(get_table_sql)
+        return [r[0] for r in result_set]

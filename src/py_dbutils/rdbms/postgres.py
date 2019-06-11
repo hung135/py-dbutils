@@ -11,7 +11,7 @@ logging.setLevel(lg.INFO)
 
 
 class DB(ConnRDBMS, DATABASE):
-    sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}'
+    sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}?application_name={appname}'
 
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None,
                  port=None, dbname=None, schema=None, label=None):
@@ -22,8 +22,9 @@ class DB(ConnRDBMS, DATABASE):
         self.host = host or os.getenv('PGHOST', 'localhost')
         self.port = port or os.getenv('PGPORT', 5432)
         self.dbname = dbname or os.getenv('PGDATABASE', 'postgres')
-        self.label = label or 'py_dbutils'
+        self.label = label or __file__
         self.schema = schema
+        self.appname=self.label
         conn = psycopg2.connect(dbname=self.dbname, user=self.userid, password=self.pwd, port=self.port,
                                 host=self.host, application_name=self.label, sslmode=self.ssl)
         conn.set_client_encoding('UNICODE')

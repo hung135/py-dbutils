@@ -34,6 +34,9 @@ mysql
 mssql
 msaccess
 sqlite
+
+NB:
+Install jaydebeapi if you need to mess with JAVA JDBC
  
 
  

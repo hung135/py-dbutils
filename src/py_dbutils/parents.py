@@ -7,7 +7,7 @@ from abc import ABCMeta, abstractmethod  # define interfaces
 
 lg.basicConfig()
 logging = lg.getLogger()
-logging.setLevel(lg.INFO)
+
 
 
 class DB(object):

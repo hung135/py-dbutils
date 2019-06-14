@@ -8,7 +8,7 @@ import logging as lg
 
 lg.basicConfig()
 logging = lg.getLogger()
-logging.setLevel(lg.INFO)
+
 
 
 class DB(ConnRDBMS, PARENTDB):

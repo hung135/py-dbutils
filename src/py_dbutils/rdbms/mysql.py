@@ -8,7 +8,7 @@ import pymysql
 
 lg.basicConfig()
 logging = lg.getLogger()
-logging.setLevel(lg.INFO)
+
 
 
 class DB(ConnRDBMS, PARENT):

@@ -9,7 +9,7 @@ import sqlite3
 
 lg.basicConfig()
 logging = lg.getLogger()
-logging.setLevel(lg.INFO)
+
 
 #still developing
 

@@ -406,7 +406,7 @@ class ConnRDBMS(object):
         try:
             self.cursor = None
             self.autocommit = autocommit or True
-            print('INIT DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
+            logging.debug('INIT DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
                                                               self.autocommit))
             logging.debug('Connect: ){}:{}:{}'.format(
                 self.host, self.dbname, self.userid))

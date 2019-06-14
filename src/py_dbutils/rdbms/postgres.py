@@ -31,7 +31,7 @@ class DB(ConnRDBMS, DATABASE):
         self.conn = conn
         # call the parent to set anything else we didn't set
         # super should check to see if the values are none
-        print("Initialize Super")
+        logging.debug("Initialize Super")
         super().__init__()
 
     # copy using pyscopg to convert a dataframe to a file like object and pass it into pyscopg
@@ -71,7 +71,7 @@ class DB(ConnRDBMS, DATABASE):
         self.create_cur()
         column_list = ['"{}"'.format(c)
                        for c in dataframe.columns.values.tolist()]
-        print(column_list)
+         
         if workingpath == 'MEMORY':
             with readStringIO() as f:
 
@@ -83,7 +83,7 @@ class DB(ConnRDBMS, DATABASE):
             tmp_file = os.path.join(workingpath, '_tmp_file.csv')
             dataframe.to_csv(tmp_file, header=False,
                              index=False, encoding='utf8')
-            print(column_list)
+             
             with open(tmp_file) as f:
                 self.cursor.copy_from(
                     f, table_name_fqn, columns=column_list, sep=",")

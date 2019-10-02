@@ -46,6 +46,7 @@ class DB(ConnRDBMS, DATABASE):
         Returns:
           None: None
         """
+        rowcount=0
         try:
             from StringIO import StringIO
         except ImportError:
@@ -78,6 +79,7 @@ class DB(ConnRDBMS, DATABASE):
                                                                                                 columns=','.join(
                                                                                                     column_list))
                 self.cursor.copy_expert(cmd_string, f)
+                rowcount=self.cursor.rowcount
                  
         else:
             tmp_file = os.path.join(workingpath, '_tmp_file.csv')
@@ -87,5 +89,7 @@ class DB(ConnRDBMS, DATABASE):
             with open(tmp_file) as f:
                 self.cursor.copy_from(
                     f, table_name_fqn, columns=column_list, sep=",")
+                rowcount=self.cursor.rowcount
         if self.autocommit:
             self.commit()
+        return rowcount

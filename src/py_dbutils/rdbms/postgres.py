@@ -78,6 +78,7 @@ class DB(ConnRDBMS, DATABASE):
                                                                                                 columns=','.join(
                                                                                                     column_list))
                 self.cursor.copy_expert(cmd_string, f)
+                 
         else:
             tmp_file = os.path.join(workingpath, '_tmp_file.csv')
             dataframe.to_csv(tmp_file, header=False,
@@ -86,3 +87,5 @@ class DB(ConnRDBMS, DATABASE):
             with open(tmp_file) as f:
                 self.cursor.copy_from(
                     f, table_name_fqn, columns=column_list, sep=",")
+        if self.autocommit:
+            self.commit()

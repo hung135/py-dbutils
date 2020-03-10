@@ -144,7 +144,7 @@ class DB(object):
                 logging.warning(
                     "SQL error Occurred But Continuing:\n{}")
             else:
-                raise Exception('Raising', 'SQL-ERROR')
+                raise Exception('Raising ERROR for:', sql)
          
         rowcount = self.cursor.rowcount
         if commit or self.autocommit:

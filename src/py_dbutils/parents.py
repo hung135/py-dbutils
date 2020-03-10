@@ -133,16 +133,19 @@ class DB(object):
         rowcount = 0
         this_sql = str(sql).strip()
 
-        if catch_exception:
-            try:
-                self.cursor.execute(this_sql)
-
-            except Exception as e:
-                # print("Error Execute SQL:{}".format(e))
-                logging.warning(
-                    "SQL error Occurred But Continuing:\n{}".format(e))
-        else:
+        
+        try:
             self.cursor.execute(this_sql)
+
+        except Exception as e:
+            
+            logging.error(  "SQL error:\n{}".format(e))
+            if catch_exception:
+                logging.warning(
+                    "SQL error Occurred But Continuing:\n{}")
+            else:
+                raise Exception('Raising', 'SQL-ERROR')
+         
         rowcount = self.cursor.rowcount
         if commit or self.autocommit:
             self.commit()

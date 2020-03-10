@@ -18,8 +18,8 @@ twine
 psycopg2-binary==2.7.7
 sqlalchemy
 pandas
-pymysql
+#pymysql
 jaydebeapi
 pyarrow
 tables
-pymssql
+#pymssql

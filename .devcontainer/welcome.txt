@@ -1,0 +1,19 @@
+
+make test - test executable
+python setup.py test - run python unittest
+make exe - creates the executable
+make sonar - run sonarqube code analysis on current codebase
+ 
+Upload to PyPi:
+    1. commit 
+    2. git tag <next tag number> # git tag --to list all tags
+    3. make build
+    4. make release
+pgadmin:
+http://localhost
+
+sonarqube:
+http://localhost:9000
+username/password:
+admin/bitnami
+

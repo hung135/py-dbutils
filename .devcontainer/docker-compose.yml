@@ -10,13 +10,12 @@ services:
       - ..:/workspace
       # This lets you avoid setting up Git again in the container
       - ~/.gitconfig:/root/.gitconfig
+      - ./.bashrc:/root/.bashrc 
+      - /var/run/docker.sock:/var/run/docker.sock
 
     # Overrides default command so things don't shut down after the process ends - useful for debugging
     command: sleep infinity
-    links:
-      - pgdb1
-      - mysqldb1
-      - mssqldb1
+ 
     environment:
       PGHOST: pgdb1
       PGDATABASE: postgres
@@ -54,32 +53,32 @@ services:
   pgdb1:
     image: postgres
     restart: always
-    ports: 
-      - 15432:5432
+    # ports: 
+    #   - 15432:5432
     environment:
       POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
-  mysqldb1:
-    image: mariadb
-    restart: always
-    ports: 
-      - 13306:3306
+  # mysqldb1:
+  #   image: mariadb
+  #   restart: always
+  #   ports: 
+  #     - 13306:3306
 
-    environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: test
-        MYSQL_USER: docker
-        MYSQL_PASSWORD: docker
-        MYSQL_HOST: mysqldb
-        MYSQL_PORT: 3306
-  mssqldb1:
-    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
-    restart: always
-    ports: 
-      - 11433:1433
-    environment:
-        ACCEPT_EULA: 'Y'
-        SA_PASSWORD: Docker1234
-        MSSQL_PID: Express
+  #   environment:
+  #       MYSQL_ROOT_PASSWORD: root
+  #       MYSQL_DATABASE: test
+  #       MYSQL_USER: docker
+  #       MYSQL_PASSWORD: docker
+  #       MYSQL_HOST: mysqldb
+  #       MYSQL_PORT: 3306
+  # mssqldb1:
+  #   image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+  #   restart: always
+  #   ports: 
+  #     - 11433:1433
+  #   environment:
+  #       ACCEPT_EULA: 'Y'
+  #       SA_PASSWORD: Docker1234
+  #       MSSQL_PID: Express
         
  

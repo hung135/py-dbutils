@@ -17,8 +17,9 @@ class DB(ConnRDBMS, ParentDB):
     sql_alchemy_uri = 'sqlite:///{file_path}'
 
     # https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
-    def __init__(self, file_path, autocommit=None):
-
+    def __init__(self, file_path, autocommit=None,loglevel=None):
+        logging.level=loglevel
+        
         self.file_path = os.path.abspath(file_path)
         self.autocommit = autocommit
 

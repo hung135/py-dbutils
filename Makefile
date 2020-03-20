@@ -11,3 +11,7 @@ release:
 cleanbuild: clean build
 clean:
 	rm -rf build/ dist/ exe/
+
+test:
+	clear
+	python setup.py test

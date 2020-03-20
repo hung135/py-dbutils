@@ -8,7 +8,9 @@ from py_dbutils.rdbms import mssql
 import inspect
 import os
 import pprint
+import logging as lg 
 
+logging = lg.getLogger()
 
 APPNAME = 'test_connection'
 
@@ -35,7 +37,7 @@ TEST_CSV_FILE = os.path.abspath(os.path.join(
 RDBMS = [mssql]
 PARAMS = [{'port': PORT}
           ]
-
+@unittest.skip
 @unittest.skipIf(not os.path.exists("/workspace"), "Travis don't support MS SQLserver")
 class TestMssql(unittest.TestCase):
 
@@ -68,7 +70,7 @@ class TestMssql(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        x = mssql.DB(port=PORT, userid=USERID, host=HOST, dbname=DATABASE)
+        x = mssql.DB(port=PORT, userid=USERID, host=HOST, dbname=DATABASE,loglevel=logging.level)
         #x = mssql.DB(port=PORT,userid=USERID,host=HOST,pwd=PASSWORD,dbname=DATABASE)
         assert isinstance(x, mssql.DB)
         # We don't want to put data into MsAccess we want to get away from access

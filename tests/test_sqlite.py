@@ -9,6 +9,9 @@ from py_dbutils.rdbms import  sqlite
 import inspect
 import os
 import pprint
+import logging as lg 
+
+logging = lg.getLogger()
 
 APPNAME = 'test_connection'
 
@@ -64,7 +67,7 @@ class TestSqlLite(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'sqlite.db')
         
         #connects to or creates an empty sqlite db
-        x = sqlite.DB(dst)
+        x = sqlite.DB(dst,loglevel=logging.level)
         assert isinstance(x, sqlite.DB)
         
         self.populate_test_table(DB=x, table_name=TEST_TABLE_NAME)

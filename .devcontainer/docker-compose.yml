@@ -9,9 +9,10 @@ services:
     volumes:
       - ..:/workspace
       # This lets you avoid setting up Git again in the container
-      - ~/.gitconfig:/root/.gitconfig
+      - ~/.gitconfig:/root/.gitconfig:ro
       - ./.bashrc:/root/.bashrc 
       - /var/run/docker.sock:/var/run/docker.sock
+      - .vscode-server:/root/.vscode-server
 
     # Overrides default command so things don't shut down after the process ends - useful for debugging
     command: sleep infinity
@@ -58,19 +59,19 @@ services:
     environment:
       POSTGRES_PASSWORD: docker
       POSTGRES_USER: docker
-  # mysqldb1:
-  #   image: mariadb
-  #   restart: always
-  #   ports: 
-  #     - 13306:3306
+  mysqldb1:
+    image: mariadb
+    restart: always
+    ports: 
+      - 13306:3306
 
-  #   environment:
-  #       MYSQL_ROOT_PASSWORD: root
-  #       MYSQL_DATABASE: test
-  #       MYSQL_USER: docker
-  #       MYSQL_PASSWORD: docker
-  #       MYSQL_HOST: mysqldb
-  #       MYSQL_PORT: 3306
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: test
+        MYSQL_USER: docker
+        MYSQL_PASSWORD: docker
+        MYSQL_HOST: mysqldb
+        MYSQL_PORT: 3306
   # mssqldb1:
   #   image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
   #   restart: always

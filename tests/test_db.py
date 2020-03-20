@@ -10,6 +10,10 @@ from py_dbutils.rdbms import msaccess
 import inspect
 import os
 import pprint
+import logging as lg
+logging = lg.getLogger()
+logging.level=lg.DEBUG
+
 
 DBSCHEMA = 'postgres'
 COMMIT = True
@@ -67,10 +71,10 @@ class TestDB(unittest.TestCase):
      
     def test_postgres(self):
         
-        x = postgres.DB(port=PORT,pwd=PASSWORD,userid=USERID)
+        x = postgres.DB(port=PORT,pwd=PASSWORD,userid=USERID,loglevel=logging.level)
         self.clean_test_db(x)
         try:
-            fail_db = postgres.DB() #purpose fail
+            fail_db = postgres.DB(loglevel=logging.level) #purpose fail
         except Exception as e:
             print("Purposely Fail test Destroy",e)
         
@@ -86,7 +90,7 @@ class TestDB(unittest.TestCase):
     @unittest.skip
     def test_sqlite(self):
         import pandas
-        x = sqlite.DB(os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_sqlite.db'));
+        x = sqlite.DB(os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'test_sqlite.db') ,loglevel=logging.level)
         assert isinstance(x, sqlite.DB)
 
         self.populate_test_table(DB=x, table_name='test')

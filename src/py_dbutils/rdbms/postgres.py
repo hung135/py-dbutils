@@ -14,7 +14,9 @@ class DB(ConnRDBMS, DATABASE):
     sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}?application_name={appname}'
 
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None,
-                 port=None, dbname=None, schema=None, label=None):
+                 port=None, dbname=None, schema=None, label=None, loglevel=None):
+        print("------------------------------",loglevel)
+        logging.level=loglevel
         self.ssl = os.getenv('PGSSLMODE', 'prefer')
         self.autocommit = autocommit
         self.pwd = pwd or os.getenv('PGPASSWORD', 'docker')
@@ -31,8 +33,8 @@ class DB(ConnRDBMS, DATABASE):
         self.conn = conn
         # call the parent to set anything else we didn't set
         # super should check to see if the values are none
-        logging.debug("Initialize Super")
-        super().__init__()
+        logging.debug("Initialize Parent Class")
+        super().__init__(loglevel=loglevel)
 
     # copy using pyscopg to convert a dataframe to a file like object and pass it into pyscopg
     # this does not write to the file system but puts all the data into memory

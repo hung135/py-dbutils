@@ -403,19 +403,19 @@ class ConnRDBMS(object):
     conn = None
     appname = __file__
 
-    def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None):
-        self.str = 'DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
-                                                          self.autocommit)
+    def __init__(self, autocommit=None, pwd=None, userid=None, host=None, dbname=None, schema=None, loglevel=None):
+        
+        logging.level=loglevel
+        self.str = f'DB: {self.host}:{self.port}:{self.dbname}:{self.userid}:autocommit={self.autocommit}' 
+        
         try:
+
             self.cursor = None
             self.autocommit = autocommit or True
-            logging.debug('INIT DB: {}:{}:{}:{}:autocommit={}'.format(self.host, self.port, self.dbname, self.userid,
-                                                              self.autocommit))
-            logging.debug('Connect: ){}:{}:{}'.format(
-                self.host, self.dbname, self.userid))
+            logging.debug(f'INIT DB: {self.host}:{self.port}:{self.dbname}:{self.userid}:autocommit={self.autocommit}' )
+            logging.debug(f'Connect Info: {self.host}:{self.dbname}:{self.userid})' )
         except Exception:
-            logging.debug(
-                "Can not U)se this Class directly: You must instantiate a child")
+            logging.exception( "Can not U se this Class directly: You must instantiate a child")
             sys.exit(1)
 
     def __repr__(self):
@@ -430,7 +430,7 @@ class ConnRDBMS(object):
         return str
 
     def __del__(self):
-        logging.debug("Destroying: {}".format(self.__str__()))
+        logging.debug(f"Destroying: {self.__str__()}")
 
     def authenticate(self):
         pass
@@ -462,8 +462,7 @@ class ConnRDBMS(object):
                     appname=self.appname
                 ))
             except Exception as e:
-                logging.error(
-                    "Could not Connect to sqlAlchemy, Check Uri Syntax: {}".format(e))
+                logging.error( f"Could not Connect to sqlAlchemy, Check Uri Syntax: {e}" )
                 sys.exit(1)
 
 

@@ -8,7 +8,9 @@ from py_dbutils.rdbms import mysql
 import inspect
 import os
 import pprint
+import logging as lg 
 
+logging = lg.getLogger()
 
 APPNAME = 'test_connection'
 
@@ -70,7 +72,7 @@ class TestMysql(unittest.TestCase):
 
         #x = mysql.DB(port=PORT, userid=USERID, host=HOST,dbname=DATABASE)
         x = mysql.DB(port=PORT, userid=USERID, host=HOST,
-                     pwd=PASSWORD, dbname=DATABASE)
+                     pwd=PASSWORD, dbname=DATABASE,loglevel=logging.level)
         assert isinstance(x, mysql.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')

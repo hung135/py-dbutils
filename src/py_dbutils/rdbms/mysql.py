@@ -6,7 +6,7 @@ import os
 import logging as lg
 import pymysql
 
-lg.basicConfig()
+ 
 logging = lg.getLogger()
 
 
@@ -18,7 +18,9 @@ class DB(ConnRDBMS, PARENT):
     sql_alchemy_uri = 'mysql+pymysql://{userid}:{pwd}@{host}:{port}/{db}'
     # https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None, port=None, dbname=None, schema=None,
-                 label=None):
+                 label=None,loglevel=None):
+        logging.level=loglevel
+        
 
         self.autocommit = autocommit
         self.pwd = pwd or os.getenv('MYSQL_PWD', 'docker')

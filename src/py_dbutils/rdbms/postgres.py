@@ -15,7 +15,7 @@ class DB(ConnRDBMS, DATABASE):
 
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None,
                  port=None, dbname=None, schema=None, label=None, loglevel=None):
-        print("------------------------------",loglevel)
+        
         logging.level=loglevel
         self.ssl = os.getenv('PGSSLMODE', 'prefer')
         self.autocommit = autocommit

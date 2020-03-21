@@ -10,7 +10,7 @@ import os
 import pprint
 import pandas as pd
 import logging as lg 
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 
 
 DBSCHEMA = 'test'

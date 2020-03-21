@@ -8,7 +8,7 @@ import pybigquery
 import sqlite3
 
 lg.basicConfig()
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 
 
 #still developing

@@ -7,7 +7,7 @@ import logging as lg
 import pymysql
 
  
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 
 
 

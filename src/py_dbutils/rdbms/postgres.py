@@ -6,7 +6,7 @@ import os
 import logging as lg
 
 lg.basicConfig()
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 
 
 

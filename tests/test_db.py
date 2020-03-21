@@ -11,7 +11,7 @@ import inspect
 import os
 import pprint
 import logging as lg
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 logging.level=lg.DEBUG
 
 

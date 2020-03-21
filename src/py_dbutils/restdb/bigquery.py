@@ -7,7 +7,7 @@ import logging as lg
 import pybigquery
 
 lg.basicConfig()
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 
 
 

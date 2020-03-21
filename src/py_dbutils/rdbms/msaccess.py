@@ -8,7 +8,7 @@ import jaydebeapi
 import pprint
 
 lg.basicConfig()
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 
 
 

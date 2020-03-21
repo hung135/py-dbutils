@@ -12,7 +12,7 @@ import os
 import pprint
 import logging as lg 
 
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 
 DBSCHEMA = 'postgres'
 COMMIT = True

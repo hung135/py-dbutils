@@ -6,7 +6,7 @@ import datetime
 from abc import ABCMeta, abstractmethod  # define interfaces
 
 lg.basicConfig()
-logging = lg.getLogger()
+logging = lg.getLogger(__name__)
 
 
 

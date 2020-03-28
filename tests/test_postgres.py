@@ -9,6 +9,9 @@ import inspect
 import os
 import pprint
 import pandas as pd
+import logging as lg 
+logging = lg.getLogger(__name__)
+
 
 DBSCHEMA = 'test'
 COMMIT = True
@@ -62,11 +65,9 @@ class TestPostgres(unittest.TestCase):
         from shutil import copyfile
         src = os.path.join(curr_file_path, 'sample_data/AgeRange.mdb')
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
-        copyfile(src, dst)
-
-        print("-------------------------", USERID)
+        copyfile(src, dst) 
         x = postgres.DB(port=PORT, userid=USERID, host=HOST,
-                        pwd=PASSWORD, dbname=DATABASE)
+                        pwd=PASSWORD, dbname=DATABASE,loglevel=logging.level)
 
         assert isinstance(x, postgres.DB)
         # We don't want to put data into MsAccess we want to get away from access
@@ -96,7 +97,7 @@ class TestPostgres(unittest.TestCase):
 
     def test_bulk_load_dataframe(self):
         db = postgres.DB(port=PORT, userid=USERID, host=HOST,
-                         pwd=PASSWORD, dbname=DATABASE)
+                         pwd=PASSWORD, dbname=DATABASE,loglevel=logging.level)
         df = pd.read_csv(TEST_CSV_FILE)
         print(db.get_table_columns(TEST_TABLE))
         #db.execute('truncate table test.test')
@@ -110,7 +111,7 @@ class TestPostgres(unittest.TestCase):
 
     def test_db_has_record(self):
         db = postgres.DB(port=PORT, userid=USERID, host=HOST,
-                         pwd=PASSWORD, dbname=DATABASE)
+                         pwd=PASSWORD, dbname=DATABASE,loglevel=logging.level)
         df = pd.read_csv(TEST_CSV_FILE)
         print(db.get_table_columns(TEST_TABLE))
         #db.execute('truncate table test.test')

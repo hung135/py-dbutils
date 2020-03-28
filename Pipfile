@@ -13,7 +13,7 @@ pyarrow = "*"
 pylint = "*"
 PyScaffold = "*"
 PyMySQL = "*"
-Cython = "==0.29.6"
+#Cython = "==0.29.6"
 pep8 = "*"
 autopep8 = "*"
 

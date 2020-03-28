@@ -7,8 +7,8 @@ import logging as lg
 import pybigquery
 
 lg.basicConfig()
-logging = lg.getLogger()
-logging.setLevel(lg.INFO)
+logging = lg.getLogger(__name__)
+
 
 
 class DB(ConnREST, DB):

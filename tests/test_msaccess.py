@@ -10,6 +10,9 @@ from py_dbutils.rdbms import msaccess
 import inspect
 import os
 import pprint
+import logging as lg 
+
+logging = lg.getLogger(__name__)
 
 DBSCHEMA = 'postgres'
 COMMIT = True
@@ -77,7 +80,7 @@ class TestMsAccess(unittest.TestCase):
         dst = os.path.join(curr_file_path, TEST_OUTPUT_DIR, 'msaccess.mdb')
         copyfile(src, dst)
 
-        x = msaccess.DB(dst)
+        x = msaccess.DB(dst,loglevel=logging.level)
         assert isinstance(x, msaccess.DB)
         # We don't want to put data into MsAccess we want to get away from access
         self.populate_test_table(DB=x, table_name='test')

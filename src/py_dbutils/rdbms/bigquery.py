@@ -8,8 +8,8 @@ import pybigquery
 import sqlite3
 
 lg.basicConfig()
-logging = lg.getLogger()
-logging.setLevel(lg.INFO)
+logging = lg.getLogger(__name__)
+
 
 #still developing
 
@@ -19,7 +19,9 @@ class DB(ConnRDBMS, ParentDB):
     sql_alchemy_uri = 'bigquery://{project}'
 
     # https://dev.mysql.com/doc/refman/8.0/en/environment-variables.html
-    def __init__(self, project, data_id, key_file, autocommit=None):
+    def __init__(self, project, data_id, key_file, autocommit=None,loglevel=None):
+        logging.level=loglevel
+        
 
         self.file_path = os.path.abspath(key_file)
         self.autocommit = autocommit

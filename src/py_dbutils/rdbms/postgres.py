@@ -6,15 +6,17 @@ import os
 import logging as lg
 
 lg.basicConfig()
-logging = lg.getLogger()
-logging.setLevel(lg.INFO)
+logging = lg.getLogger(__name__)
+
 
 
 class DB(ConnRDBMS, DATABASE):
-    sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}'
+    sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}?application_name={appname}'
 
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None,
-                 port=None, dbname=None, schema=None, label=None):
+                 port=None, dbname=None, schema=None, label=None, loglevel=None):
+        
+        logging.level=loglevel
         self.ssl = os.getenv('PGSSLMODE', 'prefer')
         self.autocommit = autocommit
         self.pwd = pwd or os.getenv('PGPASSWORD', 'docker')
@@ -22,16 +24,17 @@ class DB(ConnRDBMS, DATABASE):
         self.host = host or os.getenv('PGHOST', 'localhost')
         self.port = port or os.getenv('PGPORT', 5432)
         self.dbname = dbname or os.getenv('PGDATABASE', 'postgres')
-        self.label = label or 'py_dbutils'
+        self.label = label or __file__
         self.schema = schema
+        self.appname=self.label
         conn = psycopg2.connect(dbname=self.dbname, user=self.userid, password=self.pwd, port=self.port,
                                 host=self.host, application_name=self.label, sslmode=self.ssl)
         conn.set_client_encoding('UNICODE')
         self.conn = conn
         # call the parent to set anything else we didn't set
         # super should check to see if the values are none
-        print("Initialize Super")
-        super().__init__()
+        logging.debug("Initialize Parent Class")
+        super().__init__(loglevel=loglevel)
 
     # copy using pyscopg to convert a dataframe to a file like object and pass it into pyscopg
     # this does not write to the file system but puts all the data into memory
@@ -71,7 +74,7 @@ class DB(ConnRDBMS, DATABASE):
         self.create_cur()
         column_list = ['"{}"'.format(c)
                        for c in dataframe.columns.values.tolist()]
-        print(column_list)
+         
         if workingpath == 'MEMORY':
             with readStringIO() as f:
 
@@ -85,7 +88,7 @@ class DB(ConnRDBMS, DATABASE):
             tmp_file = os.path.join(workingpath, '_tmp_file.csv')
             dataframe.to_csv(tmp_file, header=False,
                              index=False, encoding='utf8')
-            print(column_list)
+             
             with open(tmp_file) as f:
                 self.cursor.copy_from(
                     f, table_name_fqn, columns=column_list, sep=",")

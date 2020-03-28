@@ -22,4 +22,7 @@ pymysql
 jaydebeapi
 pyarrow
 tables
-pymssql
+#pymssql
+#mssql-cli
+mycli
+pgcli

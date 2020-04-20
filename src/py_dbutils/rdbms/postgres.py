@@ -11,7 +11,7 @@ logging = lg.getLogger(__name__)
 
 
 class DB(ConnRDBMS, DATABASE):
-    sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}?charset=utf8&application_name={appname}'
+    sql_alchemy_uri = 'postgresql://{userid}:{pwd}@{host}:{port}/{db}?application_name={appname}'
 
     def __init__(self, autocommit=None, pwd=None, userid=None, host=None,
                  port=None, dbname=None, schema=None, label=None, loglevel=None):

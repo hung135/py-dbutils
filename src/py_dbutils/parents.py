@@ -460,7 +460,7 @@ class ConnRDBMS(object):
                     port=self.port,
                     db=self.dbname,
                     appname=self.appname
-                ))
+                ), client_encoding='utf8')
             except Exception as e:
                 logging.error( f"Could not Connect to sqlAlchemy, Check Uri Syntax: {e}" )
                 sys.exit(1)

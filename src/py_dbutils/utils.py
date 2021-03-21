@@ -1,5 +1,10 @@
 import logging
 
+try:
+    raw_input
+except NameError:
+    raw_input = input
+
 
 def purge_schema_except(db, schema_list):
     # this will run through and drop all schemas except for those in the schema_list

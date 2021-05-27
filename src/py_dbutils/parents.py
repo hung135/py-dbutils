@@ -54,7 +54,20 @@ class DB(object):
             datetime.datetime.now().time()))
 
         return rows if isinstance(rows, list) else list(rows), meta
+    def get_primary_keys(self, table_name_fqn):
+        
 
+        sql="""SELECT a.attname
+        FROM   pg_index i
+        JOIN   pg_attribute a ON a.attrelid = i.indrelid
+                            AND a.attnum = ANY(i.indkey)
+        WHERE  i.indrelid = '{}'::regclass
+        AND    i.indisprimary; """.format(table_name_fqn)
+            
+
+        rows, meta = self.query(sql)
+        # will fail if we get no rows
+        return [str(r[0]) for r in meta]
     def get_table_columns(self, table_name):
         """This method will select 1 record from the table and return the column names
 
@@ -169,11 +182,12 @@ class DB(object):
                 Will check instance variable to decide if a commit is needed
         """
         try:
-            self.cursor.execute("COMMIT")
-            self.cursor.close()
-            self.cursor = None
-        except AttributeError:
-            logging.error("No Open Cursor to do Commit")
+            if self.cursor:
+                self.cursor.execute("COMMIT")
+            else:
+                logging.warning(f"No Open Cursor to do Commit: Your calling commit without an open connection???")
+        except AttributeError as e:
+            logging.error(f"No Open Cursor to do Commit: {e}")
         except Exception as e:
             logging.error(e)
 
@@ -430,7 +444,9 @@ class ConnRDBMS(object):
         return str
 
     def __del__(self):
-        logging.debug(f"Destroying: {self.__str__()}")
+        self.close()
+        class_name=self.__str__()
+        logging.debug('Destroying: {class_name}')
 
     def authenticate(self):
         pass
@@ -462,7 +478,7 @@ class ConnRDBMS(object):
                     appname=self.appname
                 ), client_encoding='utf8')
             except Exception as e:
-                logging.error( f"Could not Connect to sqlAlchemy, Check Uri Syntax: {e}" )
+                logging.error( f'Could not Connect to sqlAlchemy, Check Uri Syntax: {e}' )
                 sys.exit(1)
 
 

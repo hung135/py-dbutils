@@ -34,8 +34,7 @@ TEST_TABLE = '{}.test'.format(TEST_SCHEMA)
 TEST_CSV_FILE = os.path.abspath(os.path.join(
     os.path.dirname(__file__), 'sample_data/unittest.csv'))
 RDBMS = [postgres]
-PARAMS = [{'port': PORT}
-          ]
+PARAMS = [{'port': PORT} ]
 
 
 class TestPostgres(unittest.TestCase):
@@ -74,8 +73,8 @@ class TestPostgres(unittest.TestCase):
         self.populate_test_table(DB=x, fqn_table_name=TEST_TABLE)
 
         z = x.get_all_tables()
-
-        print(z)
+        primary_keys=x.get_primary_keys(TEST_TABLE)
+        assert isinstance(primary_keys, list)
         y = x.get_table_columns(TEST_TABLE)
         # make sure we log error
         z = x.connect_SqlAlchemy()

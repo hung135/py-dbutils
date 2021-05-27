@@ -38,9 +38,9 @@ RDBMS = [mysql]
 PARAMS = [{'port': PORT}
           ]
 
-
+@unittest.skip("Mysql Not Full Supported Yet")
 class TestMysql(unittest.TestCase):
-
+     
     def populate_test_table(self, DB, table_name=TEST_TABLE):
         import pandas as pd
         import os

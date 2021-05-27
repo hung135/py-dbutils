@@ -89,3 +89,17 @@ class DB(ConnRDBMS, DATABASE):
             with open(tmp_file) as f:
                 self.cursor.copy_from(
                     f, table_name_fqn, columns=column_list, sep=",")
+    def get_primary_keys(self, table_name_fqn):
+        
+
+        sql="""SELECT a.attname
+        FROM   pg_index i
+        JOIN   pg_attribute a ON a.attrelid = i.indrelid
+                            AND a.attnum = ANY(i.indkey)
+        WHERE  i.indrelid = '{}'::regclass
+        AND    i.indisprimary; """.format(table_name_fqn)
+            
+
+        rows, meta = self.query(sql)
+        # will fail if we get no rows
+        return [str(r[0]) for r in meta]

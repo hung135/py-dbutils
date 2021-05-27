@@ -73,7 +73,10 @@ class TestPostgres(unittest.TestCase):
         self.populate_test_table(DB=x, fqn_table_name=TEST_TABLE)
 
         z = x.get_all_tables()
+        x.execute("alter table test.test add primary key (col1,col2);")
         primary_keys=x.get_primary_keys(TEST_TABLE)
+
+ 
         assert isinstance(primary_keys, list)
         y = x.get_table_columns(TEST_TABLE)
         # make sure we log error

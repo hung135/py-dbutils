@@ -102,4 +102,5 @@ class DB(ConnRDBMS, DATABASE):
 
         rows, meta = self.query(sql)
         # will fail if we get no rows
-        return [str(r[0]) for r in meta]
+        
+        return [str(r[0]) for r in rows]

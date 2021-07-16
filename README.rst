@@ -53,10 +53,11 @@ rows_inserted = db.bulk_load_dataframe(dataframe, table_name_fqn='schema_name.ta
 
 #sometimes you just need a value from a table
 v=db.get_a_value("select count(*) from some_schema.some_table)
-#sometime you just want a specific row 
+#sometimes you just want a specific row 
 row, meta=db.get_a_row("select * from some_schema.some_table where id=12345)
 
-
+Other functions...not all work are here:
+https://github.com/hung135/py-dbutils/blob/master/src/py_dbutils/parents.py
 
 Currently Mostly supports:
 postgres

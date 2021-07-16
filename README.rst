@@ -30,6 +30,7 @@ pip install py_dbtuils
 Usage:
 
 import py_dbutils.rdbms.postgres as db_utils
+logging = lg.getLogger()
 db=db_utils.DB(schema=dbschema
                                 ,label='label_for_dbconnection'
                                 ,dbname='your_db_name'
@@ -50,6 +51,10 @@ db.create_table_from_dataframe(dataframe, 'schema_name.table_name')
 #require psycopg2-binary
 rows_inserted = db.bulk_load_dataframe(dataframe, table_name_fqn='schema_name.table_name')
 
+#sometimes you just need a value from a table
+v=db.get_a_value("select count(*) from some_schema.some_table)
+#sometime you just want a specific row 
+row, meta=db.get_a_row("select * from some_schema.some_table where id=12345)
 
 
 

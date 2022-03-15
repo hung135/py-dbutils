@@ -18,8 +18,12 @@ RUN mkdir /workspace
 WORKDIR /workspace
 
 # Install pylint
-RUN pip install pylint
-RUN pip install pipenv
+RUN pip install pylint pipenv
+RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc |  apt-key add -
+RUN add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/18.04/mssql-server-2019.list)"
+RUN ACCEPT_EULA=y DEBIAN_FRONTEND=noninteractive \
+        apt-get install -y --no-install-recommends mssql-tools unixodbc-dev
+ 
 # Install Python dependencies from requirements.txt if it exists
 COPY requirements.txt requirements.txt
 RUN if [ -f "requirements.txt" ]; then pip install -r requirements.txt; rm requirements.txt; fi

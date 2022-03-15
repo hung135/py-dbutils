@@ -23,7 +23,7 @@ RUN pip install pipenv
 # Install Python dependencies from requirements.txt if it exists
 COPY requirements.txt requirements.txt
 RUN if [ -f "requirements.txt" ]; then pip install -r requirements.txt; rm requirements.txt; fi
-RUN copy .gitconfig /root/
+ 
 # Clean up
 RUN apt-get autoremove -y \
     && apt-get clean -y \

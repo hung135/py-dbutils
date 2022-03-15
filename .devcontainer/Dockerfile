@@ -11,18 +11,20 @@ COPY .devcontainer/settings.vscode.json /root/.vscode-remote/data/Machine/settin
 ENV PYTHONUNBUFFERED 1
 
 # Install git, process tools
-RUN apt-get update && apt-get -y install git procps fish postgresql-client default-jre 
+RUN apt-get update && apt-get -y install git procps fish postgresql-client default-jre unixodbc
 #RUN apt-get -y install python3-tables
 RUN wget http://ftp.us.debian.org/debian/pool/main/m/mysql-transitional/mysql-client_5.5.9999+default_amd64.deb 
 RUN mkdir /workspace
 WORKDIR /workspace
 
 # Install pylint
-RUN pip install pylint pipenv
-RUN wget -qO- https://packages.microsoft.com/keys/microsoft.asc |  apt-key add -
-RUN add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/18.04/mssql-server-2019.list)"
+RUN pip install pylint pipenv 
+RUN curl https://packages.microsoft.com/keys/microsoft.asc |  apt-key add -
+RUN curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list |  tee /etc/apt/sources.list.d/msprod.list
+  
+RUN apt-get update
 RUN ACCEPT_EULA=y DEBIAN_FRONTEND=noninteractive \
-        apt-get install -y --no-install-recommends mssql-tools unixodbc-dev
+        apt-get install -y --no-install-recommends mssql-tools 
  
 # Install Python dependencies from requirements.txt if it exists
 COPY requirements.txt requirements.txt

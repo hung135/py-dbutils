@@ -108,7 +108,7 @@ class DB(object):
         self.create_cur()
 
         self.cursor.execute(file_object.read())
-        if commit or self.autocommit:
+        if self.autocommit:
             self.commit()
 
     def execute_script_file(self, file_path):
@@ -126,7 +126,7 @@ class DB(object):
 
         with open(file_path, "r") as f:
             self.cursor.execute(f.read())
-        if commit or self.autocommit:
+        if self.autocommit:
             self.commit()
 
     def execute(self, sql, commit=None, catch_exception=True):
@@ -160,7 +160,7 @@ class DB(object):
                 raise Exception('Raising ERROR for:', sql)
          
         rowcount = self.cursor.rowcount
-        if commit or self.autocommit:
+        if self.autocommit:
             self.commit()
 
         logging.debug("DB SQL Execute Completed: {}".format(self.__str__()))

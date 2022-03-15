@@ -5,6 +5,7 @@
 	"service": "app1",
 	"workspaceFolder": "/workspace",
 	"extensions": [
-		"ms-python.python"
+		"ms-python.python",
+		"ms-azuretools.vscode-docker"
 	]
 }

@@ -10,7 +10,7 @@ services:
       - ..:/workspace
       - ./.bashrc:/root/.bashrc 
       - /var/run/docker.sock:/var/run/docker.sock
-      - .vscode-server:/root/.vscode-server
+ 
 
     # Overrides default command so things don't shut down after the process ends - useful for debugging
     command: sleep infinity

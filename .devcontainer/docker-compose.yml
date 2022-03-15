@@ -8,8 +8,6 @@ services:
 
     volumes:
       - ..:/workspace
-      # This lets you avoid setting up Git again in the container
-      - ~/.gitconfig:/root/.gitconfig:ro
       - ./.bashrc:/root/.bashrc 
       - /var/run/docker.sock:/var/run/docker.sock
       - .vscode-server:/root/.vscode-server
